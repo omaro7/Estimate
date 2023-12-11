@@ -1,0 +1,73 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'kr.co.goms.app.estimate'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "kr.co.goms.app.estimate"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+                arguments "-DANDROID_STL = c++_shared"
+            }
+        }
+
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.airbnb.android:lottie:3.6.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'//Grid 밑에서 위로 올라오면서 보여주기
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
+    implementation files('libs/poi-3.12-android-a.jar')
+    implementation files('libs/poi-ooxml-schemas-3.12-20150511-a.jar')
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'com.vanniktech:android-image-cropper:4.3.3'
+
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+
+    implementation project(path: ':common')
+
+}

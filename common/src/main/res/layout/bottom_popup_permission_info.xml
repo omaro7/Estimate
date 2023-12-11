@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scrollview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_rounded_corner_bottom_popup">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/pop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <RelativeLayout
+                        android:id="@+id/rlTop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
+
+                        <TextView
+                            android:id="@+id/title_tv"
+                            android:textColor="#111111"
+                            android:textSize="24sp"
+                            android:text="감사합니다."
+                            android:lineSpacingExtra="-0.5dp"
+                            android:fontFamily="@font/spoqahansansneobold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="24dp"/>
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:onClick="btnClick"
+                        android:src="@drawable/btn_pop_close"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/rlBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="130dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/context_tv1"
+                        android:textSize="16sp"
+                        android:textColor="#111"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="left|top"
+                        android:lineHeight="24dp"
+                        android:fontFamily="@font/spoqahansansneolight"
+                        android:minHeight="120dp"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_context2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/context_tv2_top"
+                                android:textSize="16sp"
+                                android:textColor="#222"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginTop="20dp"
+                                android:lineSpacingExtra="9dp"
+                                android:minHeight="30dp"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:visibility="visible" />
+                        </RelativeLayout>
+
+                        <ImageView
+                            android:id="@+id/image_view"
+                            android:layout_width="235dp"
+                            android:layout_height="135dp"/>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/context_tv2_bottom"
+                                android:textSize="16sp"
+                                android:textColor="#222"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginTop="20dp"
+                                android:lineSpacingExtra="9dp"
+                                android:minHeight="30dp"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:visibility="visible" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bt_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+                        <LinearLayout
+                            android:id="@+id/bt_rl_cancle"
+                            android:layout_width="0dp"
+                            android:layout_height="54dp"
+                            android:layout_weight="0.26"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/cancel_bt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/cancel"
+                                android:textSize="16sp"
+                                android:background="@drawable/bg_round_bottomdialog_leftbtn"
+                                android:backgroundTint="@null"
+                                android:textColor="@color/text_primary"
+                                android:fontFamily="@font/spoqahansansneobold"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/bt_rl_ok"
+                            android:layout_width="0dp"
+                            android:layout_height="54dp"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/ok_bt2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/ok"
+                                android:textSize="16sp"
+                                android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                                android:backgroundTint="@null"
+                                android:textColor="#ffffff"
+                                android:fontFamily="@font/spoqahansansneobold"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/ok_bt1"
+                        style="@style/btn_bottom_popup_right"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

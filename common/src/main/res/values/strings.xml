@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">commonModule</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_notifications">Noti</string>
+
+    <string name="ok" translatable="false">확인</string>
+    <string name="yes" translatable="false">네</string>
+    <string name="no" translatable="false">아니오</string>
+    <string name="delete" translatable="false">삭제</string>
+    <string name="cancel" translatable="false">취소</string>
+    <string name="cancellation" translatable="false">해제</string>
+    <string name="change" translatable="false">변경</string>
+    <string name="confirm" translatable="false">확인</string>
+    <string name="finish" translatable="false">종료</string>
+    <string name="add" translatable="false">추가</string>
+
+    <string name="login" translatable="false">로그인</string>
+    <string name="setting_move" translatable="false">설정이동</string>
+    <string name="install" translatable="false">설치</string>
+    <string name="retry" translatable="false">재시도</string>
+    <string name="enable" translatable="false">활성화</string>
+    <string name="do_it_later" translatable="false">나중에 하기</string>
+    <string name="close" translatable="false">닫기</string>
+    <string name="notifications" translatable="false">알림</string>
+    <string name="download" translatable="false">Download</string>
+
+    <string name="copy_ok" translatable="false">복사 완료</string>
+    <string name="copy_fail" translatable="false">복사 실패</string>
+
+    <string name="dialog_upload_processing"><![CDATA["<font color='#ffdf34'>Uploading</font>ㆍㆍㆍ"]]></string>
+    <string name="dialog_write_server_apply"><![CDATA["<font color='#ffdf34'>Apply</font>ㆍㆍㆍ"]]></string>
+
+    <string name="today_no_dialog">오늘 더이상 안보기</string>
+    <string name="no_dialog_day">%1$s 안보기</string>
+
+    <string name="app_exit">앱 종료</string>
+</resources>

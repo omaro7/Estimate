@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Admob</string>
+    <string name="app_name_title">충전소</string>
+
+    <string name="admob_widget_banner_reward">ca-app-pub-9725459038205351/2378803636</string>
+    <string name="admob_widget_app">ca-app-pub-9725459038205351/3980176833</string>
+    <string name="admob_widget_app_exit">ca-app-pub-9725459038205351/9626738267</string>
+    <string name="admob_widget_opening">ca-app-pub-9725459038205351/5188536476</string>
+
+    <string name="action_charging_station">충전소</string>
+    <string name="dia_use_alert">다이아 1개를 사용합니다.</string>
+    <string name="charging_satation_watch_ad">비디오 광고 보기</string>
+    <string name="charging_satation_get_dia">비디오 광고를 다 보시면, 다이아를 드립니다.</string>
+
+</resources>

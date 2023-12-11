@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scrollview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_rounded_corner_bottom_popup">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/pop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <RelativeLayout
+                        android:id="@+id/rlTop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
+
+                        <TextView
+                            android:id="@+id/title_tv"
+                            android:text="안녕하세요\n동의 취소하시겠어요?"
+                            android:textColor="#111111"
+                            android:textSize="20dp"
+                            android:lineHeight="36dp"
+                            android:fontFamily="@font/spoqahansansneobold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="24dp"/>
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|top"
+                        android:layout_marginRight="24dp"
+                        android:src="@drawable/btn_pop_close"
+                        android:visibility="visible" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/rlBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="130dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/context_tv1"
+                        android:textSize="16dp"
+                        android:textColor="#111"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="left|top"
+                        android:fontFamily="@font/spoqahansansneolight"
+                        android:minHeight="40dp"
+                        android:lineSpacingExtra="4dp"
+                        android:visibility="visible" />
+
+                    <RelativeLayout
+                        android:id="@+id/rlt_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginLeft="26dp"
+                        android:layout_marginRight="26dp"
+                        android:background="@drawable/rounded_border_gray">
+
+                        <EditText
+                            android:id="@+id/et_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="6dp"
+                            android:layout_marginBottom="2dp"
+                            android:background="@color/white"
+                            android:fontFamily="@font/spoqahansansneoregular"
+                            android:layout_gravity="center"
+                            android:gravity="left|center_vertical"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:maxLength="36"
+                            android:text=""
+                            android:hint="검색명"
+                            android:textColor="@color/text_primary"
+                            android:textColorHint="@color/text_primary_gray"
+                            android:textSize="16dp"
+                            android:inputType="text"
+                            android:drawablePadding="-16dp"
+                            />
+                    </RelativeLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_search_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="26dp"
+                        android:layout_marginRight="26dp"
+                        android:minHeight="200dp"
+                        android:visibility="visible"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_basic_title"/>
+
+                    <LinearLayout
+                        android:id="@+id/bt_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+                        <LinearLayout
+                            android:id="@+id/bt_rl_cancle"
+                            android:layout_width="0dp"
+                            android:layout_height="54dp"
+                            android:layout_weight="0.26"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/cancel_bt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/no"
+                                android:textSize="18dp"
+                                android:background="@drawable/bg_round_bottomdialog_leftbtn"
+                                android:textColor="#888888"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/bt_rl_ok"
+                            android:layout_width="0dp"
+                            android:layout_height="54dp"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/ok_bt2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/yes"
+                                android:textSize="18dp"
+                                android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                                android:textColor="#ffffff"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/ok_bt1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text=""
+                        android:textSize="20dp"
+                        android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                        android:textColor="#ffffff"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
