@@ -84,6 +84,32 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }
 
+        String createClientTable = buildQuery(
+                "CREATE TABLE",
+                EstimateDB.ClientTable.CLIENT_TABLE , "(",
+                EstimateDB.ClientTable.CLI_IDX , " INTEGER PRIMARY KEY AUTOINCREMENT, ",
+                EstimateDB.ClientTable.CLI_NAME , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_BIZ_NUM , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_CEO_NAME , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_UPTAE , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_UPJONG , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_MANAGER_NAME , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_TEL_NUM , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_FAX_NUM , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_HP_NUM , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_EMAIL , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_ZIPCODE , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_ADDRESS_01 , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_ADDRESS_02 , " VARCHAR, ",
+                EstimateDB.ClientTable.CLI_REGDATE , " VARCHAR "
+                        + ")"
+        );
+        try {
+            pDb.execSQL(createClientTable);
+        }catch(RuntimeException e){
+
+        }
+
         String createItemTable = buildQuery(
                 "CREATE TABLE",
                 EstimateDB.ItemTable.ITEM_TABLE, "(",
@@ -397,7 +423,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * 거래처 입력하기
      * @param clientBeanTB
      */
-    public void insertClient(ClientBeanTB clientBeanTB) {
+    public ArrayList<ClientBeanTB> insertClient(ClientBeanTB clientBeanTB) {
         Log.d(AppConstant.LOG_TAG, "insertCompany() START ====================== ");
 
         SQLiteDatabase db = getReadableDatabase();
@@ -411,6 +437,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(EstimateDB.ClientTable.CLI_UPTAE, clientBeanTB.getCli_uptae());
         cv.put(EstimateDB.ClientTable.CLI_UPJONG, clientBeanTB.getCli_upjong());
         cv.put(EstimateDB.ClientTable.CLI_MANAGER_NAME, clientBeanTB.getCli_manager_name());
+        cv.put(EstimateDB.ClientTable.CLI_TEL_NUM, clientBeanTB.getCli_tel_num());
         cv.put(EstimateDB.ClientTable.CLI_FAX_NUM, clientBeanTB.getCli_fax_num());
         cv.put(EstimateDB.ClientTable.CLI_HP_NUM, clientBeanTB.getCli_hp_num());
         cv.put(EstimateDB.ClientTable.CLI_EMAIL, clientBeanTB.getCli_email());
@@ -424,8 +451,45 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.clear();
 
         db.close();
+
+        return getClientListData();
     }
 
+    public ClientBeanTB getClient(String cliIdx) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + EstimateDB.ClientTable.CLIENT_TABLE + " WHERE " + EstimateDB.ClientTable.CLI_IDX+ " = '" + cliIdx + "' LIMIT 1", null);
+        cursor.moveToFirst();
+        try{
+            ClientBeanTB bean = new ClientBeanTB();
+
+            bean.setCli_idx(StringUtil.intToString(cursor.getInt(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_IDX))));
+            bean.setCli_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_NAME)));
+            bean.setCli_biz_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_BIZ_NUM)));
+            bean.setCli_ceo_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_CEO_NAME)));
+            bean.setCli_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_UPTAE)));
+            bean.setCli_upjong(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_UPJONG)));
+            bean.setCli_manager_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_MANAGER_NAME)));
+            bean.setCli_tel_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_TEL_NUM)));
+            bean.setCli_fax_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_FAX_NUM)));
+            bean.setCli_hp_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_HP_NUM)));
+            bean.setCli_email(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_EMAIL)));
+            bean.setCli_zipcode(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_ZIPCODE)));
+            bean.setCli_address_01(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_ADDRESS_01)));
+            bean.setCli_address_02(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_ADDRESS_02)));
+            bean.setCli_regdate(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.ClientTable.CLI_REGDATE)));
+
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            return bean;
+        }catch (NullPointerException | SQLiteException e){
+            return null;
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+    }
 
     /**
      * 거래처 리스트 가져오기
@@ -474,12 +538,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return clientList;
     }
 
-    public void deleteClientData(int clientIdx) {
+    public ArrayList<ClientBeanTB> deleteClientData(String clientIdx) {
         SQLiteDatabase db = getReadableDatabase();
         String whereClause = EstimateDB.ClientTable.CLI_IDX + "=?";
-        String[] whereArgs = new String[]{Integer.toString(clientIdx)}; // 실제 삭제할 id 값을 입력
+        String[] whereArgs = new String[]{clientIdx}; // 실제 삭제할 id 값을 입력
         db.delete(EstimateDB.ClientTable.CLIENT_TABLE, whereClause, whereArgs);
         db.close();
+
+        return getClientListData();
     }
 
     /**

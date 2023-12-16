@@ -83,8 +83,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         RelativeLayout rltBizForm = view.findViewById(R.id.rl_biz);
         RelativeLayout rltItem = view.findViewById(R.id.rl_item);
+        RelativeLayout rltCli = view.findViewById(R.id.rl_cli);
         rltBizForm.setOnClickListener(this);
         rltItem.setOnClickListener(this);
+        rltCli.setOnClickListener(this);
 
         this.setHasOptionsMenu(true);
 
@@ -118,9 +120,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.rl_biz){
-            ((SettingActivity)getActivity()).changeFragment(new BizFormFragment(), "BizForm");
+            ((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm");
         }else if(id == R.id.rl_item){
             ((SettingActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList");
+        }else if(id == R.id.rl_cli){
+            ((SettingActivity)getActivity()).changeFragment(new ClientListFragment(), "CliList");
         }
 
     }

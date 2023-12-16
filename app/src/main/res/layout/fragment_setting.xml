@@ -136,6 +136,24 @@
                         android:fontFamily="@font/spoqahansansneomedium"/>
 
                 </RelativeLayout>
+                <!-- 거래처 호출-->
+                <RelativeLayout
+                    android:id="@+id/rl_cli"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="거래처"
+                        android:textSize="16dp"
+                        android:textColor="@color/text_primary"
+                        android:letterSpacing="-0.03"
+                        android:fontFamily="@font/spoqahansansneomedium"/>
+
+                </RelativeLayout>
                 <!-- 상품명 호출-->
                 <RelativeLayout
                     android:id="@+id/rl_item"

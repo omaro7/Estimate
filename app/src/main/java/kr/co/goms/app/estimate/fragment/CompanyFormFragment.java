@@ -30,21 +30,19 @@ import kr.co.goms.app.estimate.AppConstant;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
-import kr.co.goms.app.estimate.db.DBHelper;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.app.estimate.manager.GlideHelper;
 import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.curvlet.CurvletManager;
 import kr.co.goms.module.common.util.FileUtil;
-import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.StringUtil;
 
-public class BizFormFragment extends Fragment implements View.OnClickListener {
+public class CompanyFormFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = BizFormFragment.class.getSimpleName();
+    private static final String TAG = CompanyFormFragment.class.getSimpleName();
 
-    public BizFormFragment(){}
+    public CompanyFormFragment(){}
 
     private Toolbar mToolbar;
 
@@ -63,8 +61,8 @@ public class BizFormFragment extends Fragment implements View.OnClickListener {
 
     private String mComIdx = "";
 
-    public static BizFormFragment getFragment(int comIdx){
-        BizFormFragment fragment = new BizFormFragment();
+    public static CompanyFormFragment getFragment(int comIdx){
+        CompanyFormFragment fragment = new CompanyFormFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("comIdx", comIdx);
         fragment.setArguments(bundle);
@@ -80,7 +78,7 @@ public class BizFormFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.fragment_biz_form, container, false);
+        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.fragment_company_form, container, false);
         return layout;
     }
 
@@ -101,7 +99,7 @@ public class BizFormFragment extends Fragment implements View.OnClickListener {
         TextView tvToolBarTitle = view.findViewById(R.id.tv_toolbar_title);
         tvToolBarTitle.setText("나의 회사 정보");
 
-        mComIdx = "1";
+        //mComIdx = "1";
         initData(view, mComIdx);
 
         this.setHasOptionsMenu(true);

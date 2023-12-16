@@ -1,6 +1,5 @@
 package kr.co.goms.app.estimate;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,14 +18,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
-import kr.co.goms.app.estimate.fragment.BizFormFragment;
+import kr.co.goms.app.estimate.fragment.CompanyFormFragment;
 import kr.co.goms.app.estimate.fragment.EstimateListFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
 import kr.co.goms.module.common.command.BaseBottomDialogCommand;
 import kr.co.goms.module.common.manager.DialogManager;
-import kr.co.goms.module.common.util.StringUtil;
 
 public class MainActivity extends CustomActivity implements View.OnClickListener{
 
@@ -77,8 +75,8 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
                 @Override
                 public void onActivityResult(Uri selectedImageUri) {
                     if (selectedImageUri != null) {
-                        BizFormFragment bizFormFragment = (BizFormFragment) getSupportFragmentManager().findFragmentByTag("bizForm");
-                        bizFormFragment.setAlbumPhoto(selectedImageUri);
+                        CompanyFormFragment companyFormFragment = (CompanyFormFragment) getSupportFragmentManager().findFragmentByTag("comForm");
+                        companyFormFragment.setAlbumPhoto(selectedImageUri);
                     }
                 }
             });

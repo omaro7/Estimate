@@ -79,6 +79,7 @@ public class EstimateDB {
         public static final String CLI_UPTAE        = "cli_uptae";      //업태
         public static final String CLI_UPJONG       = "cli_upjong";         //업종
         public static final String CLI_MANAGER_NAME = "cli_manager_name";   //매니저명
+        public static final String CLI_TEL_NUM		= "cli_tel_num";        //전화번호
         public static final String CLI_FAX_NUM		= "cli_fax_num";        //팩스번호
         public static final String CLI_HP_NUM       = "cli_hp_num";         //핸드폰번호
         public static final String CLI_EMAIL        = "cli_email";          //이메일

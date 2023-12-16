@@ -11,6 +11,7 @@ public class ClientBeanTB implements Parcelable {
     private String cli_uptae;      //업태
     private String cli_upjong;         //업종
     private String cli_manager_name;   //매니저명
+    private String cli_tel_num;        //전화번호
     private String cli_fax_num;        //팩스번호
     private String cli_hp_num;         //핸드폰번호
     private String cli_email;          //이메일
@@ -31,6 +32,7 @@ public class ClientBeanTB implements Parcelable {
         cli_uptae = in.readString();
         cli_upjong = in.readString();
         cli_manager_name = in.readString();
+        cli_tel_num = in.readString();
         cli_fax_num = in.readString();
         cli_hp_num = in.readString();
         cli_email = in.readString();
@@ -50,6 +52,7 @@ public class ClientBeanTB implements Parcelable {
         dest.writeString(cli_uptae);
         dest.writeString(cli_upjong);
         dest.writeString(cli_manager_name);
+        dest.writeString(cli_tel_num);
         dest.writeString(cli_fax_num);
         dest.writeString(cli_hp_num);
         dest.writeString(cli_email);
@@ -131,6 +134,14 @@ public class ClientBeanTB implements Parcelable {
 
     public void setCli_manager_name(String cli_manager_name) {
         this.cli_manager_name = cli_manager_name;
+    }
+
+    public String getCli_tel_num() {
+        return cli_tel_num;
+    }
+
+    public void setCli_tel_num(String cli_tel_num) {
+        this.cli_tel_num = cli_tel_num;
     }
 
     public String getCli_fax_num() {
