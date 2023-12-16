@@ -6,10 +6,11 @@ import android.os.Parcelable;
 public class ItemBeanTB implements Parcelable {
     private String item_idx;        // Primary key
     private String item_name;       //아이템 이름
-    private String item_std;       //아이템 단위
+    private String item_std;       //아이템 규격
     private String item_unit;       //아이템 단위
     private String item_price;      //아이템 판매가
     private String item_remark;     //아이템 비고
+    private String item_regdate;     //생성일
 
     public ItemBeanTB() {
     }
@@ -21,6 +22,7 @@ public class ItemBeanTB implements Parcelable {
         item_unit = in.readString();
         item_price = in.readString();
         item_remark = in.readString();
+        item_regdate = in.readString();
     }
 
     @Override
@@ -31,6 +33,7 @@ public class ItemBeanTB implements Parcelable {
         dest.writeString(item_unit);
         dest.writeString(item_price);
         dest.writeString(item_remark);
+        dest.writeString(item_regdate);
     }
 
     @Override
@@ -96,5 +99,13 @@ public class ItemBeanTB implements Parcelable {
 
     public void setItem_remark(String item_remark) {
         this.item_remark = item_remark;
+    }
+
+    public String getItem_regdate() {
+        return item_regdate;
+    }
+
+    public void setItem_regdate(String item_regdate) {
+        this.item_regdate = item_regdate;
     }
 }

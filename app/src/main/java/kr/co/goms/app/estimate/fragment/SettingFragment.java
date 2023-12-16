@@ -82,7 +82,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         mSwitchBlcok.setChecked("Y".equalsIgnoreCase(isShowBlockYN));
 
         RelativeLayout rltBizForm = view.findViewById(R.id.rl_biz);
+        RelativeLayout rltItem = view.findViewById(R.id.rl_item);
         rltBizForm.setOnClickListener(this);
+        rltItem.setOnClickListener(this);
 
         this.setHasOptionsMenu(true);
 
@@ -117,6 +119,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         int id = v.getId();
         if(id == R.id.rl_biz){
             ((SettingActivity)getActivity()).changeFragment(new BizFormFragment(), "BizForm");
+        }else if(id == R.id.rl_item){
+            ((SettingActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList");
         }
 
     }

@@ -10,4 +10,7 @@ public class AppConstant {
 
     public static final String APP_JNI = "estimate-native-lib";
 
+    public final static int PHOTO_WIDTH = 160;
+    public final static int PHOTO_HEIGHT = 160;
+
 }

@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
+import kr.co.goms.app.estimate.fragment.BizFormFragment;
 import kr.co.goms.app.estimate.fragment.EstimateListFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
@@ -68,6 +69,21 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
     }
 
 
+    private void setInitLauncher(){
+
+        mAlbumLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri selectedImageUri) {
+                    if (selectedImageUri != null) {
+                        BizFormFragment bizFormFragment = (BizFormFragment) getSupportFragmentManager().findFragmentByTag("bizForm");
+                        bizFormFragment.setAlbumPhoto(selectedImageUri);
+                    }
+                }
+            });
+
+    }
 
     private void goSetting(){
         Intent intent = new Intent(this, SettingActivity.class);

@@ -141,7 +141,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/et_sm_smoke_num"
+                                    android:id="@+id/et_com_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -198,7 +198,7 @@
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
                                 <EditText
-                                    android:id="@+id/et_biznum"
+                                    android:id="@+id/et_biz_num"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -209,6 +209,8 @@
                                     android:fontFamily="@font/spoqahansansneoregular"
                                     android:gravity="left|center_vertical"
                                     android:hint="사업자번호 입력"
+                                    android:inputType="number"
+                                    android:maxLength="10"
                                     android:text=""
                                     android:textColor="@color/text_primary_gray"
                                     android:textColorHint="@color/text_primary_gray"
@@ -423,7 +425,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/et_manager"
+                                    android:id="@+id/et_manager_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -760,7 +762,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/et_address"
+                                    android:id="@+id/et_address_01"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -818,7 +820,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/et_address_1"
+                                    android:id="@+id/et_address_02"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -874,7 +876,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/et_accountnum"
+                                    android:id="@+id/et_account_num"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"

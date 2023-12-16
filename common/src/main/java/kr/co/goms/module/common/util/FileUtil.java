@@ -23,7 +23,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -524,5 +526,80 @@ public class FileUtil {
 		}
 		return fileName.substring(dotIndex + 1);
 
+	}
+
+
+	/**
+	 * @param context
+	 * @param folder  Environment.DIRECTORY_PICTURES
+	 * @param extname .jpg
+	 * @return
+	 */
+	public static File createFile(Context context, String prefix, String folder, String type, String extname) {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+		String imageFileName = prefix + "_" + type + "_" + timeStamp + "_";
+		File storageDir = context.getExternalFilesDir(folder);	//Android > data > kr.co.goms.manhole > file > document
+
+		File excelDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Manhole/Photo");
+
+		GomsLog.d("File", "Dir : " + storageDir.getAbsolutePath());
+		GomsLog.d("File", "excelDir : " + excelDir.getAbsolutePath());
+
+		try {
+			if(!excelDir.exists()){
+				excelDir.mkdirs();
+			}
+
+			return File.createTempFile(imageFileName, extname, excelDir);
+			//return File.createTempFile(imageFileName, extname, storageDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static File createExcelFile(Context context, String appName, String prefix, String folder, String type, String extname) {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+		String imageFileName = appName + "_" + prefix + "_" + type + "_" +timeStamp + "_";
+		File storageDir = context.getExternalFilesDir(folder);	//Android > data > kr.co.goms.manhole > file > document
+
+		File excelDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Manhole/Excel");
+
+		GomsLog.d("File", "Dir : " + storageDir.getAbsolutePath());
+		GomsLog.d("File", "excelDir : " + excelDir.getAbsolutePath());
+
+		try {
+			if(!excelDir.exists()){
+				excelDir.mkdirs();
+			}
+
+			return File.createTempFile(imageFileName, extname, excelDir);
+			//return File.createTempFile(imageFileName, extname, storageDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// Convert Uri to File
+	public static File uriToFile(Context context, Uri uri) {
+		String filePath = null;
+
+		if (uri.getScheme().equals("content")) {
+			Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+			if (cursor != null && cursor.moveToFirst()) {
+				int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+				filePath = cursor.getString(columnIndex);
+				cursor.close();
+			}
+		} else if (uri.getScheme().equals("file")) {
+			filePath = uri.getPath();
+		}
+
+		if (filePath != null) {
+			return new File(filePath);
+		}
+
+		return null;
 	}
 }

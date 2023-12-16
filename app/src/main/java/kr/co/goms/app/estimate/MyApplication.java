@@ -12,11 +12,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import kr.co.goms.app.estimate.common.EstimatePrefs;
+import kr.co.goms.app.estimate.db.DBHelper;
 import kr.co.goms.app.estimate.jni.GomsJNI;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.module.common.WaterFramework;
@@ -32,7 +32,7 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
 
     public static MyApplication mMyApplication;
     public static GomsJNI mGomsJNI;
-    //public static ExamDBHelper mExamDBHelper;
+    public DBHelper mDBHelper;
     private EstimatePrefs mPreference;
 
     private ExecutorService mExecutorService;
@@ -60,7 +60,7 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
         mPreference = EstimatePrefs.getInstance(getApplicationContext());
 
         mGomsJNI = new GomsJNI(this);
-        //mExamDBHelper = new ExamDBHelper(this);
+        mDBHelper = new DBHelper(this);
 
         curvletApiSettings();
 
@@ -106,6 +106,7 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
     @Override
     public void curvletApiSettings() {
         Log.d(LOG_TAG, "curvletApiSettings()");
+        CurvletManager.I().create("water");
         CurvletManager.I().addCurvlet("water", "appExit", CurvletExit.class);
         CurvletManager.I().addCurvlet("water", "toast", CurvletToast.class);
     }
@@ -209,5 +210,11 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {}
 
+    public DBHelper getDBHelper() {
+        return mDBHelper;
+    }
 
+    public void setDBHelper(DBHelper mDBHelper) {
+        this.mDBHelper = mDBHelper;
+    }
 }

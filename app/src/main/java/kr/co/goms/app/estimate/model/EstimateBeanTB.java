@@ -32,6 +32,7 @@ public class EstimateBeanTB implements Parcelable {
     private String est_tax_type;			//부가세 포함, 미포함
     private String est_total_price;			//총합계
     private String est_remark;				//견적서 비고
+    private String est_regdate;				//견적서 비고
 
     public EstimateBeanTB() {
     }
@@ -64,6 +65,7 @@ public class EstimateBeanTB implements Parcelable {
         est_tax_type = in.readString();
         est_total_price = in.readString();
         est_remark = in.readString();
+        est_regdate = in.readString();
     }
 
     @Override
@@ -95,6 +97,7 @@ public class EstimateBeanTB implements Parcelable {
         dest.writeString(est_tax_type);
         dest.writeString(est_total_price);
         dest.writeString(est_remark);
+        dest.writeString(est_regdate);
     }
 
     @Override
@@ -328,5 +331,13 @@ public class EstimateBeanTB implements Parcelable {
 
     public void setEst_remark(String est_remark) {
         this.est_remark = est_remark;
+    }
+
+    public String getEst_regdate() {
+        return est_regdate;
+    }
+
+    public void setEst_regdate(String est_regdate) {
+        this.est_regdate = est_regdate;
     }
 }

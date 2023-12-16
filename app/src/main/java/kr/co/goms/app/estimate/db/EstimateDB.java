@@ -39,6 +39,7 @@ public class EstimateDB {
         public static final String COM_UPTAE        = "com_uptae";      //업태
         public static final String COM_UPJONG       = "com_upjong";         //업종
         public static final String COM_MANAGER_NAME = "com_manager_name";   //매니저명
+        public static final String COM_TEL_NUM		= "com_tel_num";        //전화번호
         public static final String COM_FAX_NUM		= "com_fax_num";        //팩스번호
         public static final String COM_HP_NUM       = "com_hp_num";         //핸드폰번호
         public static final String COM_EMAIL        = "com_email";          //이메일
@@ -63,6 +64,7 @@ public class EstimateDB {
         public static final String ITEM_UNIT    	= "item_unit";          //아이템 단위
         public static final String ITEM_PRICE    	= "item_price";         //아이템 판매가
         public static final String ITEM_REMARK      = "item_remark";        //아이템 비고
+        public static final String ITEM_REGDATE     = "item_regdate";       //생성일
     }
 
     /**
@@ -118,6 +120,7 @@ public class EstimateDB {
         public static final String EST_TAX_TYPE			="est_tax_type";			//부가세 포함, 미포함
         public static final String EST_TOTAL_PRICE		="est_total_price";			//총합계
         public static final String EST_REMARK			="est_remark";				//견적서 비고
+        public static final String EST_REGDATE			="est_regdate";				//견적서 비고
     }
 
     /**
