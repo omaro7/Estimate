@@ -15,7 +15,6 @@ public class FontUtil {
 	private final String SpoqaThin = "font/spoqahansansneothin.otf";
 
 	private static FontUtil fontUtil = null;
-	private Typeface HanaM = null;
 
 	private Typeface SpoqaRegularTypeface = null;
 	private Typeface SpoqaMediumTypeface = null;
@@ -37,11 +36,6 @@ public class FontUtil {
 		}
 		return fontUtil;
 	}
-
-	public Typeface getHanaM() {
-		return HanaM;
-	}
-
 	/**
 	 * 폰트 일괄 적용
 	 * 

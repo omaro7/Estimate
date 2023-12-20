@@ -1161,4 +1161,22 @@ public class DateUtil {
 		return(r);
 	}
 
+	/**
+	 * 2023092->20230902로 8자리로 처리
+	 * @param inputDateStr
+	 * @return
+	 */
+	public static String displayDateYMD8(String inputDateStr){
+		SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyyMMdd");
+
+		try {
+			Date date = inputDateFormat.parse(inputDateStr);
+			String outputDateStr = outputDateFormat.format(date);
+			return outputDateStr;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return inputDateStr;
+	}
 }
