@@ -377,9 +377,6 @@ public class BottomDialogCommon {
             }
         }
 
-        //positiveButton.setTypeface(fontUtil.getHanaM());
-        //negativeButton.setTypeface(fontUtil.getHanaM());
-
         if(false == StringUtil.isEmpty(positiveName)) {
             positiveButton.setText(positiveName);
         }
@@ -390,21 +387,12 @@ public class BottomDialogCommon {
         }
         setClickListener(negativeButton, negativeCommand, negativeCallback);
 
-        if(true == naverOpenCheck()) {
-            // 처리할 내용 없다.
-        } else {
-            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-            params.width = WindowManager.LayoutParams.MATCH_PARENT;
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(params);
-            dialog.show();
-        }
-    }
 
-    //메시지 중간 텍스트 색상변경.
-    public void setSpannableMessage(String spannableString, int spannableColor) {
-        this.spannableString = spannableString;
-        this.spannableColor = spannableColor;
-    }
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(params);
+        dialog.show();
 
+    }
 }
