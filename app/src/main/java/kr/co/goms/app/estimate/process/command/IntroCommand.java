@@ -77,7 +77,7 @@ public class IntroCommand  extends Command {
         };
 
         GomsLog.d(TAG, "sendIntroData()");
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         //SendManager.I().sendData(SendDataFactory.URL_DATA_TYPE.INTRO, params, dataObserver);
 
         //서버 송신없이 그냥 끝냄.

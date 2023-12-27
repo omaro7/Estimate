@@ -18,8 +18,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
+import kr.co.goms.app.estimate.fragment.ClientListFragment;
 import kr.co.goms.app.estimate.fragment.CompanyFormFragment;
 import kr.co.goms.app.estimate.fragment.EstimateListFragment;
+import kr.co.goms.app.estimate.fragment.ItemListFragment;
+import kr.co.goms.app.estimate.fragment.SettingFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;

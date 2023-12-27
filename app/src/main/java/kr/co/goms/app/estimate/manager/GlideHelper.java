@@ -35,8 +35,8 @@ public class GlideHelper {
      * @param imageUri
      * @param imageView
      */
-    public void setImageView(Activity activity, Uri imageUri, ImageView imageView) {
-        Glide.with(activity)
+    public void setImageView(Context context, Uri imageUri, ImageView imageView) {
+        Glide.with(context)
                 .load(imageUri)
                 .into(imageView);
     }

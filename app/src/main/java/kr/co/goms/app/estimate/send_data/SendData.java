@@ -18,7 +18,7 @@ public abstract class SendData {
     private static final String LOG_TAG = SendData.class.getSimpleName();
     String mUrl;
     String mMethodType;
-    HashMap<String, String> mParam;
+    HashMap<String, Object> mParam;
     ArrayMap<Integer, File> mFileParam;
     ObserverInterface mObserver;
     static GsonManager.PARSER_TYPE mParserType;
@@ -27,11 +27,11 @@ public abstract class SendData {
         this.mUrl = mUrl;
     }
 
-    public HashMap<String, String> getParam() {
+    public HashMap<String, Object> getParam() {
         return mParam;
     }
 
-    public void setParam(HashMap<String, String> param) {
+    public void setParam(HashMap<String, Object> param) {
         this.mParam = param;
     }
 

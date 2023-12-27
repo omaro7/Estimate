@@ -19,6 +19,7 @@ public class ClientBeanTB implements Parcelable {
     private String cli_address_01;     //주소01
     private String cli_address_02;     //주소02
     private String cli_remark;          //비고
+    private String cli_main_yn;         //메인거래처 여부 YN
     private String cli_regdate;            //생성일
 
     public ClientBeanTB() {
@@ -40,6 +41,7 @@ public class ClientBeanTB implements Parcelable {
         cli_address_01 = in.readString();
         cli_address_02 = in.readString();
         cli_remark = in.readString();
+        cli_main_yn = in.readString();
         cli_regdate = in.readString();
     }
 
@@ -60,6 +62,7 @@ public class ClientBeanTB implements Parcelable {
         dest.writeString(cli_address_01);
         dest.writeString(cli_address_02);
         dest.writeString(cli_remark);
+        dest.writeString(cli_main_yn);
         dest.writeString(cli_regdate);
     }
 
@@ -198,6 +201,14 @@ public class ClientBeanTB implements Parcelable {
 
     public void setCli_remark(String cli_remark) {
         this.cli_remark = cli_remark;
+    }
+
+    public String getCli_main_yn() {
+        return cli_main_yn;
+    }
+
+    public void setCli_main_yn(String cli_main_yn) {
+        this.cli_main_yn = cli_main_yn;
     }
 
     public String getCli_regdate() {

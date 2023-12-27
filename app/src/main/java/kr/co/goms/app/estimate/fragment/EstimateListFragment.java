@@ -1,5 +1,7 @@
 package kr.co.goms.app.estimate.fragment;
 
+import static kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand.EXT_OBJECT;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -30,22 +32,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
+import kr.co.goms.app.estimate.adapter.ClientAdapter;
+import kr.co.goms.app.estimate.adapter.EstimateAdapter;
+import kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
+import kr.co.goms.app.estimate.manager.SendManager;
+import kr.co.goms.app.estimate.model.EstimateBeanTB;
+import kr.co.goms.app.estimate.send_data.SendDataFactory;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
 import kr.co.goms.module.common.command.BaseBottomDialogCommand;
-import kr.co.goms.module.common.command.InputFormBottomDialogCommand;
 import kr.co.goms.module.common.manager.DialogCommandFactory;
 import kr.co.goms.module.common.manager.DialogManager;
-import kr.co.goms.module.common.model.GroupBeanS;
+import kr.co.goms.module.common.manager.FragmentMoveManager;
 import kr.co.goms.module.common.observer.ObserverInterface;
 import kr.co.goms.module.common.util.GomsLog;
-import kr.co.goms.module.common.util.StringUtil;
 
 public class EstimateListFragment extends Fragment  implements View.OnClickListener {
 
@@ -60,14 +65,14 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
 
     private ProgressBar mPbLoading;
 
-    private ArrayList<GroupBeanS> mGroupList = new ArrayList<GroupBeanS>();
+    private ArrayList<EstimateBeanTB> mEstimateList = new ArrayList<EstimateBeanTB>();
 
-    private static final int SPAN_COUNT = 3 ;
+    private static final int SPAN_COUNT = 1;
 
     private EditText mEtSearchPlace;
     private ImageButton mInputClear;
 
-    private Button mBtnGroupCreate;
+    private Button mBtnCreate;
 
     private ObserverInterface mDataObserver;
 
@@ -75,7 +80,6 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Nullable
     @Override
@@ -90,7 +94,9 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
         Objects.requireNonNull(((CustomActivity) getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         ImageView ivSetting = view.findViewById(R.id.iv_setting);
+        //ivSetting.setVisibility(View.GONE);
         ivSetting.setOnClickListener(this);
+
         mPbLoading = view.findViewById(R.id.pb_loader);
 
         mRecyclerView = view.findViewById(R.id.rv_estimate_list);
@@ -133,15 +139,15 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
         mInputClear = view.findViewById(R.id.btn_input_clear);
         mInputClear.setOnClickListener(this);
 
-        String adId = MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID);
+        mBtnCreate = view.findViewById(R.id.btn_ok);
+        mBtnCreate.setOnClickListener(this);
 
-        mBtnGroupCreate = view.findViewById(R.id.btn_ok);
-        mBtnGroupCreate.setOnClickListener(this);
+        getEstimateData();
 
         this.setHasOptionsMenu(true);
     }
 
-    private void getGroupData(String mbIdx){
+    private void getEstimateData(){
 
         mDataObserver = new ObserverInterface() {
             @Override
@@ -166,18 +172,18 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
 
                 if (baseBean.getStatus() == BaseBean.STATUS.SUCCESS) {
 
-                    mGroupList = (ArrayList<GroupBeanS>) baseBean.getObject();
-                    GomsLog.d(TAG, "mGroupList 갯수 : " + mGroupList.size());
+                    mEstimateList = (ArrayList<EstimateBeanTB>) baseBean.getObject();
+                    GomsLog.d(TAG, "mEstimateList 갯수 : " + mEstimateList.size());
 
                     //왜 화면로딩이 되지 않을까?? -> Thread 처리
                     if (Looper.myLooper() == Looper.getMainLooper()) {
-                        setGroupList(mGroupList);
+                        setEstmateList(mEstimateList);
                     } else {
                         // WorkThread이면, MainThread에서 실행 되도록 변경.
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setGroupList(mGroupList);
+                                setEstmateList(mEstimateList);
                             }
                         });
                     }
@@ -188,33 +194,34 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
             }
         };
 
-        GomsLog.d(TAG, "sendFontData()");
-        HashMap<String, String> params = new HashMap<>();
-        params.put("mbIdx", mbIdx);
-        //SendManager.I().sendData(SendDataFactory.URL_DATA_TYPE.GROUP_LIST, params, mDataObserver);
+        HashMap<String, Object> params = new HashMap<>();
+        //params.put("mbIdx", mbIdx);
+        SendManager.I().sendData(SendDataFactory.DATA_TYPE.EST_LIST, params, mDataObserver);
 
     }
 
     @MainThread
-    private void setGroupList(ArrayList<GroupBeanS> placeList){
-        Log.d(TAG, "setGroupList()");
-        /*
-        mAdapter = new GroupAdapter(getActivity(), placeList, new GroupAdapter.GroupClickListener() {
+    private void setEstmateList(ArrayList<EstimateBeanTB> estmateList){
+        Log.d(TAG, "setEstmateList()");
+
+        mAdapter = new EstimateAdapter(getActivity(), estmateList, new EstimateAdapter.EstimateClickListener() {
             @Override
-            public void onGroupClick(int position, GroupBeanS groupBeanS) {
-                Log.d(TAG, "Group 클릭 >>>> " + groupBeanS.getRes_mh_group_name());
-                ((MainActivity)getActivity()).changeFragment(FieldBasicListFragment.getFragment(groupBeanS.getRes_mh_group_idx(), groupBeanS.getRes_mh_group_name()), "fieldBasicList");
+            public void onEstimateClick(int position, EstimateBeanTB estimateBeanTB) {
+                Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_idx());
+                Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_cli_name());
+                FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(EstimateFormFragment.getFragment(estimateBeanTB.getEst_idx()), "EstModiForm", false);
+
             }
 
             @Override
-            public void onGroupLongClick(int position, GroupBeanS groupBeanS) {
-                Log.d(TAG, "Group 롱클릭 >>>> " + groupBeanS.getRes_mh_group_name());
-                goGroupDeleteDialog(groupBeanS);
+            public void onEstimateLongClick(int position, EstimateBeanTB clientBeanTB) {
+                Log.d(TAG, "Group 롱클릭 >>>> " + clientBeanTB.getEst_cli_name());
+                goEstDeleteDialog(clientBeanTB);
             }
         });
 
-        ((GroupAdapter)mAdapter).setSearchType(GroupAdapter.SEARCH_TYPE.TITLE);    //장소명 검색조건
-        mFilter = ((GroupAdapter)mAdapter).getFilter();
+        ((EstimateAdapter)mAdapter).setSearchType(EstimateAdapter.SEARCH_TYPE.TITLE);    //장소명 검색조건
+        mFilter = ((EstimateAdapter)mAdapter).getFilter();
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setVisibility(View.VISIBLE);
@@ -224,7 +231,7 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
         ((StaggeredGridLayoutManager)mLayoutManager).setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(mLayoutManager);
-         */
+
     }
 
 
@@ -259,7 +266,8 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
                 applyClear();
                 break;
             case R.id.btn_ok:
-                goDialog();
+                //goDialog();
+                ((SettingActivity)getActivity()).changeFragment(new EstimateFormFragment(),"EstForm", false);
                 break;
             case R.id.iv_setting:
                 Intent intent = new Intent(getActivity(), SettingActivity.class);
@@ -268,67 +276,23 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
         }
     }
 
-    private void goDialog(){
-
-        //checkSignature();
-        DialogManager.I().setTag("groupInsert")
-                .setTitle("그룹생성")
-                .setMessage("그룹명을 입력해주세요")
-                .setShowTitle(true)
-                .setShowMessage(true)
-                .setNegativeBtnName("")
-                .setPositiveBtnName(getActivity().getString(kr.co.goms.module.common.R.string.confirm))
-                .setCancelable(true)
-                .setCancelTouchOutSide(true)
-                .setDataList(mGroupList)
-                .setCommand(DialogCommandFactory.I().createDialogCommand(getActivity(), DialogCommandFactory.DIALOG_TYPE.input_form.name(), new WaterCallBack() {
-                    @Override
-                    public void callback(BaseBean baseData) {
-                        String btnType = ((Bundle)baseData.getObject()).getString(BaseBottomDialogCommand.EXT_BTN_TYPE);
-                        if(BaseBottomDialogCommand.BTN_TYPE.LEFT.name().equalsIgnoreCase(btnType)){
-                            Log.d(TAG, " 클릭 >>>> 왼쪽");
-                        }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
-                            String inputData = ((Bundle)baseData.getObject()).getString(InputFormBottomDialogCommand.EXT_INPUT);
-                            if(StringUtil.isNotNull(inputData)){
-                                String mbIdx = MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID);
-                                sendNewGroupNeme(mbIdx, inputData);
-                            }
-                        }
-                    }
-                }))
-                .showDialog(getActivity());
+    /**
+     * 견적서 삭제하기
+     * @param estIdx
+     */
+    private void sendEstDelete(String estIdx){
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("estIdx", estIdx);
+        SendManager.I().sendData(SendDataFactory.DATA_TYPE.EST_DELETE, params, mDataObserver);
     }
 
     /**
-     * 그룹생성하기 서버전송
-     * @param inputData
+     * 견적서 삭제하기 하단팝업
+     * @param estimateBeanTB
      */
-    private void sendNewGroupNeme(String mbIdx, String inputData){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("mbIdx", mbIdx);
-        params.put("groupName", inputData);
-        //SendManager.I().sendData(SendDataFactory.URL_DATA_TYPE.GROUP_INSERT, params, mDataObserver);
-    }
-
-    /**
-     * 그룹삭제하기 서버전송
-     * @param mbIdx
-     * @param groupIdx
-     */
-    private void sendGroupDelete(String mbIdx, String groupIdx){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("mbIdx", mbIdx);
-        params.put("groupIdx", groupIdx);
-        //SendManager.I().sendData(SendDataFactory.URL_DATA_TYPE.GROUP_DELETE, params, mDataObserver);
-    }
-
-    /**
-     * 그룹삭제하기 하단팝업
-     * @param groupBeanS
-     */
-    private void goGroupDeleteDialog(GroupBeanS groupBeanS){
-        DialogManager.I().setTag("groupDelete")
-                .setTitle("'"+ groupBeanS.getRes_mh_group_name()+"' 삭제")
+    private void goEstDeleteDialog(EstimateBeanTB estimateBeanTB){
+        DialogManager.I().setTag("estDelete")
+                .setTitle("'"+ estimateBeanTB.getEst_cli_name()+"' 삭제")
                 .setMessage("해당 데이타를 삭제하시겠습니까?")
                 .setShowTitle(true)
                 .setShowMessage(true)
@@ -343,9 +307,8 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
                         if(BaseBottomDialogCommand.BTN_TYPE.LEFT.name().equalsIgnoreCase(btnType)){
                             Log.d(TAG, " 클릭 >>>> 왼쪽");
                         }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
-                            Log.d(TAG, " 클릭 >>>> 삭제하기 mbIdx:" + MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID) + ",groupIdx:" + groupBeanS.getRes_mh_group_name());
-                            String mbIdx = MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID);
-                            sendGroupDelete(mbIdx, groupBeanS.getRes_mh_group_idx());
+                            Log.d(TAG, " 클릭 >>>> 삭제하기 adid:" + MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID) + ",estIdx:" + estimateBeanTB.getEst_idx());
+                            sendEstDelete(estimateBeanTB.getEst_idx());
                         }
                     }
                 }))

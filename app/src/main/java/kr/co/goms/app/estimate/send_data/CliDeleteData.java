@@ -22,7 +22,7 @@ public class CliDeleteData extends LocalData implements ISendData{
         RequestItem requestItem = new RequestItem();
         requestItem.bodyMap = mParam;
 
-        String cliIdx = mParam.get("cliIdx");
+        String cliIdx = (String)mParam.get("cliIdx");
 
         ArrayList<ClientBeanTB> clientList = MyApplication.getInstance().getDBHelper().deleteClientData(cliIdx);
         successData(clientList);

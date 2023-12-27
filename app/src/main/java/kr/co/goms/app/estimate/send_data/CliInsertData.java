@@ -23,20 +23,20 @@ public class CliInsertData extends LocalData implements ISendData{
         requestItem.bodyMap = mParam;
 
         ClientBeanTB clientBeanTB = new ClientBeanTB();
-        clientBeanTB.setCli_name(mParam.get("cliName"));
-        clientBeanTB.setCli_biz_num(mParam.get("cliBizNum"));
-        clientBeanTB.setCli_ceo_name(mParam.get("cliCeoName"));
-        clientBeanTB.setCli_uptae(mParam.get("cliUpTae"));
-        clientBeanTB.setCli_upjong(mParam.get("cliUpJung"));
-        clientBeanTB.setCli_tel_num(mParam.get("cliTelNum"));
-        clientBeanTB.setCli_fax_num(mParam.get("cliFaxNum"));
-        clientBeanTB.setCli_hp_num(mParam.get("cliHpNum"));
-        clientBeanTB.setCli_manager_name(mParam.get("cliManagerName"));
-        clientBeanTB.setCli_email(mParam.get("cliEmail"));
-        clientBeanTB.setCli_zipcode(mParam.get("cliZipCode"));
-        clientBeanTB.setCli_address_01(mParam.get("cliAddress01"));
-        clientBeanTB.setCli_address_02(mParam.get("cliAddress02"));
-        clientBeanTB.setCli_remark(mParam.get("cliRemark"));
+        clientBeanTB.setCli_name((String)mParam.get("cliName"));
+        clientBeanTB.setCli_biz_num((String)mParam.get("cliBizNum"));
+        clientBeanTB.setCli_ceo_name((String)mParam.get("cliCeoName"));
+        clientBeanTB.setCli_uptae((String)mParam.get("cliUpTae"));
+        clientBeanTB.setCli_upjong((String)mParam.get("cliUpJung"));
+        clientBeanTB.setCli_tel_num((String)mParam.get("cliTelNum"));
+        clientBeanTB.setCli_fax_num((String)mParam.get("cliFaxNum"));
+        clientBeanTB.setCli_hp_num((String)mParam.get("cliHpNum"));
+        clientBeanTB.setCli_manager_name((String)mParam.get("cliManagerName"));
+        clientBeanTB.setCli_email((String)mParam.get("cliEmail"));
+        clientBeanTB.setCli_zipcode((String)mParam.get("cliZipCode"));
+        clientBeanTB.setCli_address_01((String)mParam.get("cliAddress01"));
+        clientBeanTB.setCli_address_02((String)mParam.get("cliAddress02"));
+        clientBeanTB.setCli_remark((String)mParam.get("cliRemark"));
 
         ArrayList<ClientBeanTB> clientList = MyApplication.getInstance().getDBHelper().insertClient(clientBeanTB);
         successData(clientList);

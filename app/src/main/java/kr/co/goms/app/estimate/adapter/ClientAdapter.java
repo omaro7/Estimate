@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
     private final String TAG = ClientAdapter.class.getSimpleName();
 
     private Context mContext;
-    private ArrayList<ClientBeanTB> mItemList;
+    private ArrayList<ClientBeanTB> mClientList;
     private ClientClickListener mClientClickListener;
 
     private ArrayList<ClientBeanTB> mClientListFull;
@@ -42,6 +43,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
     public class SectionHolder extends RecyclerView.ViewHolder {
         private LinearLayout lltCli;
         private TextView tvCliName, tvCliCeoName, tvCliBizNum, tvCliManagerName, tvCliHpNum, tvCliRemark;
+        private ImageView ivCliMainYn;
         public SectionHolder(View itemView, Context context) {
             super(itemView);
             lltCli = itemView.findViewById(R.id.llt_cli);
@@ -51,15 +53,16 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
             tvCliManagerName = itemView.findViewById(R.id.tv_cli_manager_name);
             tvCliHpNum = itemView.findViewById(R.id.tv_cli_hp_num);
             tvCliRemark = itemView.findViewById(R.id.tv_cli_remark);
+            ivCliMainYn = itemView.findViewById(R.id.iv_cli_main);
             setIsRecyclable(false);
         }
     }
 
-    public ClientAdapter(Context context, ArrayList<ClientBeanTB> _SectionList, ClientClickListener clientClickListener) {
+    public ClientAdapter(Context context, ArrayList<ClientBeanTB> _clientList, ClientClickListener clientClickListener) {
         this.mContext = context;
-        this.mItemList = _SectionList;
+        this.mClientList = _clientList;
         this.mClientClickListener = clientClickListener;
-        this.mClientListFull = new ArrayList<>(_SectionList);
+        this.mClientListFull = new ArrayList<>(_clientList);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
     @Override
     public void onBindViewHolder(final SectionHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        ClientBeanTB clientBeanTB = mItemList.get(position);
+        ClientBeanTB clientBeanTB = mClientList.get(position);
         String bizNum = null;
         try {
             bizNum = FormatUtil.regnNo(clientBeanTB.getCli_biz_num());
@@ -89,11 +92,13 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
         holder.tvCliHpNum.setText(clientBeanTB.getCli_hp_num());
         holder.tvCliRemark.setText(clientBeanTB.getCli_remark());
 
+        holder.ivCliMainYn.setVisibility("Y".equalsIgnoreCase(clientBeanTB.getCli_main_yn())?View.VISIBLE:View.GONE);
+
         holder.lltCli.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isLongPress) {
-                    mClientClickListener.onClientClick(position, mItemList.get(position));
+                    mClientClickListener.onClientClick(position, mClientList.get(position));
                 }
             }
         });
@@ -101,7 +106,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
         holder.lltCli.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
-                mClientClickListener.onClientLongClick(position, mItemList.get(position));
+                mClientClickListener.onClientLongClick(position, mClientList.get(position));
                 isLongPress = true;
                 return false;
             }
@@ -120,18 +125,18 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
 
     @Override
     public int getItemCount() {
-        if (mItemList == null) {
+        if (mClientList == null) {
             return 0;
         }
-        return mItemList.size();
+        return mClientList.size();
     }
 
     public void setData(ArrayList<ClientBeanTB> data) {
-        mItemList = data;
+        mClientList = data;
     }
 
     public ClientBeanTB getItem(final int position) {
-        return mItemList.get(position);
+        return mClientList.get(position);
     }
 
     /*-------------------------------------------------------
@@ -173,8 +178,8 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
         //Automatic on UI thread
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            mItemList.clear();
-            mItemList.addAll((List) filterResults.values);
+            mClientList.clear();
+            mClientList.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };

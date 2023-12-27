@@ -49,6 +49,7 @@ public class EstimateDB {
         public static final String COM_ACCOUNT_NUM  = "com_account_num";    //계좌번호
         public static final String COM_STAMP_PATH   = "com_stamp_path";     //도장
         public static final String COM_LOGO_PATH    = "com_logo_path";      //로고
+        public static final String COM_MAIN_YN    = "com_main_yn";          //메인회사 여부
         public static final String COM_REGDATE    = "com_regdate";            //생성일
     }
 
@@ -62,10 +63,32 @@ public class EstimateDB {
         public static final String ITEM_NAME        = "item_name";          //아이템 이름
         public static final String ITEM_STD         = "item_std";           //아이템 규격
         public static final String ITEM_UNIT    	= "item_unit";          //아이템 단위
-        public static final String ITEM_PRICE    	= "item_price";         //아이템 판매가
+        public static final String ITEM_UNIT_PRICE 	= "item_unit_price";    //아이템 판매가
         public static final String ITEM_REMARK      = "item_remark";        //아이템 비고
         public static final String ITEM_REGDATE     = "item_regdate";       //생성일
     }
+
+
+    /**
+     * 견적서 아이템들
+     */
+    public static final class TempItemTable {
+        public static final String TEMP_ITEM_TABLE       = "TempItemTable";          //견적서 아이템테이블
+        public static final String TEMP_ITEM_IDX         = "temp_item_idx";           //아이템 Primary key
+        public static final String TEMP_ITEM_TOKEN         = "temp_item_token";       //아이템 임시발급 key
+        public static final String TEMP_ITEM_NO        = "temp_item_no";          //아이템 이름
+        public static final String TEMP_ITEM_NAME        = "temp_item_name";          //아이템 이름
+        public static final String TEMP_ITEM_STD         = "temp_item_std";           //아이템 규격
+        public static final String TEMP_ITEM_UNIT    	= "temp_item_unit";          //아이템 단위
+        public static final String TEMP_ITEM_QUANTITY    	= "temp_item_quantity";         //아이템 수량
+        public static final String TEMP_ITEM_UNIT_PRICE    	= "temp_item_unit_price";         //아이템 판매가
+        public static final String TEMP_ITEM_PRICE    	    = "temp_item_price";         //아이템 세액
+        public static final String TEMP_ITEM_TAX_PRICE    	= "temp_item_tax_price";         //아이템 세액
+        public static final String TEMP_ITEM_TOTAL_PRICE    = "temp_item_total_price";  //아이템 합계금액
+        public static final String TEMP_ITEM_REMARK      = "temp_item_remark";        //아이템 비고
+        public static final String TEMP_ITEM_REGDATE     = "temp_item_regdate";       //생성일
+    }
+
 
     /**
      * 거래처 정보
@@ -87,6 +110,7 @@ public class EstimateDB {
         public static final String CLI_ADDRESS_01   = "cli_address_01";     //주소01
         public static final String CLI_ADDRESS_02   = "cli_address_02";     //주소02
         public static final String CLI_REMARK       = "cli_remark";         //비고
+        public static final String CLI_MAIN_YN       = "cli_main_yn";       //메인거래처 여부 YN
         public static final String CLI_REGDATE    = "cli_regdate";          //생성일
     }
     /**
@@ -106,6 +130,7 @@ public class EstimateDB {
         public static final String EST_CLI_NAME			="est_cli_name";			//거래처정보
         public static final String EST_CLI_TEL			="est_cli_tel";				//거래처 연락처
         public static final String EST_CLI_FAX			="est_cli_fax";				//거래처 팩스
+        public static final String EST_CLI_HP			="est_cli_hp";				//거래처 핸드폰
         public static final String EST_CLI_ZIPCODE		="est_cli_zipcode";			//거래처 우편번호
         public static final String EST_CLI_ADDRESS_01	="est_cli_address_01";		//거래처 주소 01
         public static final String EST_CLI_ADDRESS_02	="est_cli_address_02";		//거래처 주소 02

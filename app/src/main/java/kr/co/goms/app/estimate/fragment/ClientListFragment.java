@@ -47,6 +47,7 @@ import kr.co.goms.module.common.base.WaterCallBack;
 import kr.co.goms.module.common.command.BaseBottomDialogCommand;
 import kr.co.goms.module.common.manager.DialogCommandFactory;
 import kr.co.goms.module.common.manager.DialogManager;
+import kr.co.goms.module.common.manager.FragmentMoveManager;
 import kr.co.goms.module.common.observer.ObserverInterface;
 import kr.co.goms.module.common.util.GomsLog;
 
@@ -192,7 +193,7 @@ public class ClientListFragment extends Fragment  implements View.OnClickListene
             }
         };
 
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         //params.put("mbIdx", mbIdx);
         SendManager.I().sendData(SendDataFactory.DATA_TYPE.CLI_LIST, params, mDataObserver);
 
@@ -207,6 +208,7 @@ public class ClientListFragment extends Fragment  implements View.OnClickListene
             public void onClientClick(int position, ClientBeanTB clientBeanTB) {
                 Log.d(TAG, "clientBeanTB 클릭 >>>> " + clientBeanTB.getCli_name());
                 //((MainActivity)getActivity()).changeFragment(FieldBasicListFragment.getFragment(groupBeanS.getRes_mh_group_idx(), groupBeanS.getRes_mh_group_name()), "fieldBasicList");
+                FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(ClientFormFragment.getFragment(clientBeanTB.getCli_idx()), "CliModiForm", false);
             }
 
             @Override
@@ -263,7 +265,7 @@ public class ClientListFragment extends Fragment  implements View.OnClickListene
                 break;
             case R.id.btn_ok:
                 //goDialog();
-                ((SettingActivity)getActivity()).changeFragment(new ClientFormFragment(),"CliForm");
+                ((SettingActivity)getActivity()).changeFragment(new ClientFormFragment(),"CliForm", false);
                 break;
             case R.id.iv_setting:
                 Intent intent = new Intent(getActivity(), SettingActivity.class);
@@ -277,7 +279,7 @@ public class ClientListFragment extends Fragment  implements View.OnClickListene
      * @param cliIdx
      */
     private void sendCliDelete(String cliIdx){
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("cliIdx", cliIdx);
         SendManager.I().sendData(SendDataFactory.DATA_TYPE.CLI_DELETE, params, mDataObserver);
     }

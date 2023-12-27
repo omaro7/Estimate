@@ -151,7 +151,7 @@
                 android:layout_weight="0.2"
                 android:gravity="left|center_vertical">
                 <TextView
-                    android:id="@+id/tv_item_price"
+                    android:id="@+id/tv_item_unit_price"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left|center_vertical"

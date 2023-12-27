@@ -2,6 +2,7 @@ package kr.co.goms.app.estimate.activity;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,9 +27,15 @@ public class SettingActivity extends CustomActivity {
         fragmentTransaction.replace(R.id.setting_nav_host_fragment, fragment).commit();
     }
 
-    public void changeFragment(Fragment fragment, String name){
+    public void changeFragment(Fragment fragment, String name,@Nullable boolean isPop){
+
+        //isPos > 현재 fragment 없애고, 이동 처리함. back했을 때, 확인 가능.
+        if(isPop){
+            mFragmentManager.popBackStack();
+        }
+
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.addToBackStack("");
+        fragmentTransaction.addToBackStack(name);
         fragmentTransaction.replace(R.id.setting_nav_host_fragment, fragment).commit();
     }
 

@@ -23,15 +23,14 @@ public class ItemInsertData extends LocalData implements ISendData{
         requestItem.bodyMap = mParam;
 
         ItemBeanTB itemBeanTB = new ItemBeanTB();
-        itemBeanTB.setItem_name(mParam.get("itemName"));
-        itemBeanTB.setItem_std(mParam.get("itemStd"));
-        itemBeanTB.setItem_unit(mParam.get("itemUnit"));
-        itemBeanTB.setItem_price(mParam.get("itemPrice"));
-        itemBeanTB.setItem_remark(mParam.get("itemRemark"));
+        itemBeanTB.setItem_name((String)mParam.get("itemName"));
+        itemBeanTB.setItem_std((String)mParam.get("itemStd"));
+        itemBeanTB.setItem_unit((String)mParam.get("itemUnit"));
+        itemBeanTB.setItem_unit_price((String)mParam.get("itemUnitPrice"));
+        itemBeanTB.setItem_remark((String)mParam.get("itemRemark"));
 
         ArrayList<ItemBeanTB> itemList = MyApplication.getInstance().getDBHelper().insertItem(itemBeanTB);
         successData(itemList);
-
     }
 
     private void successData(Object object){

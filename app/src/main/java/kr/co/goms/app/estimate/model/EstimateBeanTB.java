@@ -15,17 +15,23 @@ public class EstimateBeanTB implements Parcelable {
     private String est_delivery_location;	//인도장소
     private String est_num;					//견적번호
     private String est_cli_name;			//거래처정보
+    private String est_cli_email;			//거래처 이메일
     private String est_cli_tel;				//거래처 연락처
     private String est_cli_fax;				//거래처 팩스
+    private String est_cli_hp;				//거래처 핸드폰
     private String est_cli_zipcode;			//거래처 우편번호
     private String est_cli_address_01;		//거래처 주소 01
     private String est_cli_address_02;		//거래처 주소 02
-    private String est_cli_manager_name;	//담당자 이름
+    private String est_cli_manager_name;	//거래처 담당자 이름
     private String est_cli_remark;			//거래처 비고
     private String est_com_name;			//회사명
     private String est_com_ceo_name;		//회사대표자명
-    private String est_com_biz_num;		//사업자번호
+    private String est_com_biz_num;		    //사업자번호
+    private String est_com_tel;				//회사 연락처
+    private String est_com_fax;				//회사 팩스
+    private String est_com_hp;				//회사 핸드폰
     private String est_com_email;			//이메일
+    private String est_com_manager_name;	//담당자 이름
     private String est_com_zipcode;		//회사우편번호
     private String est_com_address_01;		//주소01
     private String est_com_address_02;		//주소02
@@ -48,8 +54,10 @@ public class EstimateBeanTB implements Parcelable {
         est_delivery_location = in.readString();
         est_num = in.readString();
         est_cli_name = in.readString();
+        est_cli_email = in.readString();
         est_cli_tel = in.readString();
         est_cli_fax = in.readString();
+        est_cli_hp = in.readString();
         est_cli_zipcode = in.readString();
         est_cli_address_01 = in.readString();
         est_cli_address_02 = in.readString();
@@ -58,7 +66,11 @@ public class EstimateBeanTB implements Parcelable {
         est_com_name = in.readString();
         est_com_ceo_name = in.readString();
         est_com_biz_num = in.readString();
+        est_com_tel = in.readString();
+        est_com_fax = in.readString();
+        est_com_hp = in.readString();
         est_com_email = in.readString();
+        est_com_manager_name = in.readString();
         est_com_zipcode = in.readString();
         est_com_address_01 = in.readString();
         est_com_address_02 = in.readString();
@@ -80,8 +92,10 @@ public class EstimateBeanTB implements Parcelable {
         dest.writeString(est_delivery_location);
         dest.writeString(est_num);
         dest.writeString(est_cli_name);
+        dest.writeString(est_cli_email);
         dest.writeString(est_cli_tel);
         dest.writeString(est_cli_fax);
+        dest.writeString(est_cli_hp);
         dest.writeString(est_cli_zipcode);
         dest.writeString(est_cli_address_01);
         dest.writeString(est_cli_address_02);
@@ -90,7 +104,11 @@ public class EstimateBeanTB implements Parcelable {
         dest.writeString(est_com_name);
         dest.writeString(est_com_ceo_name);
         dest.writeString(est_com_biz_num);
+        dest.writeString(est_com_tel);
+        dest.writeString(est_com_fax);
+        dest.writeString(est_com_hp);
         dest.writeString(est_com_email);
+        dest.writeString(est_com_manager_name);
         dest.writeString(est_com_zipcode);
         dest.writeString(est_com_address_01);
         dest.writeString(est_com_address_02);
@@ -197,6 +215,14 @@ public class EstimateBeanTB implements Parcelable {
         this.est_cli_name = est_cli_name;
     }
 
+    public String getEst_cli_email() {
+        return est_cli_email;
+    }
+
+    public void setEst_cli_email(String est_cli_email) {
+        this.est_cli_email = est_cli_email;
+    }
+
     public String getEst_cli_tel() {
         return est_cli_tel;
     }
@@ -211,6 +237,14 @@ public class EstimateBeanTB implements Parcelable {
 
     public void setEst_cli_fax(String est_cli_fax) {
         this.est_cli_fax = est_cli_fax;
+    }
+
+    public String getEst_cli_hp() {
+        return est_cli_hp;
+    }
+
+    public void setEst_cli_hp(String est_cli_hp) {
+        this.est_cli_hp = est_cli_hp;
     }
 
     public String getEst_cli_zipcode() {
@@ -277,12 +311,44 @@ public class EstimateBeanTB implements Parcelable {
         this.est_com_biz_num = est_com_biz_num;
     }
 
+    public String getEst_com_tel() {
+        return est_com_tel;
+    }
+
+    public void setEst_com_tel(String est_com_tel) {
+        this.est_com_tel = est_com_tel;
+    }
+
+    public String getEst_com_fax() {
+        return est_com_fax;
+    }
+
+    public void setEst_com_fax(String est_com_fax) {
+        this.est_com_fax = est_com_fax;
+    }
+
+    public String getEst_com_hp() {
+        return est_com_hp;
+    }
+
+    public void setEst_com_hp(String est_com_hp) {
+        this.est_com_hp = est_com_hp;
+    }
+
     public String getEst_com_email() {
         return est_com_email;
     }
 
     public void setEst_com_email(String est_com_email) {
         this.est_com_email = est_com_email;
+    }
+
+    public String getEst_com_manager_name() {
+        return est_com_manager_name;
+    }
+
+    public void setEst_com_manager_name(String est_com_manager_name) {
+        this.est_com_manager_name = est_com_manager_name;
     }
 
     public String getEst_com_zipcode() {

@@ -5,16 +5,20 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -24,6 +28,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import kr.co.goms.app.estimate.AppConstant;
@@ -32,10 +38,17 @@ import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.app.estimate.manager.GlideHelper;
+import kr.co.goms.app.estimate.manager.SendManager;
 import kr.co.goms.app.estimate.model.CompanyBeanTB;
+import kr.co.goms.app.estimate.model.ItemBeanTB;
+import kr.co.goms.app.estimate.send_data.SendDataFactory;
 import kr.co.goms.module.common.activity.CustomActivity;
+import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.curvlet.CurvletManager;
+import kr.co.goms.module.common.manager.FragmentMoveManager;
+import kr.co.goms.module.common.observer.ObserverInterface;
 import kr.co.goms.module.common.util.FileUtil;
+import kr.co.goms.module.common.util.GomsLog;
 import kr.co.goms.module.common.util.StringUtil;
 
 public class CompanyFormFragment extends Fragment implements View.OnClickListener {
@@ -49,6 +62,7 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
     private EditText mEtComName, mEtBizNum, mEtCeoName, mEtUpTae, mEtUpJong, mEtManagerName, mEtTel, mEtFax, mEtHp, mEtEmail, mEtZipCode, mEtAddress01, mEtAddress02, mEtAccoundNum;
     private ImageView mIvStamp, mIvLogo;
     private LottieAnimationView mLavStemp, mLavLogo;
+    private SwitchCompat mSwitchMainYn;
 
     private DIALOG_TYPE mDialogType = DIALOG_TYPE.STAMP;
     private enum DIALOG_TYPE{
@@ -58,13 +72,20 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
 
     private Uri mPhotoStampUri, mPhotoLogoUri;
 
-
     private String mComIdx = "";
 
-    public static CompanyFormFragment getFragment(int comIdx){
+    private FORM_TYPE mFormType = FORM_TYPE.CREATE;
+    private enum FORM_TYPE{
+        CREATE, //생성
+        MODIFY,   //수정
+    }
+
+    private ObserverInterface mDataObserver;
+
+    public static CompanyFormFragment getFragment(String comIdx){
         CompanyFormFragment fragment = new CompanyFormFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("comIdx", comIdx);
+        bundle.putString("comIdx", comIdx);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -99,8 +120,8 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         TextView tvToolBarTitle = view.findViewById(R.id.tv_toolbar_title);
         tvToolBarTitle.setText("나의 회사 정보");
 
-        //mComIdx = "1";
         initData(view, mComIdx);
+        setObserverData();
 
         this.setHasOptionsMenu(true);
 
@@ -135,49 +156,24 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         int id = v.getId();
         if(id == R.id.btn_save){
             if(checkValue()){
-                String comName = mEtComName.getText().toString();
-                String bizNum = mEtBizNum.getText().toString();
-                String ceoName = mEtCeoName.getText().toString();
-                String upTae = mEtUpTae.getText().toString();
-                String upJong  = mEtUpJong.getText().toString();
-                String managerName  = mEtManagerName.getText().toString();
-                String tel = mEtTel.getText().toString();
-                String fax  = mEtFax.getText().toString();
-                String hp  = mEtHp.getText().toString();
-                String email = mEtEmail.getText().toString();
-                String zipCode = mEtZipCode.getText().toString();
-                String address01 = mEtAddress01.getText().toString();
-                String address02 = mEtAddress02.getText().toString();
-                String accoundNum = mEtAccoundNum.getText().toString();
-
-                CompanyBeanTB companyBeanTB = new CompanyBeanTB();
-                companyBeanTB.setUser_ad_id(AdIdHelper.I().getAdID());
-                companyBeanTB.setCom_name(comName);
-                companyBeanTB.setCom_biz_num(bizNum);
-                companyBeanTB.setCom_ceo_name(ceoName);
-                companyBeanTB.setCom_uptae(upTae);
-                companyBeanTB.setCom_upjong(upJong);
-                companyBeanTB.setCom_manager_name(managerName);
-                companyBeanTB.setCom_tel_num(tel);
-                companyBeanTB.setCom_fax_num(fax);
-                companyBeanTB.setCom_hp_num(hp);
-                companyBeanTB.setCom_email(email);
-                companyBeanTB.setCom_zipcode(zipCode);
-                companyBeanTB.setCom_address_01(address01);
-                companyBeanTB.setCom_address_02(address02);
-                companyBeanTB.setCom_account_num(accoundNum);
-
-                if(mPhotoStampUri != null) {
-                    companyBeanTB.setCom_stamp_path(mPhotoStampUri.getPath());
-                }
-                if(mPhotoLogoUri != null) {
-                    companyBeanTB.setCom_logo_path(mPhotoLogoUri.getPath());
-                }
-
-                MyApplication.getInstance().getDBHelper().insertCompany(companyBeanTB);
-
+                goSave();
             }
         }
+    }
+
+    private void setObserverData(){
+        mDataObserver = new ObserverInterface() {
+            @Override
+            public void callback(BaseBean baseBean) {
+                GomsLog.d(TAG, "mDataObserver  CallBack()");
+
+                if (baseBean.getStatus() == BaseBean.STATUS.SUCCESS) {
+                    FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(new CompanyListFragment(), "ComList", true);
+                } else {
+                    GomsLog.d(TAG, "CallBack() : mDataObserver 실패!!!!");
+                }
+            }
+        };
     }
 
     private void goAlbum(DIALOG_TYPE dialogType){
@@ -260,6 +256,12 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
 
     private void initData(View view, String comIdx){
 
+        if(StringUtil.isEmpty(comIdx)){
+            mFormType = FORM_TYPE.CREATE;
+        }else{
+            mFormType = FORM_TYPE.MODIFY;
+        }
+
         mEtComName = view.findViewById(R.id.et_com_name);
         mEtBizNum= view.findViewById(R.id.et_biz_num);
         mEtCeoName = view.findViewById(R.id.et_ceo_name);
@@ -279,9 +281,12 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         mLavStemp = view.findViewById(R.id.lav_stamp);
         mLavLogo = view.findViewById(R.id.lav_logo);
 
-        view.findViewById(R.id.btn_save).setOnClickListener(this);
+        mSwitchMainYn = view.findViewById(R.id.sc_main_yn);
 
-        if(StringUtil.isNotNull(comIdx)) {
+        Button btnSave = view.findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(this);
+
+        if(FORM_TYPE.MODIFY.name().equalsIgnoreCase(mFormType.name()) && StringUtil.isNotNull(comIdx)) {
             CompanyBeanTB companyBeanTB = MyApplication.getInstance().getDBHelper().getCompany(comIdx);
 
             mEtComName.setText(companyBeanTB.getCom_name());
@@ -298,7 +303,77 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             mEtAddress01.setText(companyBeanTB.getCom_address_01());
             mEtAddress02.setText(companyBeanTB.getCom_address_02());
             mEtAccoundNum.setText(companyBeanTB.getCom_account_num());
+            mSwitchMainYn.setChecked("Y".equalsIgnoreCase(companyBeanTB.getCom_main_yn()));
+
+            btnSave.setText("수정");
         }
     }
 
+    private void goSave(){
+        String comName = mEtComName.getText().toString();
+        String bizNum = mEtBizNum.getText().toString();
+        String ceoName = mEtCeoName.getText().toString();
+        String upTae = mEtUpTae.getText().toString();
+        String upJong  = mEtUpJong.getText().toString();
+        String managerName  = mEtManagerName.getText().toString();
+        String tel = mEtTel.getText().toString();
+        String fax  = mEtFax.getText().toString();
+        String hp  = mEtHp.getText().toString();
+        String email = mEtEmail.getText().toString();
+        String zipCode = mEtZipCode.getText().toString();
+        String address01 = mEtAddress01.getText().toString();
+        String address02 = mEtAddress02.getText().toString();
+        String accoundNum = mEtAccoundNum.getText().toString();
+        String mainYn = mSwitchMainYn.isChecked()?"Y":"N";
+
+        CompanyBeanTB companyBeanTB = new CompanyBeanTB();
+        companyBeanTB.setCom_idx(mComIdx);
+        companyBeanTB.setUser_ad_id(AdIdHelper.I().getAdID());
+        companyBeanTB.setCom_name(comName);
+        companyBeanTB.setCom_biz_num(bizNum);
+        companyBeanTB.setCom_ceo_name(ceoName);
+        companyBeanTB.setCom_uptae(upTae);
+        companyBeanTB.setCom_upjong(upJong);
+        companyBeanTB.setCom_manager_name(managerName);
+        companyBeanTB.setCom_tel_num(tel);
+        companyBeanTB.setCom_fax_num(fax);
+        companyBeanTB.setCom_hp_num(hp);
+        companyBeanTB.setCom_email(email);
+        companyBeanTB.setCom_zipcode(zipCode);
+        companyBeanTB.setCom_address_01(address01);
+        companyBeanTB.setCom_address_02(address02);
+        companyBeanTB.setCom_account_num(accoundNum);
+        companyBeanTB.setCom_main_yn(mainYn);
+
+        if(mPhotoStampUri != null) {
+            companyBeanTB.setCom_stamp_path(mPhotoStampUri.getPath());
+        }
+        if(mPhotoLogoUri != null) {
+            companyBeanTB.setCom_logo_path(mPhotoLogoUri.getPath());
+        }
+
+        if(FORM_TYPE.MODIFY.name().equalsIgnoreCase(mFormType.name())) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("comIdx", companyBeanTB.getCom_idx());
+            params.put("comName", companyBeanTB.getCom_name());
+            params.put("comBizNum", companyBeanTB.getCom_biz_num());
+            params.put("comCeoName", companyBeanTB.getCom_ceo_name());
+            params.put("comUpTae", companyBeanTB.getCom_uptae());
+            params.put("comUpJong", companyBeanTB.getCom_upjong());
+            params.put("comManagerName", companyBeanTB.getCom_manager_name());
+            params.put("comTelNum", companyBeanTB.getCom_tel_num());
+            params.put("comFaxNum", companyBeanTB.getCom_fax_num());
+            params.put("comHpNum", companyBeanTB.getCom_hp_num());
+            params.put("comEmail", companyBeanTB.getCom_email());
+            params.put("comZipCode", companyBeanTB.getCom_zipcode());
+            params.put("comAddress01", companyBeanTB.getCom_address_01());
+            params.put("comAddress02", companyBeanTB.getCom_address_02());
+            params.put("comAccountNum", companyBeanTB.getCom_account_num());
+            params.put("comMainYN", companyBeanTB.getCom_main_yn());
+
+            SendManager.I().sendData(SendDataFactory.DATA_TYPE.COM_UPDATE, params, mDataObserver);
+        }else {
+            MyApplication.getInstance().getDBHelper().insertCompany(companyBeanTB);
+        }
+    }
 }

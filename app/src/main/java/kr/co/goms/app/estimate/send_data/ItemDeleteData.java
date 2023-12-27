@@ -22,7 +22,7 @@ public class ItemDeleteData extends LocalData implements ISendData{
         RequestItem requestItem = new RequestItem();
         requestItem.bodyMap = mParam;
 
-        String itemIdx = mParam.get("itemIdx");
+        String itemIdx = (String)mParam.get("itemIdx");
 
         ArrayList<ItemBeanTB> itemList = MyApplication.getInstance().getDBHelper().deleteItemData(itemIdx);
         successData(itemList);

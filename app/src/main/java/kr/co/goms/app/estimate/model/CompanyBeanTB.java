@@ -22,6 +22,7 @@ public class CompanyBeanTB implements Parcelable {
     private String com_account_num;    //계좌번호
     private String com_stamp_path;     //도장
     private String com_logo_path;      //로고
+    private String com_main_yn;         //메인회사 여부
     private String com_regdate;            //생성일
 
     public CompanyBeanTB() {
@@ -47,6 +48,7 @@ public class CompanyBeanTB implements Parcelable {
         com_account_num = in.readString();
         com_stamp_path = in.readString();
         com_logo_path = in.readString();
+        com_main_yn = in.readString();
         com_regdate = in.readString();
     }
 
@@ -70,6 +72,7 @@ public class CompanyBeanTB implements Parcelable {
         dest.writeString(com_account_num);
         dest.writeString(com_stamp_path);
         dest.writeString(com_logo_path);
+        dest.writeString(com_main_yn);
         dest.writeString(com_regdate);
     }
 
@@ -232,6 +235,14 @@ public class CompanyBeanTB implements Parcelable {
 
     public void setCom_logo_path(String com_logo_path) {
         this.com_logo_path = com_logo_path;
+    }
+
+    public String getCom_main_yn() {
+        return com_main_yn;
+    }
+
+    public void setCom_main_yn(String com_main_yn) {
+        this.com_main_yn = com_main_yn;
     }
 
     public String getCom_regdate() {

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import kr.co.goms.app.estimate.send_data.LocalData;
 import kr.co.goms.app.estimate.send_data.SendData;
 import kr.co.goms.app.estimate.send_data.SendDataFactory;
+import kr.co.goms.module.common.curvlet.CurvletManager;
 import kr.co.goms.module.common.observer.ObserverInterface;
 import kr.co.goms.module.common.util.GomsLog;
 
@@ -47,7 +48,7 @@ public class SendManager {
      * @param param 전달 param
      * @param observer  결과 observer
      */
-    public void sendData(SendDataFactory.DATA_TYPE dataType, HashMap<String, String> param, ObserverInterface observer){
+    public void sendData(SendDataFactory.DATA_TYPE dataType, HashMap<String, Object> param, ObserverInterface observer){
         GomsLog.d(TAG, "sendData()");
         SendDataFactory sendDataFactory = new SendDataFactory();
         Object sendData = sendDataFactory.createSendData(dataType);
@@ -57,7 +58,7 @@ public class SendManager {
             localData.setParam(param);
             localData.setObserver(observer);
             localData.onSendData();
-        }else {
+        } else {
             SendData localData = (SendData) sendData;
             localData.setParam(param);
             localData.setObserver(observer);
@@ -66,7 +67,7 @@ public class SendManager {
 
     }
 
-    public void sendData(SendDataFactory.DATA_TYPE dataType, HashMap<String, String> param, ArrayMap<Integer, File> fileParam, ObserverInterface observer){
+    public void sendData(SendDataFactory.DATA_TYPE dataType, HashMap<String, Object> param, ArrayMap<Integer, File> fileParam, ObserverInterface observer){
         GomsLog.d(TAG, "sendData()");
         SendDataFactory sendDataFactory = new SendDataFactory();
         SendData sendData = (SendData)sendDataFactory.createSendData(dataType);

@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,11 +19,13 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
+import kr.co.goms.app.estimate.AppConstant;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
 import kr.co.goms.module.common.activity.CustomActivity;
+import kr.co.goms.module.common.util.StringUtil;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
 
@@ -32,6 +35,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private SwitchCompat mSwitchBlcok;
+    private EditText mEtEstimatePrefix;
 
     private String isShowBlockYN = "N";
 
@@ -81,12 +85,26 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         mSwitchBlcok.setChecked("Y".equalsIgnoreCase(isShowBlockYN));
 
-        RelativeLayout rltBizForm = view.findViewById(R.id.rl_biz);
+        mEtEstimatePrefix = view.findViewById(R.id.et_estimate_prefix);
+
+        String estimatePrefix = MyApplication.getInstance().prefs().get(AppConstant.EST_PREFIX);
+        if(StringUtil.isEmpty(estimatePrefix)){
+            estimatePrefix = "AB";
+        }
+        mEtEstimatePrefix.setText(estimatePrefix);
+
+        RelativeLayout rltCom = view.findViewById(R.id.rl_com);
         RelativeLayout rltItem = view.findViewById(R.id.rl_item);
         RelativeLayout rltCli = view.findViewById(R.id.rl_cli);
-        rltBizForm.setOnClickListener(this);
+        RelativeLayout rltEst = view.findViewById(R.id.rl_est);
+
+        view.findViewById(R.id.btn_est_prefix).setOnClickListener(this);
+
+        rltCom.setOnClickListener(this);
         rltItem.setOnClickListener(this);
         rltCli.setOnClickListener(this);
+        rltEst.setOnClickListener(this);
+
 
         this.setHasOptionsMenu(true);
 
@@ -119,12 +137,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if(id == R.id.rl_biz){
-            ((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm");
+        if(id == R.id.rl_com){
+            ((SettingActivity)getActivity()).changeFragment(new CompanyListFragment(), "ComList", false);
         }else if(id == R.id.rl_item){
-            ((SettingActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList");
+            ((SettingActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList", false);
         }else if(id == R.id.rl_cli){
-            ((SettingActivity)getActivity()).changeFragment(new ClientListFragment(), "CliList");
+            ((SettingActivity)getActivity()).changeFragment(new ClientListFragment(), "CliList", false);
+        }else if(id == R.id.rl_est){
+            ((SettingActivity)getActivity()).changeFragment(new EstimateListFragment(), "EstList", false);
+        }else if(id == R.id.btn_est_prefix){
+            String prefix = mEtEstimatePrefix.getText().toString();
+            MyApplication.getInstance().prefs().put(AppConstant.EST_PREFIX, prefix);
         }
 
     }

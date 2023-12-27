@@ -17,17 +17,17 @@ import kr.co.goms.module.common.util.GomsLog;
 
 public abstract class LocalData {
     private static final String LOG_TAG = LocalData.class.getSimpleName();
-    HashMap<String, String> mParam;
+    HashMap<String, Object> mParam;
     ArrayMap<Integer, File> mFileParam;
     ObserverInterface mObserver;
     static GsonManager.PARSER_TYPE mParserType;
 
 
-    public HashMap<String, String> getParam() {
+    public HashMap<String, Object> getParam() {
         return mParam;
     }
 
-    public void setParam(HashMap<String, String> param) {
+    public void setParam(HashMap<String, Object> param) {
         this.mParam = param;
     }
 

@@ -12,5 +12,6 @@ public class AppConstant {
 
     public final static int PHOTO_WIDTH = 160;
     public final static int PHOTO_HEIGHT = 160;
+    public static final String EST_PREFIX = "EST_PREFIX";
 
 }

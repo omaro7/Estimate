@@ -198,7 +198,7 @@ public class ItemListFragment extends Fragment  implements View.OnClickListener 
         };
 
         GomsLog.d(TAG, "sendFontData()");
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         //params.put("mbIdx", mbIdx);
         SendManager.I().sendData(SendDataFactory.DATA_TYPE.ITEM_LIST, params, mDataObserver);
 
@@ -301,11 +301,11 @@ public class ItemListFragment extends Fragment  implements View.OnClickListener 
 
                             ItemBeanTB itemBeanTB = (ItemBeanTB) bundle.getParcelable(EXT_OBJECT);
 
-                            HashMap<String, String> params = new HashMap<>();
+                            HashMap<String, Object> params = new HashMap<>();
                             params.put("itemName", itemBeanTB.getItem_name());
                             params.put("itemStd", itemBeanTB.getItem_std());
                             params.put("itemUnit", itemBeanTB.getItem_unit());
-                            params.put("itemPrice", itemBeanTB.getItem_price());
+                            params.put("itemUnitPrice", itemBeanTB.getItem_unit_price());
                             params.put("itemRemark", itemBeanTB.getItem_remark());
                             SendManager.I().sendData(SendDataFactory.DATA_TYPE.ITEM_INSERT, params, new ObserverInterface() {
                                 @Override
@@ -344,7 +344,7 @@ public class ItemListFragment extends Fragment  implements View.OnClickListener 
      * @param itemIdx
      */
     private void sendItemDelete(String itemIdx){
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("itemIdx", itemIdx);
         SendManager.I().sendData(SendDataFactory.DATA_TYPE.ITEM_DELETE, params, mDataObserver);
     }

@@ -10,7 +10,7 @@ import kr.co.goms.module.common.task.RequestItem;
 import kr.co.goms.module.common.util.GomsLog;
 
 /**
- * 아이템 가져오기
+ * 거래처 가져오기
  */
 public class CliListData extends LocalData implements ISendData{
     private final String TAG = CliListData.class.getSimpleName();

@@ -45,7 +45,8 @@ public class BottomDialogItemForm {
     protected EditText mEtItemName = null;
     protected EditText mEtItemStd = null;
     protected EditText mEtItemUnit = null;
-    protected EditText mEtItemPrice = null;
+    protected EditText mEtItemQuantity = null;
+    protected EditText mEtItemUnitPrice = null;
     protected EditText mEtItemRemark = null;
     protected TextView titleTV = null;
     protected TextView messageTV = null;
@@ -110,7 +111,8 @@ public class BottomDialogItemForm {
         mEtItemName = dialog.findViewById(R.id.et_item_name);
         mEtItemStd = dialog.findViewById(R.id.et_item_std);
         mEtItemUnit = dialog.findViewById(R.id.et_item_unit);
-        mEtItemPrice = dialog.findViewById(R.id.et_item_price);
+        mEtItemQuantity = dialog.findViewById(R.id.et_item_quantity);
+        mEtItemUnitPrice = dialog.findViewById(R.id.et_item_unit_price);
         mEtItemRemark = dialog.findViewById(R.id.et_item_remark);
 
         titleTV = dialog.findViewById(R.id.title_tv);
@@ -186,11 +188,18 @@ public class BottomDialogItemForm {
                     String itemName = mEtItemName.getText().toString();
                     String itemStd = mEtItemStd.getText().toString();
                     String itemUnit = mEtItemUnit.getText().toString();
-                    String itemPrice = mEtItemPrice.getText().toString();
+                    String itemQuantity = mEtItemQuantity.getText().toString();
+                    String itemUnitPrice = mEtItemUnitPrice.getText().toString();
                     String itemRemark = mEtItemRemark.getText().toString();
 
                     if(StringUtil.isEmpty(itemName)){
                         CurvletManager.process(activity, null, "water://toast?text=상품명을 입력해주세요");
+                        return;
+                    }else if(StringUtil.isEmpty(itemQuantity)){
+                        CurvletManager.process(activity, null, "water://toast?text=상품수량을 입력해주세요");
+                        return;
+                    }else if(StringUtil.isEmpty(itemUnitPrice)){
+                        CurvletManager.process(activity, null, "water://toast?text=상품가격을 입력해주세요");
                         return;
                     }
 
@@ -198,7 +207,8 @@ public class BottomDialogItemForm {
                     itemBeanTB.setItem_name(itemName);
                     itemBeanTB.setItem_std(itemStd);
                     itemBeanTB.setItem_unit(itemUnit);
-                    itemBeanTB.setItem_price(itemPrice);
+                    itemBeanTB.setItem_unit_price(itemUnitPrice);
+                    itemBeanTB.setItem_quantity(itemQuantity);
                     itemBeanTB.setItem_remark(itemRemark);
 
                     dialog.dismiss();

@@ -41,14 +41,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.SectionHolder>
 
     public class SectionHolder extends RecyclerView.ViewHolder {
         private LinearLayout lltItem;
-        private TextView tvItemName, tvItemStd, tvItemUnit, tvItemPrice, tvItemRemark;
+        private TextView tvItemName, tvItemStd, tvItemUnit, tvItemUnitPrice, tvItemRemark;
         public SectionHolder(View itemView, Context context) {
             super(itemView);
             lltItem = itemView.findViewById(R.id.llt_item);
             tvItemName = itemView.findViewById(R.id.tv_item_name);
             tvItemStd = itemView.findViewById(R.id.tv_item_std);
             tvItemUnit = itemView.findViewById(R.id.tv_item_unit);
-            tvItemPrice = itemView.findViewById(R.id.tv_item_price);
+            tvItemUnitPrice = itemView.findViewById(R.id.tv_item_unit_price);
             tvItemRemark = itemView.findViewById(R.id.tv_item_remark);
             setIsRecyclable(false);
         }
@@ -74,9 +74,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.SectionHolder>
     public void onBindViewHolder(final SectionHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         ItemBeanTB itemBeanTB = mItemList.get(position);
-        String price = null;
+        String unitPrice = null;
         try {
-            price = FormatUtil.money(itemBeanTB.getItem_price());
+            unitPrice = FormatUtil.money(itemBeanTB.getItem_unit_price());
         }catch(Exception e){
             
         }
@@ -84,7 +84,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.SectionHolder>
         holder.tvItemName.setText(itemBeanTB.getItem_name());
         holder.tvItemStd.setText(itemBeanTB.getItem_std());
         holder.tvItemUnit.setText(itemBeanTB.getItem_unit());
-        holder.tvItemPrice.setText(price);
+        holder.tvItemUnitPrice.setText(unitPrice);
         holder.tvItemRemark.setText(itemBeanTB.getItem_remark());
 
         holder.lltItem.setOnClickListener(new View.OnClickListener() {
