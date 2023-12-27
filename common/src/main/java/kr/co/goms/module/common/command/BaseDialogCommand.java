@@ -115,12 +115,12 @@ public class BaseDialogCommand extends Command {
      */
     private void goBaseDialog(Activity activity, Object object, BaseBean baseData){
 
-        String negativeName = ((Bundle)object).getString("nagativeName");
+        String negativeName = ((Bundle)object).getString("negativeName");
         String positiveName = ((Bundle)object).getString("positiveName");
 
         final BaseDialog baseDialog = new BaseDialog(activity, object);
 
-        //nagativeName = -1 지정 시, 안보이게 처리
+        //negativeName = -1 지정 시, 안보이게 처리
         if (!StringUtil.isEmpty(negativeName)) {
             baseDialog.setOnLeftButtonListener(negativeName, new BaseCommand(BaseBean.STATUS.FAIL, "", new WaterCallBack() {
                 @Override

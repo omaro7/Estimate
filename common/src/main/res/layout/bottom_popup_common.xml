@@ -27,7 +27,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp">
+                    android:layout_marginTop="16dp">
 
                     <RelativeLayout
                         android:id="@+id/rlTop"
@@ -38,7 +38,7 @@
 
                         <TextView
                             android:id="@+id/title_tv"
-                            android:text="안녕하세요\n동의 취소하시겠어요?"
+                            android:text="안녕하세요"
                             android:textColor="#111111"
                             android:textSize="20dp"
                             android:lineHeight="36dp"
@@ -53,8 +53,8 @@
                         android:id="@+id/iv_close"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="24dp"
+                        android:layout_gravity="right|top"
+                        android:layout_marginRight="20dp"
                         android:src="@drawable/btn_pop_close"
                         android:visibility="visible" />
                 </FrameLayout>

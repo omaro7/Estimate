@@ -2111,4 +2111,72 @@ public class FormatUtil {
         return nSum;
     }
 
+    public static String removeComma(String money){
+       return money.replace(",", "");
+    }
+
+    /**
+     * 정해진 자리수에 맞게 zero fill
+     * @param format "%04d"
+     * @param i 1
+     * @return 0001
+     */
+    public static String zeroFill(String format, int i){
+        String target = String.format(format, i);
+        return target;
+    }
+
+    private static final String[] NUMBER_UNIT = {"", "만", "억", "조", "경", "해"};
+    private static final String[] NUMBER_BASE = {"", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"};
+
+    public static String convertNumberToKorean(long number) {
+        if (number == 0) {
+            return "영";
+        }
+
+        StringBuilder result = new StringBuilder();
+        int unitIndex = 0;
+
+        while (number > 0) {
+            long remainder = number % 10000;
+            if (remainder > 0) {
+                result.insert(0, convertBelow10000(remainder) + NUMBER_UNIT[unitIndex]);
+            }
+            number /= 10000;
+            unitIndex++;
+        }
+
+        return result.toString();
+    }
+
+    private static String convertBelow10000(long number) {
+        StringBuilder result = new StringBuilder();
+
+        int digit = 1;
+        while (number > 0) {
+            int num = (int) (number % 10);
+            if (num > 0) {
+                result.insert(0, NUMBER_BASE[num] + getDigitName(digit));
+            }
+            number /= 10;
+            digit++;
+        }
+
+        return result.toString();
+    }
+
+    private static String getDigitName(int digit) {
+        switch (digit) {
+            case 1:
+                return "";
+            case 2:
+                return "십";
+            case 3:
+                return "백";
+            case 4:
+                return "천";
+            default:
+                return "";
+        }
+    }
 }

@@ -297,11 +297,11 @@ public class ServerTask extends AsyncTask<Void, Void, String> implements Request
     }
 
     private String getRequestBodyString(){
-        Iterator<Map.Entry<String, String>> iterator = mItem.bodyMap.entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> iterator = mItem.bodyMap.entrySet().iterator();
 
         String params = "";
         while (iterator.hasNext()) {
-            Map.Entry<String, String> param = iterator.next();
+            Map.Entry<String, Object> param = iterator.next();
             if(StringUtil.isEmpty(params)) {
                 params = param.getKey() + "^" + param.getValue();
             } else {
