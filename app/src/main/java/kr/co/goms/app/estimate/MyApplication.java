@@ -61,7 +61,7 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
 
         mGomsJNI = new GomsJNI(this);
         mDBHelper = new DBHelper(this);
-        //mDBHelper.deleteTable();
+        //mDBHelper.deleteTable(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
         //mDBHelper.createTable();
 
         curvletApiSettings();
