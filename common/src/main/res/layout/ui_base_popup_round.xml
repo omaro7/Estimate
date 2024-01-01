@@ -151,7 +151,7 @@
                 android:background="@drawable/bg_round_default_btn"
                 android:text="@string/ok"
                 android:textSize="16dp"
-                android:textColor="#111111"
+                android:textColor="@color/white"
                 android:fontFamily="@font/spoqahansansneoregular"
                 android:visibility="gone" />
         </RelativeLayout>
