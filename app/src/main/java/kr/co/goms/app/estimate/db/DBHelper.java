@@ -151,13 +151,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 EstimateDB.EstimateTable.EST_CLI_ADDRESS_02, " VARCHAR, ",		//거래처 주소 02
                 EstimateDB.EstimateTable.EST_CLI_MANAGER_NAME, " VARCHAR, ",	//담당자 이름
                 EstimateDB.EstimateTable.EST_CLI_REMARK, " VARCHAR, ",			//거래처 비고
-                EstimateDB.EstimateTable.EST_COM_NAME, " VARCHAR, ",			//회사명
-                EstimateDB.EstimateTable.EST_COM_CEO_NAME, " VARCHAR, ",		//회사대표자명
-                EstimateDB.EstimateTable.EST_COM_BIZ_NUM, " VARCHAR, ",		    //사업자번호
-                EstimateDB.EstimateTable.EST_COM_EMAIL, " VARCHAR, ",			//이메일
-                EstimateDB.EstimateTable.EST_COM_ZIPCODE, " VARCHAR, ",		    //회사우편번호
-                EstimateDB.EstimateTable.EST_COM_ADDRESS_01, " VARCHAR, ",		//주소01
-                EstimateDB.EstimateTable.EST_COM_ADDRESS_02, " VARCHAR, ",		//주소02
+                EstimateDB.EstimateTable.EST_COM_NAME, " VARCHAR, ",			//공급자 회사명
+                EstimateDB.EstimateTable.EST_COM_CEO_NAME, " VARCHAR, ",		//공급자 회사대표자명
+                EstimateDB.EstimateTable.EST_COM_BIZ_NUM, " VARCHAR, ",		    //공급자 사업자번호
+                EstimateDB.EstimateTable.EST_COM_UPTAE, " VARCHAR, ",		    //공급자 업태
+                EstimateDB.EstimateTable.EST_COM_UPJONG, " VARCHAR, ",		    //공급자 업종
+                EstimateDB.EstimateTable.EST_COM_MANAGER_NAME, " VARCHAR, ",    //공급자 담당자명
+                EstimateDB.EstimateTable.EST_COM_EMAIL, " VARCHAR, ",			//공급자 이메일
+                EstimateDB.EstimateTable.EST_COM_ZIPCODE, " VARCHAR, ",		    //공급자 회사우편번호
+                EstimateDB.EstimateTable.EST_COM_ADDRESS_01, " VARCHAR, ",		//공급자 주소01
+                EstimateDB.EstimateTable.EST_COM_ADDRESS_02, " VARCHAR, ",		//공급자 주소02
                 EstimateDB.EstimateTable.EST_TAX_TYPE, " VARCHAR, ",			//부가세 포함, 미포함
                 EstimateDB.EstimateTable.EST_TOTAL_PRICE	, " VARCHAR, ",		//총합계
                 EstimateDB.EstimateTable.EST_REMARK, " VARCHAR, ",				//견적서 비고
@@ -179,6 +182,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 EstimateDB.EstimateItemTable.EST_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
                 EstimateDB.EstimateItemTable.EST_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
                 EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
+                EstimateDB.EstimateItemTable.EST_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
+                EstimateDB.EstimateItemTable.EST_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
                 EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE, " VARCHAR, ",			//견적ITEM단가
                 EstimateDB.EstimateItemTable.EST_ITEM_PRICE, " VARCHAR, ",				//견적ITEM금액
                 EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE, " VARCHAR, ",			//견적ITEM세액
@@ -199,8 +204,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 EstimateDB.TempItemTable.TEMP_ITEM_TOKEN, " VARCHAR, ",					//견적ITEM 임시키값
                 EstimateDB.TempItemTable.TEMP_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
                 EstimateDB.TempItemTable.TEMP_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
-                EstimateDB.TempItemTable.TEMP_ITEM_STD, " VARCHAR, ",			//견적ITEM수량
-                EstimateDB.TempItemTable.TEMP_ITEM_UNIT, " VARCHAR, ",			//견적ITEM수량
+                EstimateDB.TempItemTable.TEMP_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
+                EstimateDB.TempItemTable.TEMP_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
                 EstimateDB.TempItemTable.TEMP_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
                 EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE, " VARCHAR, ",        //견적ITEM단가금액
                 EstimateDB.TempItemTable.TEMP_ITEM_PRICE, " VARCHAR, ",             //견적ITEM금액
@@ -768,6 +773,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(EstimateDB.EstimateTable.EST_COM_NAME, estimateBeanTB.getEst_com_name());
         cv.put(EstimateDB.EstimateTable.EST_COM_CEO_NAME, estimateBeanTB.getEst_com_ceo_name());
         cv.put(EstimateDB.EstimateTable.EST_COM_BIZ_NUM, estimateBeanTB.getEst_com_biz_num());
+        cv.put(EstimateDB.EstimateTable.EST_COM_MANAGER_NAME, estimateBeanTB.getEst_com_manager_name());
 
         cv.put(EstimateDB.EstimateTable.EST_COM_ZIPCODE, estimateBeanTB.getEst_com_zipcode());
         cv.put(EstimateDB.EstimateTable.EST_COM_ADDRESS_01, estimateBeanTB.getEst_com_address_01());
@@ -779,7 +785,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.clear();
         db.close();
 
-        setEstimateItemData(StringUtil.longToString(estIdx), estimateBeanTB.getEst_tax_type(), itemList);
+        setEstimateItemData(StringUtil.longToString(estIdx),itemList);
 
         return getEstimateListData();
     }
@@ -787,10 +793,9 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * 견적서  > 상품 리스트 저장하기
      * @param estIdx
-     * @param taxType
      * @param itemList
      */
-    public void setEstimateItemData(String estIdx, String taxType, ArrayList<ItemBeanTB> itemList){
+    public void setEstimateItemData(String estIdx, ArrayList<ItemBeanTB> itemList){
         int itemNo = 0;
         for(ItemBeanTB itemBeanTB : itemList) {
             itemBeanTB.setEst_idx(estIdx);
@@ -844,6 +849,9 @@ public class DBHelper extends SQLiteOpenHelper {
             bean.setEst_com_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_NAME)));
             bean.setEst_com_ceo_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_CEO_NAME)));
             bean.setEst_com_biz_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_BIZ_NUM)));
+            bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPTAE)));
+            bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
+            bean.setEst_com_manager_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_MANAGER_NAME)));
             bean.setEst_com_email(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_EMAIL)));
             bean.setEst_com_zipcode(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ZIPCODE)));
             bean.setEst_com_address_01(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ADDRESS_01)));
@@ -903,6 +911,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     bean.setEst_com_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_NAME)));
                     bean.setEst_com_ceo_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_CEO_NAME)));
                     bean.setEst_com_biz_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_BIZ_NUM)));
+                    bean.setEst_com_manager_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_MANAGER_NAME)));
+                    bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPTAE)));
+                    bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
                     bean.setEst_com_email(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_EMAIL)));
                     bean.setEst_com_zipcode(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ZIPCODE)));
                     bean.setEst_com_address_01(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ADDRESS_01)));
@@ -971,6 +982,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(EstimateDB.EstimateTable.EST_COM_NAME, estimateBeanTB.getEst_com_name());
         cv.put(EstimateDB.EstimateTable.EST_COM_CEO_NAME, estimateBeanTB.getEst_com_ceo_name());
         cv.put(EstimateDB.EstimateTable.EST_COM_BIZ_NUM, estimateBeanTB.getEst_com_biz_num());
+        cv.put(EstimateDB.EstimateTable.EST_COM_UPTAE, estimateBeanTB.getEst_com_uptae());
+        cv.put(EstimateDB.EstimateTable.EST_COM_UPJONG, estimateBeanTB.getEst_com_upjong());
 
         cv.put(EstimateDB.EstimateTable.EST_COM_ZIPCODE, estimateBeanTB.getEst_com_zipcode());
         cv.put(EstimateDB.EstimateTable.EST_COM_ADDRESS_01, estimateBeanTB.getEst_com_address_01());
@@ -987,7 +1000,7 @@ public class DBHelper extends SQLiteOpenHelper {
         deleteEstimateItemData(estIdx);
 
         //이전 상품과 추가 등 변경된 상품리스트 저장하기
-        setEstimateItemData(estIdx, estimateBeanTB.getEst_tax_type(), itemList);
+        setEstimateItemData(estIdx, itemList);
 
         return getEstimateListData();
     }
@@ -1028,6 +1041,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(EstimateDB.EstimateItemTable.ITEM_IDX, estimateItemBeanTB.getItem_idx());
         cv.put(EstimateDB.EstimateItemTable.EST_ITEM_NAME, estimateItemBeanTB.getItem_name());
         cv.put(EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY, estimateItemBeanTB.getItem_quantity());
+        cv.put(EstimateDB.EstimateItemTable.EST_ITEM_STD, estimateItemBeanTB.getItem_std());
+        cv.put(EstimateDB.EstimateItemTable.EST_ITEM_UNIT, estimateItemBeanTB.getItem_unit());
         cv.put(EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE, estimateItemBeanTB.getItem_unit_price());
         cv.put(EstimateDB.EstimateItemTable.EST_ITEM_PRICE, estimateItemBeanTB.getItem_price());
         cv.put(EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE, estimateItemBeanTB.getItem_tax_price());
@@ -1060,6 +1075,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     bean.setItem_idx(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.ITEM_IDX))));
                     bean.setItem_name(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_NAME))));
                     bean.setItem_quantity(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY))));
+                    bean.setItem_unit(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_UNIT))));
                     bean.setItem_unit_price(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE))));
                     bean.setItem_price(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_PRICE))));
                     bean.setItem_tax_price(cursor.getString(cursor.getColumnIndexOrThrow((EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE))));
@@ -1213,17 +1229,44 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteTable() {
+    /**
+     * EstimateDB.EstimateTable.ESTIMATE_TABLE
+     * @param table
+     */
+    public void deleteTable(String table) {
         SQLiteDatabase db = this.getWritableDatabase();
         //db.execSQL("DROP TABLE IF EXISTS " + EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE);
+        //db.execSQL("DROP TABLE IF EXISTS " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + table);
         db.close();
-
-        createTable();
     }
 
     public void createTable(){
         SQLiteDatabase db = this.getWritableDatabase();
+        String createEstimateItemTable = buildQuery(
+                "CREATE TABLE",
+                EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE, "(",
+                EstimateDB.EstimateItemTable.EST_ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",				//견적ITEM 키값
+                EstimateDB.EstimateItemTable.EST_IDX, " INTEGER, ",					    //견적IDX
+                EstimateDB.EstimateItemTable.ITEM_IDX, " INTEGER, ",					//견적ITEM IDX
+                EstimateDB.EstimateItemTable.EST_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
+                EstimateDB.EstimateItemTable.EST_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
+                EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
+                EstimateDB.EstimateItemTable.EST_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
+                EstimateDB.EstimateItemTable.EST_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
+                EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE, " VARCHAR, ",			//견적ITEM단가
+                EstimateDB.EstimateItemTable.EST_ITEM_PRICE, " VARCHAR, ",				//견적ITEM금액
+                EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE, " VARCHAR, ",			//견적ITEM세액
+                EstimateDB.EstimateItemTable.EST_ITEM_TOTAL_PRICE, " VARCHAR, ",		//견적ITEM총금액
+                EstimateDB.EstimateItemTable.EST_ITEM_REMARK, " VARCHAR "				//견적ITEM비고
+                        + ")"
+        );
+        try {
+            db.execSQL(createEstimateItemTable);
+        }catch(RuntimeException e){
+
+        }
+
         String createTempItemTable = buildQuery(
                 "CREATE TABLE",
                 EstimateDB.TempItemTable.TEMP_ITEM_TABLE, "(",
@@ -1231,8 +1274,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 EstimateDB.TempItemTable.TEMP_ITEM_TOKEN, " VARCHAR, ",					//견적ITEM 임시키값
                 EstimateDB.TempItemTable.TEMP_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
                 EstimateDB.TempItemTable.TEMP_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
-                EstimateDB.TempItemTable.TEMP_ITEM_STD, " VARCHAR, ",			//견적ITEM수량
-                EstimateDB.TempItemTable.TEMP_ITEM_UNIT, " VARCHAR, ",			//견적ITEM수량
+                EstimateDB.TempItemTable.TEMP_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
+                EstimateDB.TempItemTable.TEMP_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
                 EstimateDB.TempItemTable.TEMP_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
                 EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE, " VARCHAR, ",        //견적ITEM단가금액
                 EstimateDB.TempItemTable.TEMP_ITEM_PRICE, " VARCHAR, ",             //견적ITEM금액
@@ -1246,6 +1289,8 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(createTempItemTable);
         }catch(RuntimeException e){
 
+        }finally {
+            db.close();
         }
     }
 

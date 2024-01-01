@@ -59,11 +59,15 @@
                             android:textColor="@color/text_primary"
                             android:textSize="20dp" />
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_save"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
                             android:layout_marginTop="4dp"
                             android:layout_marginRight="16dp"
                             android:background="@drawable/bg_round_bottomdialog_rightbtn"
@@ -72,6 +76,20 @@
                             android:textColor="#ffffff"
                             android:textSize="16dp"
                             android:visibility="visible"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_excel"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="16dp"
+                            android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                            android:gravity="center"
+                            android:text="엑셀"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            android:visibility="visible"/>
+                        </LinearLayout>
                     </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
 

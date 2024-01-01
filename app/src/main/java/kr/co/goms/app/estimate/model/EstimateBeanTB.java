@@ -27,6 +27,8 @@ public class EstimateBeanTB implements Parcelable {
     private String est_com_name;			//회사명
     private String est_com_ceo_name;		//회사대표자명
     private String est_com_biz_num;		    //사업자번호
+    private String est_com_uptae;		    //공급자 업태
+    private String est_com_upjong;		    //공급자 업종
     private String est_com_tel;				//회사 연락처
     private String est_com_fax;				//회사 팩스
     private String est_com_hp;				//회사 핸드폰
@@ -66,6 +68,8 @@ public class EstimateBeanTB implements Parcelable {
         est_com_name = in.readString();
         est_com_ceo_name = in.readString();
         est_com_biz_num = in.readString();
+        est_com_uptae = in.readString();
+        est_com_upjong = in.readString();
         est_com_tel = in.readString();
         est_com_fax = in.readString();
         est_com_hp = in.readString();
@@ -104,6 +108,8 @@ public class EstimateBeanTB implements Parcelable {
         dest.writeString(est_com_name);
         dest.writeString(est_com_ceo_name);
         dest.writeString(est_com_biz_num);
+        dest.writeString(est_com_uptae);
+        dest.writeString(est_com_upjong);
         dest.writeString(est_com_tel);
         dest.writeString(est_com_fax);
         dest.writeString(est_com_hp);
@@ -309,6 +315,22 @@ public class EstimateBeanTB implements Parcelable {
 
     public void setEst_com_biz_num(String est_com_biz_num) {
         this.est_com_biz_num = est_com_biz_num;
+    }
+
+    public String getEst_com_uptae() {
+        return est_com_uptae;
+    }
+
+    public void setEst_com_uptae(String est_com_uptae) {
+        this.est_com_uptae = est_com_uptae;
+    }
+
+    public String getEst_com_upjong() {
+        return est_com_upjong;
+    }
+
+    public void setEst_com_upjong(String est_com_upjong) {
+        this.est_com_upjong = est_com_upjong;
     }
 
     public String getEst_com_tel() {

@@ -134,11 +134,14 @@ public class EstimateDB {
         public static final String EST_CLI_ZIPCODE		="est_cli_zipcode";			//거래처 우편번호
         public static final String EST_CLI_ADDRESS_01	="est_cli_address_01";		//거래처 주소 01
         public static final String EST_CLI_ADDRESS_02	="est_cli_address_02";		//거래처 주소 02
-        public static final String EST_CLI_MANAGER_NAME	="est_cli_manager_name";	//담당자 이름
+        public static final String EST_CLI_MANAGER_NAME	="est_cli_manager_name";	//거래처 담당자 이름
         public static final String EST_CLI_REMARK		="est_cli_remark";			//거래처 비고
         public static final String EST_COM_NAME			="est_com_name";			//회사명
         public static final String EST_COM_CEO_NAME		="est_com_ceo_name";		//회사대표자명
         public static final String EST_COM_BIZ_NUM		="est_com_biz_num";		    //사업자번호
+        public static final String EST_COM_UPTAE		="est_com_uptae";		    //공급자 업태
+        public static final String EST_COM_UPJONG		="est_com_upjong";		    //공급자 업종
+        public static final String EST_COM_MANAGER_NAME	="est_com_manager_name";	//공급자 담당자 이름
         public static final String EST_COM_EMAIL		="est_com_email";			//이메일
         public static final String EST_COM_ZIPCODE		="est_com_zipcode";	        //회사우편번호
         public static final String EST_COM_ADDRESS_01	="est_com_address_01";		//주소01
@@ -160,6 +163,8 @@ public class EstimateDB {
         public static final String ITEM_IDX ="item_idx";					            //견적item Idx
         public static final String EST_ITEM_NAME	 ="est_item_name";				    //견적item 이름
         public static final String EST_ITEM_QUANTITY ="est_item_quantity";			    //견적item수량
+        public static final String EST_ITEM_STD ="est_item_std";			            //견적item규격
+        public static final String EST_ITEM_UNIT ="est_item_unit";			            //견적item단위
         public static final String EST_ITEM_UNIT_PRICE ="est_item_unit_price";			//견적item단가
         public static final String EST_ITEM_PRICE ="est_item_price";				    //견적item금액
         public static final String EST_ITEM_TAX_PRICE	 ="est_item_tax_price";			//견적item세액

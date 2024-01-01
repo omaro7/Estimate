@@ -38,6 +38,7 @@ import kr.co.goms.app.estimate.adapter.EstimateItemAdapter;
 import kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
 import kr.co.goms.app.estimate.db.EstimateDB;
+import kr.co.goms.app.estimate.manager.ExcelManager;
 import kr.co.goms.app.estimate.manager.SendManager;
 import kr.co.goms.app.estimate.model.ClientBeanTB;
 import kr.co.goms.app.estimate.model.CompanyBeanTB;
@@ -175,9 +176,6 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
 
         mSwitchVat.setChecked("Y".equalsIgnoreCase(isVatYN));
 
-        long number = 12545000;
-        String money = FormatUtil.convertNumberToKorean(number);
-        GomsLog.d(TAG, "money : " + money);
         this.setHasOptionsMenu(true);
 
     }
@@ -244,6 +242,21 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         if(id == R.id.btn_save) {
             if (checkValue()) {
                 goSave(mComIdx, mCliIdx);
+            }
+        }else if(id == R.id.btn_excel) {
+
+            if(!StringUtil.isEmpty(mEstIdx)) {
+                ExcelManager.I(getActivity()).setExcelInterface(new ExcelManager.ExcelInterface() {
+                    @Override
+                    public void onComplete() {
+                        showDialogComplete();
+                    }
+                });
+
+                EstimateBeanTB estimateBeanTB = MyApplication.getInstance().getDBHelper().getEstimateData(mEstIdx);
+                //엑셀 첫 시작 시점입니다.
+                ExcelManager.I(getActivity()).createWorkbook();
+                ExcelManager.I(getActivity()).createEstimateExcel(estimateBeanTB);
             }
         }else if(id == R.id.iv_com_search){
             goComSearch(mCompanyList);
@@ -553,7 +566,9 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         mTvEstDeliveryDate.setOnClickListener(this);
 
         Button btnSave = view.findViewById(R.id.btn_save);
+        Button btnExcel = view.findViewById(R.id.btn_excel);
         btnSave.setOnClickListener(this);
+        btnExcel.setOnClickListener(this);
 
         view.findViewById(R.id.btn_est_item_add).setOnClickListener(this);
 
@@ -588,6 +603,8 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
             mTvCliName.setText(estimateBeanTB.getEst_cli_name());
             mTvComName.setText(estimateBeanTB.getEst_com_name());
             mTvEstDate.setText(estimateBeanTB.getEst_date());
+            mTvEstEffectiveDate.setText(estimateBeanTB.getEst_effective_date());
+            mTvEstDeliveryDate.setText(estimateBeanTB.getEst_delivery_date());
 
             mEtManagerName.setText(estimateBeanTB.getEst_com_manager_name());
             mEtTel.setText(estimateBeanTB.getEst_com_tel());
@@ -921,10 +938,20 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         estimateBeanTB.setEst_com_fax(fax);
         estimateBeanTB.setEst_com_hp(hp);
         estimateBeanTB.setEst_com_email(email);
-
         estimateBeanTB.setEst_tax_type(taxType);
         estimateBeanTB.setEst_total_price(FormatUtil.removeComma(totalPrice));
         estimateBeanTB.setEst_remark(remark);
+
+        //별도로 가져와서 공급자 회사 정보 넣기
+        CompanyBeanTB companyBeanTB = MyApplication.getInstance().getDBHelper().getCompany(comIdx);
+
+        estimateBeanTB.setEst_com_ceo_name(companyBeanTB.getCom_ceo_name());
+        estimateBeanTB.setEst_com_biz_num(companyBeanTB.getCom_biz_num());
+        estimateBeanTB.setEst_com_uptae(companyBeanTB.getCom_uptae());
+        estimateBeanTB.setEst_com_upjong(companyBeanTB.getCom_upjong());
+        estimateBeanTB.setEst_com_zipcode(companyBeanTB.getCom_zipcode());
+        estimateBeanTB.setEst_com_address_01(companyBeanTB.getCom_address_01());
+        estimateBeanTB.setEst_com_address_02(companyBeanTB.getCom_address_02());
 
         ArrayList<ItemBeanTB> itemList = ((EstimateItemAdapter)mAdapter).getData();
 
@@ -1032,5 +1059,30 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         itemTotalPrice = ((EstimateItemAdapter)mAdapter).getTotalPrice();
         mTvItemTotalPrice.setText(itemTotalPrice);
     }
+
+    public void showDialogComplete(){
+
+        DialogManager.I().setTitle("견적서 엑셀 생성")
+                .setMessage("견적서 엑셀 생성을 완료했습니다.")
+                .setShowTitle(true)
+                .setShowMessage(true)
+                .setNegativeBtnName("")
+                .setPositiveBtnName("확인")
+                .setCancelable(false)
+                .setCancelTouchOutSide(false)
+                .setCommand(DialogCommandFactory.I().createDialogCommand(getActivity(), DialogCommandFactory.DIALOG_TYPE.basic.name(), new WaterCallBack() {
+                    @Override
+                    public void callback(BaseBean baseData) {
+                        String btnType = ((Bundle)baseData.getObject()).getString(BaseBottomDialogCommand.EXT_BTN_TYPE);
+                        if(BaseBottomDialogCommand.BTN_TYPE.LEFT.name().equalsIgnoreCase(btnType)){
+
+                        }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
+                            //requireActivity().onBackPressed();
+                        }
+                    }
+                }))
+                .showDialog(getActivity());
+    }
+
 
 }

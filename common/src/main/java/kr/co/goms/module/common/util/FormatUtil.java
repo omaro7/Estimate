@@ -2179,4 +2179,46 @@ public class FormatUtil {
                 return "";
         }
     }
+
+    public static String addHyphenToBusinessNumber(String businessNumber) {
+        // 입력받은 사업자번호에서 하이픈을 추가하는 코드
+        if (businessNumber == null || businessNumber.length() != 10) {
+            // 예외 처리: 사업자번호가 null이거나 10자리가 아닌 경우
+            return businessNumber;
+        }
+
+        StringBuilder formattedNumber = new StringBuilder();
+        formattedNumber.append(businessNumber.substring(0, 3))
+                .append("-")
+                .append(businessNumber.substring(3, 5))
+                .append("-")
+                .append(businessNumber.substring(5));
+
+        return formattedNumber.toString();
+    }
+
+    public static String addHyphenToPhoneNumber(String phoneNumber) {
+        // 입력받은 전화번호에서 하이픈을 추가하는 코드
+        if (phoneNumber == null || (phoneNumber.length() != 10 && phoneNumber.length() != 11)) {
+            // 예외 처리: 전화번호가 null이거나 10자리 또는 11자리가 아닌 경우
+            return phoneNumber;
+        }
+
+        StringBuilder formattedNumber = new StringBuilder();
+        if (phoneNumber.length() == 10) {
+            formattedNumber.append(phoneNumber.substring(0, 2))
+                    .append("-")
+                    .append(phoneNumber.substring(2, 6))
+                    .append("-")
+                    .append(phoneNumber.substring(6));
+        } else {
+            formattedNumber.append(phoneNumber.substring(0, 3))
+                    .append("-")
+                    .append(phoneNumber.substring(3, 7))
+                    .append("-")
+                    .append(phoneNumber.substring(7));
+        }
+
+        return formattedNumber.toString();
+    }
 }

@@ -1179,4 +1179,26 @@ public class DateUtil {
 		}
 		return inputDateStr;
 	}
+
+	/**
+	 *
+	 * @param inputDateStr "yyyyMMdd"
+	 * @param inputFormat	"yyyy.MM.dd"
+	 * @param outFormat
+	 * @return
+	 */
+	public static String displayDateFormat(String inputDateStr, String inputFormat, String outFormat){
+
+		@SuppressLint("SimpleDateFormat") SimpleDateFormat inputDateFormat = new SimpleDateFormat(inputFormat);
+		@SuppressLint("SimpleDateFormat") SimpleDateFormat outputDateFormat = new SimpleDateFormat(outFormat);
+
+		try {
+			Date date = inputDateFormat.parse(inputDateStr);
+			return outputDateFormat.format(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return inputDateStr;
+
+	}
 }
