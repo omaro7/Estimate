@@ -247,22 +247,30 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         int id = v.getId();
         if(id == R.id.btn_save) {
             if (checkValue()) {
-                //goSave(mComIdx, mCliIdx);
+                goSave(mComIdx, mCliIdx);
             }
         }else if(id == R.id.btn_excel) {
 
             if(!StringUtil.isEmpty(mEstIdx)) {
                 ExcelManager.I(getActivity()).setExcelInterface(new ExcelManager.ExcelInterface() {
                     @Override
-                    public void onComplete() {
-                        showDialogComplete();
+                    public void onComplete(String path, Uri uri) {
+                        //엑셀 경로 업데이트
+                        GomsLog.d(TAG, "onComplete() >> mEstIdx : " + mEstIdx);
+                        GomsLog.d(TAG, "onComplete() >> path : " + path);
+                        GomsLog.d(TAG, "onComplete() >> uri.toString : " + uri.toString()); //content://media/external_primary/file/26950
+                        GomsLog.d(TAG, "onComplete() >> uri.getPath : " + uri.getPath());   ///external_primary/file/26950 안불러짐..
+                        MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(mEstIdx, uri.toString());
+                        //완료 하단팝업 띄우기
+                        showDialogComplete(AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.getName());
                     }
                 });
 
                 EstimateBeanTB estimateBeanTB = MyApplication.getInstance().getDBHelper().getEstimateData(mEstIdx);
                 //엑셀 첫 시작 시점입니다.
                 ExcelManager.I(getActivity()).createWorkbook();
-                ExcelManager.I(getActivity()).createEstimateExcel(estimateBeanTB);
+                //견적서 엑셀 작성하기
+                ExcelManager.I(getActivity()).createExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE);
             }
         }else if(id == R.id.iv_com_search){
             goComSearch(mCompanyList);
@@ -510,12 +518,13 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
             CurvletManager.process(getActivity(), null, "water://toast?text=거래처를 선택해 주세요");
             return false;
         }
-        /*
+
         if(cliName.length() <= 1){
             CurvletManager.process(getActivity(), null, "water://toast?text=거래처명을 2자리 이상 넣어주세요");
             return false;
         }
 
+        /*
         if(!StringUtil.isBizNumValid(bizNum)){
             CurvletManager.process(getActivity(), null, "water://toast?text=사업자번호를 정확히 넣어주세요");
             return false;
@@ -876,7 +885,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                             Log.d(TAG, " 클릭 >>>> 왼쪽");
                         }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
                             //((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm", true);
-                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyFormFragment(), "ComForm", true);
+                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyFormFragment(), AppConstant.FRAGMENT_TAG.COMPANY_FORM.name(), true);
                         }
                     }
                 }))
@@ -905,7 +914,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                             Log.d(TAG, " 클릭 >>>> 왼쪽");
                         }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
                             //((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm", true);
-                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new ClientFormFragment(), "CliForm", false);
+                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new ClientFormFragment(), AppConstant.FRAGMENT_TAG.CLIENT_FORM.name(), false);
                         }
                     }
                 }))
@@ -1030,12 +1039,13 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                         //왜 화면로딩이 되지 않을까?? -> Thread 처리
                         if (Looper.myLooper() == Looper.getMainLooper()) {
                             //setItemList(mItemList);
+                            FragmentMoveManager.I().setManager(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment).changeFragment(new EstimateListFragment(), AppConstant.FRAGMENT_TAG.ESTIMATE_LIST.name(), true);
                         } else {
                             // WorkThread이면, MainThread에서 실행 되도록 변경.
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //setItemList(mItemList);
+                                    FragmentMoveManager.I().setManager(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment).changeFragment(new EstimateListFragment(), AppConstant.FRAGMENT_TAG.ESTIMATE_LIST.name(), true);
                                 }
                             });
                         }
@@ -1094,11 +1104,12 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
 
     /**
      * 견적서 생성완료
+     * @param excelType
      */
-    public void showDialogComplete(){
+    public void showDialogComplete(String excelType){
 
-        DialogManager.I().setTitle("견적서 엑셀 생성")
-                .setMessage("견적서 엑셀 생성을 완료했습니다.")
+        DialogManager.I().setTitle(excelType + " 엑셀 생성")
+                .setMessage(excelType + " 엑셀 생성을 완료했습니다.")
                 .setShowTitle(true)
                 .setShowMessage(true)
                 .setNegativeBtnName("")

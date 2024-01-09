@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.module.common.util.DateUtil;
 import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.GomsLog;
+import kr.co.goms.module.common.util.StringUtil;
 
 public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.SectionHolder> implements Filterable {
 
@@ -39,19 +41,23 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.Sectio
 
     public interface EstimateClickListener {
         void onEstimateClick(int position, EstimateBeanTB estimateBeanTB );
+        void onEstimateExcelDownloadClick(int position, EstimateBeanTB estimateBeanTB );
         void onEstimateLongClick(int position, EstimateBeanTB estimateBeanTB );
     }
 
     public class SectionHolder extends RecyclerView.ViewHolder {
-        private LinearLayout lltEst;
+        private LinearLayout lltEst, lltExcelDowload;
         private TextView tvEstDate, tvEstNum, tvEstCliName, tvEstTotalPrice;
+        private Button btnExcelDownload;
         public SectionHolder(View itemView, Context context) {
             super(itemView);
             lltEst = itemView.findViewById(R.id.llt_est);
+            lltExcelDowload = itemView.findViewById(R.id.llt_excel_download);
             tvEstDate = itemView.findViewById(R.id.tv_est_date);
             tvEstNum = itemView.findViewById(R.id.tv_est_num);
             tvEstCliName = itemView.findViewById(R.id.tv_est_cli_name);
             tvEstTotalPrice = itemView.findViewById(R.id.tv_est_total_price);
+            btnExcelDownload = itemView.findViewById(R.id.btn_excel_download);
             setIsRecyclable(false);
         }
     }
@@ -83,11 +89,28 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.Sectio
             
         }
 
-        //holder.tvEstDate.setText(DateUtil.displayDateFormat(estimateBeanTB.getEst_regdate(), "yyyyMMdd", "yyyy년MM월dd일"));
-        holder.tvEstDate.setText(estimateBeanTB.getEst_regdate());
+        holder.tvEstDate.setText(DateUtil.getConvertDateTimeToDate(estimateBeanTB.getEst_regdate(), "yyyy년 MM월 dd일"));
+        //holder.tvEstDate.setText(estimateBeanTB.getEst_regdate());
         holder.tvEstNum.setText(estimateBeanTB.getEst_num());
         holder.tvEstCliName.setText(estimateBeanTB.getEst_cli_name());
         holder.tvEstTotalPrice.setText(totalPrice);
+
+        GomsLog.d(TAG, "onComplete() >> estimateBeanTB.getEst_excel_path() : " + estimateBeanTB.getEst_excel_path());
+
+        if(StringUtil.isEmpty(estimateBeanTB.getEst_excel_path())){
+            holder.lltExcelDowload.setVisibility(View.GONE);
+        }else{
+            holder.lltExcelDowload.setVisibility(View.VISIBLE);
+        }
+
+        holder.btnExcelDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isLongPress) {
+                    mEstimateClickListener.onEstimateExcelDownloadClick(position, mItemList.get(position));
+                }
+            }
+        });
 
         holder.lltEst.setOnClickListener(new View.OnClickListener() {
             @Override

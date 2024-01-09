@@ -149,6 +149,7 @@ public class EstimateDB {
         public static final String EST_TAX_TYPE			="est_tax_type";			//부가세 포함, 미포함
         public static final String EST_TOTAL_PRICE		="est_total_price";			//총합계
         public static final String EST_REMARK			="est_remark";				//견적서 비고
+        public static final String EST_EXCEL_PATH		="est_excel_path";			//견적서 엑셀 위치
         public static final String EST_REGDATE			="est_regdate";				//견적서 비고
     }
 

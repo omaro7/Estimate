@@ -176,7 +176,7 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
                 GomsLog.d(TAG, "mDataObserver  CallBack()");
 
                 if (baseBean.getStatus() == BaseBean.STATUS.SUCCESS) {
-                    FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyListFragment(), "ComList", true);
+                    FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyListFragment(), AppConstant.FRAGMENT_TAG.COMPANY_LIST.name(), true);
                 } else {
                     GomsLog.d(TAG, "CallBack() : mDataObserver 실패!!!!");
                 }

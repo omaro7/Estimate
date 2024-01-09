@@ -2,7 +2,9 @@ package kr.co.goms.app.estimate.fragment;
 
 import static kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand.EXT_OBJECT;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.Editable;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import kr.co.goms.app.estimate.AppConstant;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
@@ -47,11 +50,14 @@ import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
 import kr.co.goms.module.common.command.BaseBottomDialogCommand;
+import kr.co.goms.module.common.curvlet.CurvletManager;
 import kr.co.goms.module.common.manager.DialogCommandFactory;
 import kr.co.goms.module.common.manager.DialogManager;
 import kr.co.goms.module.common.manager.FragmentMoveManager;
 import kr.co.goms.module.common.observer.ObserverInterface;
+import kr.co.goms.module.common.util.FileUtil;
 import kr.co.goms.module.common.util.GomsLog;
+import kr.co.goms.module.common.util.ImageUtil;
 
 public class EstimateListFragment extends Fragment  implements View.OnClickListener {
 
@@ -208,16 +214,38 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
         mAdapter = new EstimateAdapter(getActivity(), estmateList, new EstimateAdapter.EstimateClickListener() {
             @Override
             public void onEstimateClick(int position, EstimateBeanTB estimateBeanTB) {
-                Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_idx());
-                Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_cli_name());
-                FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(EstimateFormFragment.getFragment(estimateBeanTB.getEst_idx()), "EstModiForm", false);
+                Log.d(TAG, "estimateBeanTB 클릭 >>>> " + estimateBeanTB.getEst_idx());
+                Log.d(TAG, "estimateBeanTB 클릭 >>>> " + estimateBeanTB.getEst_cli_name());
+                FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(EstimateFormFragment.getFragment(estimateBeanTB.getEst_idx()), AppConstant.FRAGMENT_TAG.ESTIMATE_FORM.name(), false);
 
             }
 
             @Override
-            public void onEstimateLongClick(int position, EstimateBeanTB clientBeanTB) {
-                Log.d(TAG, "Group 롱클릭 >>>> " + clientBeanTB.getEst_cli_name());
-                goEstDeleteDialog(clientBeanTB);
+            public void onEstimateLongClick(int position, EstimateBeanTB estimateBeanTB) {
+                Log.d(TAG, "estimateBeanTB 롱클릭 >>>> " + estimateBeanTB.getEst_cli_name());
+                goEstDeleteDialog(estimateBeanTB);
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onEstimateExcelDownloadClick(int position, EstimateBeanTB estimateBeanTB) {
+                Log.d(TAG, "estimateBeanTB 견적서 다운로드 >>>> " + estimateBeanTB.getEst_excel_path()); //content://media/external_primary/file/26950
+                Uri excelFileUri = Uri.parse(estimateBeanTB.getEst_excel_path());
+
+                Log.d(TAG, "excelFileUri.toString() : " + excelFileUri.toString()); //content://media/external_primary/file/26950
+
+                if(FileUtil.isFileExist(ImageUtil.getRealPathFromURI(getActivity(), excelFileUri))){
+                    Log.d(TAG, "excel File 존재합니다");
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(excelFileUri, "application/vnd.ms-excel");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intent);
+                }else{
+                    Log.d(TAG, "excel File 존재하지 않습니다");
+                    CurvletManager.process(getActivity(), null, "water://toast?text=excel file이 존재하지 않습니다.");
+                    //엑셀파일 위치 초기화
+                    MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(estimateBeanTB.getEst_idx(), "");
+                }
             }
         });
 

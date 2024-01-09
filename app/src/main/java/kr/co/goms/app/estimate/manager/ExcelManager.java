@@ -820,8 +820,8 @@ public class ExcelManager {
      * for문으로 detailList array 기반으로 "맨홀 야장 조사" 탭 생성 및 내용을 기입하자
      * @param estimateBeanTB       //기본 데이타
      */
-    public void createEstimateExcel(EstimateBeanTB estimateBeanTB) {
-        GomsLog.d(LOG_TAG, "createManholeExcel()");
+    public void createExcel(EstimateBeanTB estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE saveExcelType) {
+        GomsLog.d(LOG_TAG, "createExcel()");
 
         short hAlignCenter = CellStyle.ALIGN_CENTER;
         short hAlignLeft = CellStyle.ALIGN_LEFT;
@@ -892,11 +892,14 @@ public class ExcelManager {
         CompanyBeanTB companyBeanTB = MyApplication.getInstance().getDBHelper().getCompany(estimateBeanTB.getCom_idx());
 
         //상세리스트별 맨홀야장조사 탭 생성 및 데이타 주입
-        //setEstimateExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
-        setSpecificationExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
 
-        //saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.name().toLowerCase());
-        saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.SPECIFICATION.name().toLowerCase());
+        if(AppConstant.SAVE_EXCEL_TYPE.ESTIMATE == saveExcelType) {
+            setEstimateExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
+            saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.name().toLowerCase());
+        }else{
+            setSpecificationExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
+            saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.SPECIFICATION.name().toLowerCase());
+        }
 
     }
 
@@ -1635,7 +1638,7 @@ public class ExcelManager {
                                 public void onScanCompleted(String path, Uri uri) {
                                     // Handle scan completion, if needed
                                     GomsLog.d(LOG_TAG, "path : " + path);
-                                    mExcelInterface.onComplete();
+                                    mExcelInterface.onComplete(path, uri);
                                 }
                             });
 
@@ -1659,6 +1662,6 @@ public class ExcelManager {
     }
 
     public interface ExcelInterface{
-        void onComplete();
+        void onComplete(String path, Uri uri);
     }
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 import kr.co.goms.app.estimate.common.EstimatePrefs;
 import kr.co.goms.app.estimate.db.DBHelper;
+import kr.co.goms.app.estimate.db.EstimateDB;
 import kr.co.goms.app.estimate.jni.GomsJNI;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.module.common.WaterFramework;
@@ -61,8 +62,12 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
 
         mGomsJNI = new GomsJNI(this);
         mDBHelper = new DBHelper(this);
-        //mDBHelper.deleteTable(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
-        //mDBHelper.createTable();
+        /*
+        mDBHelper.deleteTable(EstimateDB.EstimateTable.ESTIMATE_TABLE);
+        mDBHelper.createTable();
+        mDBHelper.removeTableData(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
+        mDBHelper.removeTableData(EstimateDB.TempItemTable.TEMP_ITEM_TABLE);
+        */
 
         curvletApiSettings();
 

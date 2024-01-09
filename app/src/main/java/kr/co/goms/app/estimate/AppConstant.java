@@ -25,8 +25,18 @@ public class AppConstant {
     }
 
     public enum SAVE_EXCEL_TYPE{
-        ESTIMATE,       //견적서
-        SPECIFICATION   //거래명세서
+        ESTIMATE("견적서"),       //견적서
+        SPECIFICATION("거래명세서")   //거래명세서
+        ;
+
+        String name;
+        SAVE_EXCEL_TYPE(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
 }

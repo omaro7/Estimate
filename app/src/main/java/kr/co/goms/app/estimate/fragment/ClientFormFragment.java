@@ -151,7 +151,7 @@ public class ClientFormFragment extends Fragment implements View.OnClickListener
                 GomsLog.d(TAG, "mDataObserver  CallBack()");
 
                 if (baseBean.getStatus() == BaseBean.STATUS.SUCCESS) {
-                    FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new ClientListFragment(), "CliList", true);
+                    FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new ClientListFragment(), AppConstant.FRAGMENT_TAG.CLIENT_LIST.name(), true);
                 } else {
                     GomsLog.d(TAG, "CallBack() : mDataObserver 실패!!!!");
                 }

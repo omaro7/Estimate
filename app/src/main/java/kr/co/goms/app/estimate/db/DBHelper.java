@@ -16,6 +16,7 @@ import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
 import kr.co.goms.module.common.util.DateUtil;
+import kr.co.goms.module.common.util.GomsLog;
 import kr.co.goms.module.common.util.StringUtil;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -164,6 +165,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 EstimateDB.EstimateTable.EST_TAX_TYPE, " VARCHAR, ",			//부가세 포함, 미포함
                 EstimateDB.EstimateTable.EST_TOTAL_PRICE	, " VARCHAR, ",		//총합계
                 EstimateDB.EstimateTable.EST_REMARK, " VARCHAR, ",				//견적서 비고
+                EstimateDB.EstimateTable.EST_EXCEL_PATH, " VARCHAR, ",			//견적서 엑셀파일 경로
                 EstimateDB.EstimateTable.EST_REGDATE , " VARCHAR "
             + ")"
         );
@@ -859,6 +861,7 @@ public class DBHelper extends SQLiteOpenHelper {
             bean.setEst_tax_type(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_TAX_TYPE)));
             bean.setEst_total_price(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_TOTAL_PRICE)));
             bean.setEst_remark(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_REMARK)));
+            bean.setEst_excel_path(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_EXCEL_PATH)));
             bean.setEst_regdate(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_REGDATE)));
 
             if (!cursor.isClosed()) {
@@ -921,6 +924,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     bean.setEst_tax_type(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_TAX_TYPE)));
                     bean.setEst_total_price(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_TOTAL_PRICE)));
                     bean.setEst_remark(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_REMARK)));
+                    bean.setEst_excel_path(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_EXCEL_PATH)));
                     bean.setEst_regdate(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_REGDATE)));
                     estimateList.add(bean);
 
@@ -939,6 +943,27 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return estimateList;
     }
+
+    /**
+     * 엑셀 경로 업데이트 하기
+     * @param excelPath
+     */
+    public void updateEstimateExcelPath(String estimateIdx, String excelPath){
+        GomsLog.d("EXCEL", "updateEstimateExcelPath() >> estimateIdx : " + estimateIdx);
+        GomsLog.d("EXCEL", "updateEstimateExcelPath() >> excelPath : " + excelPath);
+        SQLiteDatabase db = getReadableDatabase();
+
+        String whereClause = EstimateDB.EstimateTable.EST_IDX + "=?";
+        String[] whereArgs = new String[]{estimateIdx}; // 해당 견적서 idx
+
+        final ContentValues cv = new ContentValues();
+        cv.put(EstimateDB.EstimateTable.EST_EXCEL_PATH, excelPath);
+        db.update(EstimateDB.EstimateTable.ESTIMATE_TABLE, cv, whereClause, whereArgs);
+
+        cv.clear();
+        db.close();
+    }
+
 
     /**
      * 거래처 업데이트하기
@@ -1221,7 +1246,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 해당 테이블 삭제
-     * @param table EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE
+     * @param table removeTableData(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE)
      */
     public void removeTableData(String table) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1243,50 +1268,47 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void createTable(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String createEstimateItemTable = buildQuery(
+        String createTable = buildQuery(
                 "CREATE TABLE",
-                EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE, "(",
-                EstimateDB.EstimateItemTable.EST_ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",				//견적ITEM 키값
-                EstimateDB.EstimateItemTable.EST_IDX, " INTEGER, ",					    //견적IDX
-                EstimateDB.EstimateItemTable.ITEM_IDX, " INTEGER, ",					//견적ITEM IDX
-                EstimateDB.EstimateItemTable.EST_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
-                EstimateDB.EstimateItemTable.EST_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
-                EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
-                EstimateDB.EstimateItemTable.EST_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
-                EstimateDB.EstimateItemTable.EST_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
-                EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE, " VARCHAR, ",			//견적ITEM단가
-                EstimateDB.EstimateItemTable.EST_ITEM_PRICE, " VARCHAR, ",				//견적ITEM금액
-                EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE, " VARCHAR, ",			//견적ITEM세액
-                EstimateDB.EstimateItemTable.EST_ITEM_TOTAL_PRICE, " VARCHAR, ",		//견적ITEM총금액
-                EstimateDB.EstimateItemTable.EST_ITEM_REMARK, " VARCHAR "				//견적ITEM비고
+                EstimateDB.EstimateTable.ESTIMATE_TABLE, "(",
+                EstimateDB.EstimateTable.EST_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",				//견적IDX
+                EstimateDB.EstimateTable.COM_IDX, " INTEGER, ",					//회사IDX
+                EstimateDB.EstimateTable.CLI_IDX, " INTEGER, ",					//거래처IDX
+                EstimateDB.EstimateTable.EST_DATE, " VARCHAR, ",				//견적일자
+                EstimateDB.EstimateTable.EST_EFFECTIVE_DATE, " VARCHAR, ",		//유효일자
+                EstimateDB.EstimateTable.EST_DELIVERY_DATE, " VARCHAR, ",		//납기일자
+                EstimateDB.EstimateTable.EST_PAYMENT_CONDITION, " VARCHAR, ",	//결제조건
+                EstimateDB.EstimateTable.EST_DELIVERY_LOCATION, " VARCHAR, ",	//인도장소
+                EstimateDB.EstimateTable.EST_NUM, " VARCHAR, ",					//견적번호
+                EstimateDB.EstimateTable.EST_CLI_NAME, " VARCHAR, ",			//거래처정보
+                EstimateDB.EstimateTable.EST_CLI_TEL, " VARCHAR, ",				//거래처 연락처
+                EstimateDB.EstimateTable.EST_CLI_FAX, " VARCHAR, ",				//거래처 팩스
+                EstimateDB.EstimateTable.EST_CLI_HP, " VARCHAR, ",				//거래처 핸드폰
+                EstimateDB.EstimateTable.EST_CLI_ZIPCODE, " VARCHAR, ",			//거래처 우편번호
+                EstimateDB.EstimateTable.EST_CLI_ADDRESS_01, " VARCHAR, ",		//거래처 주소 01
+                EstimateDB.EstimateTable.EST_CLI_ADDRESS_02, " VARCHAR, ",		//거래처 주소 02
+                EstimateDB.EstimateTable.EST_CLI_MANAGER_NAME, " VARCHAR, ",	//담당자 이름
+                EstimateDB.EstimateTable.EST_CLI_REMARK, " VARCHAR, ",			//거래처 비고
+                EstimateDB.EstimateTable.EST_COM_NAME, " VARCHAR, ",			//공급자 회사명
+                EstimateDB.EstimateTable.EST_COM_CEO_NAME, " VARCHAR, ",		//공급자 회사대표자명
+                EstimateDB.EstimateTable.EST_COM_BIZ_NUM, " VARCHAR, ",		    //공급자 사업자번호
+                EstimateDB.EstimateTable.EST_COM_UPTAE, " VARCHAR, ",		    //공급자 업태
+                EstimateDB.EstimateTable.EST_COM_UPJONG, " VARCHAR, ",		    //공급자 업종
+                EstimateDB.EstimateTable.EST_COM_MANAGER_NAME, " VARCHAR, ",    //공급자 담당자명
+                EstimateDB.EstimateTable.EST_COM_EMAIL, " VARCHAR, ",			//공급자 이메일
+                EstimateDB.EstimateTable.EST_COM_ZIPCODE, " VARCHAR, ",		    //공급자 회사우편번호
+                EstimateDB.EstimateTable.EST_COM_ADDRESS_01, " VARCHAR, ",		//공급자 주소01
+                EstimateDB.EstimateTable.EST_COM_ADDRESS_02, " VARCHAR, ",		//공급자 주소02
+                EstimateDB.EstimateTable.EST_TAX_TYPE, " VARCHAR, ",			//부가세 포함, 미포함
+                EstimateDB.EstimateTable.EST_TOTAL_PRICE	, " VARCHAR, ",		//총합계
+                EstimateDB.EstimateTable.EST_REMARK, " VARCHAR, ",				//견적서 비고
+                EstimateDB.EstimateTable.EST_EXCEL_PATH, " VARCHAR, ",			//견적서 엑셀파일 경로
+                EstimateDB.EstimateTable.EST_REGDATE , " VARCHAR "
                         + ")"
         );
-        try {
-            db.execSQL(createEstimateItemTable);
-        }catch(RuntimeException e){
 
-        }
-
-        String createTempItemTable = buildQuery(
-                "CREATE TABLE",
-                EstimateDB.TempItemTable.TEMP_ITEM_TABLE, "(",
-                EstimateDB.TempItemTable.TEMP_ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ", //견적ITEM IDX
-                EstimateDB.TempItemTable.TEMP_ITEM_TOKEN, " VARCHAR, ",					//견적ITEM 임시키값
-                EstimateDB.TempItemTable.TEMP_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
-                EstimateDB.TempItemTable.TEMP_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
-                EstimateDB.TempItemTable.TEMP_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
-                EstimateDB.TempItemTable.TEMP_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
-                EstimateDB.TempItemTable.TEMP_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
-                EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE, " VARCHAR, ",        //견적ITEM단가금액
-                EstimateDB.TempItemTable.TEMP_ITEM_PRICE, " VARCHAR, ",             //견적ITEM금액
-                EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE, " VARCHAR, ",         //견적ITEM세액금액
-                EstimateDB.TempItemTable.TEMP_ITEM_TOTAL_PRICE, " VARCHAR, ",       //견적ITEM합계금액
-                EstimateDB.TempItemTable.TEMP_ITEM_REMARK, " VARCHAR, ",            //견적ITEM비고
-                EstimateDB.TempItemTable.TEMP_ITEM_REGDATE , " VARCHAR "            //견적ITEM생성일자
-                        + ")"
-        );
         try {
-            db.execSQL(createTempItemTable);
+            db.execSQL(createTable);
         }catch(RuntimeException e){
 
         }finally {
