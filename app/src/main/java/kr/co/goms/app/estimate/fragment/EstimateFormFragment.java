@@ -2,6 +2,7 @@ package kr.co.goms.app.estimate.fragment;
 
 import static kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand.EXT_OBJECT;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.MainThread;
@@ -39,6 +41,7 @@ import kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
 import kr.co.goms.app.estimate.db.EstimateDB;
 import kr.co.goms.app.estimate.manager.ExcelManager;
+import kr.co.goms.app.estimate.manager.GlideHelper;
 import kr.co.goms.app.estimate.manager.SendManager;
 import kr.co.goms.app.estimate.model.ClientBeanTB;
 import kr.co.goms.app.estimate.model.CompanyBeanTB;
@@ -103,6 +106,9 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         CREATE, //생성
         MODIFY,   //수정
     }
+
+    private LinearLayout mLltStamp;
+    private ImageView mIvStamp;
 
     public static EstimateFormFragment getFragment(String estIdx){
         EstimateFormFragment fragment = new EstimateFormFragment();
@@ -241,7 +247,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         int id = v.getId();
         if(id == R.id.btn_save) {
             if (checkValue()) {
-                goSave(mComIdx, mCliIdx);
+                //goSave(mComIdx, mCliIdx);
             }
         }else if(id == R.id.btn_excel) {
 
@@ -472,13 +478,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                                                 ArrayList<ItemBeanTB> tempItemList = (ArrayList<ItemBeanTB>) baseBean.getObject();
                                                 GomsLog.d(TAG, "tempItemList 갯수 : " + tempItemList.size());
 
-                                                int preItemTotal = 0;
-                                                try {
-                                                    preItemTotal = mItemList.size();
-                                                }catch (Exception e){
-
-                                                }
-
+                                                mItemList.clear();
                                                 mItemList.addAll(tempItemList);
 
                                                 //왜 화면로딩이 되지 않을까?? -> Thread 처리
@@ -535,6 +535,11 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         return true;
     }
 
+    /**
+     * 초기데이타
+     * @param view
+     * @param estIdx
+     */
     private void initData(View view, String estIdx){
         Log.d(TAG, "initData()");
 
@@ -558,6 +563,9 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         mEtEmail = view.findViewById(R.id.et_email);
         mEtRemark = view.findViewById(R.id.et_remart);
         mTvItemTotalPrice = view.findViewById(R.id.tv_item_total_price);
+
+        mLltStamp = view.findViewById(R.id.llt_stamp);
+        mIvStamp = view.findViewById(R.id.iv_stamp);
 
         mIvComSearch.setOnClickListener(this);
         mIvCliSearch.setOnClickListener(this);
@@ -624,11 +632,16 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
             //오늘날짜로 기입
             String currDate = DateUtil.getCurrentDate();
             mTvEstDate.setText(currDate);
+
+            btnExcel.setVisibility(View.GONE);
         }
 
     }
 
-
+    /**
+     * 견적서 아이템 리스트 보기
+     * @param tempItemList
+     */
     @MainThread
     private void setEsimateItemList(ArrayList<ItemBeanTB> tempItemList){
         Log.d(TAG, "setEsimateItemList()");
@@ -765,6 +778,16 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                         mEtHp.setText(mCurrCompanyBeanTB.getCom_hp_num());
                         mEtEmail.setText(mCurrCompanyBeanTB.getCom_email());
                         mComIdx = mCurrCompanyBeanTB.getCom_idx();
+
+                        if(!StringUtil.isEmpty(mCurrCompanyBeanTB.getCom_stamp_path())){
+                            // 저장하면 /external/images/media/26563 >> 앞에 content://media 추가
+                            Uri mPhotoStampUri = Uri.parse("content://media" + mCurrCompanyBeanTB.getCom_stamp_path());
+                            GlideHelper.I().setImageView(requireActivity(), mPhotoStampUri, mIvStamp);
+                            mLltStamp.setVisibility(View.VISIBLE);
+                        }else{
+                            mLltStamp.setVisibility(View.GONE);
+                        }
+
                     }
 
                 } else {
@@ -853,7 +876,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                             Log.d(TAG, " 클릭 >>>> 왼쪽");
                         }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
                             //((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm", true);
-                            FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(new CompanyFormFragment(), "ComForm", true);
+                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyFormFragment(), "ComForm", true);
                         }
                     }
                 }))
@@ -882,13 +905,18 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                             Log.d(TAG, " 클릭 >>>> 왼쪽");
                         }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
                             //((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(), "ComForm", true);
-                            FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(new ClientFormFragment(), "CliForm", false);
+                            FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new ClientFormFragment(), "CliForm", false);
                         }
                     }
                 }))
                 .showDialog(getActivity());
     }
 
+    /**
+     * 저장하기
+     * @param comIdx
+     * @param cliIdx
+     */
     private void goSave(String comIdx, String cliIdx){
         String comName = mTvComName.getText().toString();                   //회사명
         String cliName = mTvCliName.getText().toString();                   //거래처명
@@ -1021,6 +1049,10 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    /**
+     * 견적서 > 해당 견적서 아이템 리스트 가져오기
+     * @param estIdx
+     */
     private void getEstimateItemList(String estIdx){
         HashMap<String, Object> params = new HashMap<>();
         params.put("estIdx", estIdx);
@@ -1060,6 +1092,9 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         mTvItemTotalPrice.setText(itemTotalPrice);
     }
 
+    /**
+     * 견적서 생성완료
+     */
     public void showDialogComplete(){
 
         DialogManager.I().setTitle("견적서 엑셀 생성")

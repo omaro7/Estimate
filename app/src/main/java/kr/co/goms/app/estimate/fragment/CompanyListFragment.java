@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
@@ -206,7 +207,7 @@ public class CompanyListFragment extends Fragment  implements View.OnClickListen
             public void onCompanyClick(int position, CompanyBeanTB companyBeanTB) {
                 Log.d(TAG, "clientBeanTB 클릭 >>>> " + companyBeanTB.getCom_name());
                 //((MainActivity)getActivity()).changeFragment(FieldBasicListFragment.getFragment(groupBeanS.getRes_mh_group_idx(), groupBeanS.getRes_mh_group_name()), "fieldBasicList");
-                FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(CompanyFormFragment.getFragment(companyBeanTB.getCom_idx()), "ComModiForm", false);
+                FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(CompanyFormFragment.getFragment(companyBeanTB.getCom_idx()), "ComForm", false);
             }
 
             @Override
@@ -263,7 +264,7 @@ public class CompanyListFragment extends Fragment  implements View.OnClickListen
                 break;
             case R.id.btn_ok:
                 //goDialog();
-                ((SettingActivity)getActivity()).changeFragment(new CompanyFormFragment(),"ComForm", false);
+                ((MainActivity)getActivity()).changeFragment(new CompanyFormFragment(),"comForm", false);
                 break;
             case R.id.iv_setting:
                 Intent intent = new Intent(getActivity(), SettingActivity.class);

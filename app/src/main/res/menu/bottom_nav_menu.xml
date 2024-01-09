@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:visible="true"
+        android:enabled="true"
+        android:title="@string/tab_home" />
+
+    <item
+        android:id="@+id/navigation_estimate"
+        android:icon="@drawable/baseline_description_24"
+        android:visible="true"
+        android:enabled="true"
+        android:title="@string/tab_estimate" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/baseline_settings_24"
+        android:visible="true"
+        android:enabled="true"
+        android:title="@string/tab_setting" />
+
+</menu>

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import java.util.Objects;
 
 import kr.co.goms.app.estimate.AppConstant;
+import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
@@ -138,13 +139,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.rl_com){
-            ((SettingActivity)getActivity()).changeFragment(new CompanyListFragment(), "ComList", false);
+            ((MainActivity)getActivity()).changeFragment(new CompanyListFragment(), "ComList", false);
         }else if(id == R.id.rl_item){
-            ((SettingActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList", false);
+            ((MainActivity)getActivity()).changeFragment(new ItemListFragment(), "ItemList", false);
         }else if(id == R.id.rl_cli){
-            ((SettingActivity)getActivity()).changeFragment(new ClientListFragment(), "CliList", false);
+            ((MainActivity)getActivity()).changeFragment(new ClientListFragment(), "CliList", false);
         }else if(id == R.id.rl_est){
-            ((SettingActivity)getActivity()).changeFragment(new EstimateListFragment(), "EstList", false);
+            ((MainActivity)getActivity()).changeFragment(new EstimateListFragment(), "EstList", false);
         }else if(id == R.id.btn_est_prefix){
             String prefix = mEtEstimatePrefix.getText().toString();
             MyApplication.getInstance().prefs().put(AppConstant.EST_PREFIX, prefix);

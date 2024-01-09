@@ -90,7 +90,8 @@
                 <RelativeLayout
                     android:id="@+id/rl_app_setting_root"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="60dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -216,7 +217,8 @@
                 <RelativeLayout
                     android:id="@+id/rl_est"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="60dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

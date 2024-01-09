@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
@@ -209,7 +210,7 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
             public void onEstimateClick(int position, EstimateBeanTB estimateBeanTB) {
                 Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_idx());
                 Log.d(TAG, "clientBeanTB 클릭 >>>> " + estimateBeanTB.getEst_cli_name());
-                FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(EstimateFormFragment.getFragment(estimateBeanTB.getEst_idx()), "EstModiForm", false);
+                FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(EstimateFormFragment.getFragment(estimateBeanTB.getEst_idx()), "EstModiForm", false);
 
             }
 
@@ -267,7 +268,7 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
                 break;
             case R.id.btn_ok:
                 //goDialog();
-                ((SettingActivity)getActivity()).changeFragment(new EstimateFormFragment(),"EstForm", false);
+                ((MainActivity)getActivity()).changeFragment(new EstimateFormFragment(),"EstForm", false);
                 break;
             case R.id.iv_setting:
                 Intent intent = new Intent(getActivity(), SettingActivity.class);

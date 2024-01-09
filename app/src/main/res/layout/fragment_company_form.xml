@@ -928,8 +928,8 @@
                                         android:orientation="vertical">
                                         <ImageView
                                             android:id="@+id/iv_stamp"
-                                            android:layout_width="100dp"
-                                            android:layout_height="wrap_content"
+                                            android:layout_width="80dp"
+                                            android:layout_height="80dp"
                                             android:layout_gravity="center"
                                             android:layout_marginLeft="6dp"
                                             android:layout_marginTop="1dp"
@@ -946,7 +946,7 @@
                                             android:scaleType="centerCrop"
                                             app:lottie_autoPlay="true"
                                             app:lottie_fileName="photo_empty.json"
-                                            app:lottie_loop="true" />
+                                            app:lottie_loop="true"/>
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -997,8 +997,8 @@
                                         android:orientation="vertical">
                                         <ImageView
                                             android:id="@+id/iv_logo"
-                                            android:layout_width="100dp"
-                                            android:layout_height="wrap_content"
+                                            android:layout_width="80dp"
+                                            android:layout_height="80dp"
                                             android:layout_gravity="center"
                                             android:layout_marginLeft="6dp"
                                             android:layout_marginTop="1dp"

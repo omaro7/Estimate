@@ -44,7 +44,12 @@ public class FragmentMoveManager {
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(name);
-        fragmentTransaction.replace(mLayoutId, fragment).commit();
+        fragmentTransaction.replace(mLayoutId, fragment, name).commit();
         return instance;
+    }
+
+    public Fragment getFragment(String tagName){
+        Fragment fragment = mFragmentManager.findFragmentByTag(tagName);
+        return fragment;
     }
 }

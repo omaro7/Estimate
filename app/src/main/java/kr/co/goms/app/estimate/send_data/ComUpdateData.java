@@ -38,6 +38,8 @@ public class ComUpdateData extends LocalData implements ISendData{
         companyBeanTB.setCom_address_01((String)mParam.get("comAddress01"));
         companyBeanTB.setCom_address_02((String)mParam.get("comAddress02"));
         companyBeanTB.setCom_account_num((String)mParam.get("comAccountNum"));
+        companyBeanTB.setCom_stamp_path((String)mParam.get("comStampPath"));
+        companyBeanTB.setCom_logo_path((String)mParam.get("comLogoPath"));
         companyBeanTB.setCom_main_yn((String)mParam.get("comMainYN"));
 
         ArrayList<CompanyBeanTB> companyList = MyApplication.getInstance().getDBHelper().updateCompany(companyBeanTB);

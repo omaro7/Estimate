@@ -31,13 +31,24 @@ public class GlideHelper {
     }
     /**
      *
-     * @param activity
+     * @param context
      * @param imageUri
      * @param imageView
      */
     public void setImageView(Context context, Uri imageUri, ImageView imageView) {
         Glide.with(context)
                 .load(imageUri)
+                .into(imageView);
+    }
+    /**
+     *
+     * @param context
+     * @param imagePath
+     * @param imageView
+     */
+    public void setImageView(Context context, String imagePath, ImageView imageView) {
+        Glide.with(context)
+                .load(imagePath)
                 .into(imageView);
     }
     /**

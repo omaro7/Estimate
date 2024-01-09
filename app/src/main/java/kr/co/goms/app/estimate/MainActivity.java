@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,10 +12,17 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
@@ -40,17 +48,27 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
     private ActivityResultLauncher<String> mAlbumLauncher;
     public static ActivityResultLauncher<String> mCadLauncher;
 
+    private BottomNavigationView mNavView;
+    private NavController mNavController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mNavView = findViewById(R.id.nav_view);
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(mNavView, navController);
+
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
         String adId = MyApplication.getInstance().prefs().get(EstimatePrefs.AD_ID);
+        //mFragmentTransaction.replace(R.id.flt_root, new EstimateListFragment()).commitAllowingStateLoss();
 
-        mFragmentTransaction.replace(R.id.flt_root, new EstimateListFragment()).commitAllowingStateLoss();
+
         setInitUI();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -60,6 +78,10 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
 
             }
         };
+
+        setInitLauncher();
+
+        setBottomNavigationView();
 
         // Register the callback
         this.getOnBackPressedDispatcher().addCallback(this, callback);
@@ -78,7 +100,7 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
                 @Override
                 public void onActivityResult(Uri selectedImageUri) {
                     if (selectedImageUri != null) {
-                        CompanyFormFragment companyFormFragment = (CompanyFormFragment) getSupportFragmentManager().findFragmentByTag("comForm");
+                        CompanyFormFragment companyFormFragment = (CompanyFormFragment) getSupportFragmentManager().findFragmentByTag("ComForm");
                         companyFormFragment.setAlbumPhoto(selectedImageUri);
                     }
                 }
@@ -104,10 +126,35 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
          */
     }
 
-    public void changeFragment(Fragment fragment,@Nullable String tag){
+    private void setBottomNavigationView(){
+        mNavView.setSelectedItemId(R.id.navigation_home);
+        mNavView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navigation_home) {
+                    changeFragment(new EstimateListFragment(), "estimateList", false);
+                }else if(item.getItemId() == R.id.navigation_estimate) {
+                    changeFragment(new EstimateListFragment(), "estimateList", false);
+                }else if(item.getItemId() == R.id.navigation_setting) {
+                    changeFragment(new SettingFragment(), "setting", false);
+                }else{
+                    changeFragment(new EstimateListFragment(), "estimateList", false);
+                }
+                return true;
+            }
+        });
+    }
+
+    public void changeFragment(Fragment fragment, @Nullable String tag, @Nullable boolean isPop){
         mFragmentManager = getSupportFragmentManager();
+
+        //isPos > 현재 fragment 없애고, 이동 처리함. back했을 때, 확인 가능.
+        if(isPop){
+            mFragmentManager.popBackStack();
+        }
+
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.flt_root, fragment, tag);
+        mFragmentTransaction.replace(R.id.nav_host_fragment, fragment, tag);    // flt_root
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }

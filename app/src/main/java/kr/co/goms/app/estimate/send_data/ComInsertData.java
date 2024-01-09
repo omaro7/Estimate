@@ -23,19 +23,21 @@ public class ComInsertData extends LocalData implements ISendData{
         requestItem.bodyMap = mParam;
 
         CompanyBeanTB companyBeanTB = new CompanyBeanTB();
-        companyBeanTB.setCom_name((String)mParam.get("cliName"));
-        companyBeanTB.setCom_biz_num((String)mParam.get("cliBizNum"));
-        companyBeanTB.setCom_ceo_name((String)mParam.get("cliCeoName"));
-        companyBeanTB.setCom_uptae((String)mParam.get("cliUpTae"));
-        companyBeanTB.setCom_upjong((String)mParam.get("cliUpJung"));
-        companyBeanTB.setCom_tel_num((String)mParam.get("cliTelNum"));
-        companyBeanTB.setCom_fax_num((String)mParam.get("cliFaxNum"));
-        companyBeanTB.setCom_hp_num((String)mParam.get("cliHpNum"));
-        companyBeanTB.setCom_manager_name((String)mParam.get("cliManagerName"));
-        companyBeanTB.setCom_email((String)mParam.get("cliEmail"));
-        companyBeanTB.setCom_zipcode((String)mParam.get("cliZipCode"));
-        companyBeanTB.setCom_address_01((String)mParam.get("cliAddress01"));
-        companyBeanTB.setCom_address_02((String)mParam.get("cliAddress02"));
+        companyBeanTB.setCom_name((String)mParam.get("comName"));
+        companyBeanTB.setCom_biz_num((String)mParam.get("comBizNum"));
+        companyBeanTB.setCom_ceo_name((String)mParam.get("comCeoName"));
+        companyBeanTB.setCom_uptae((String)mParam.get("comUpTae"));
+        companyBeanTB.setCom_upjong((String)mParam.get("comUpJung"));
+        companyBeanTB.setCom_tel_num((String)mParam.get("comTelNum"));
+        companyBeanTB.setCom_fax_num((String)mParam.get("comFaxNum"));
+        companyBeanTB.setCom_hp_num((String)mParam.get("comHpNum"));
+        companyBeanTB.setCom_manager_name((String)mParam.get("comManagerName"));
+        companyBeanTB.setCom_email((String)mParam.get("comEmail"));
+        companyBeanTB.setCom_zipcode((String)mParam.get("comZipCode"));
+        companyBeanTB.setCom_address_01((String)mParam.get("comAddress01"));
+        companyBeanTB.setCom_address_02((String)mParam.get("comAddress02"));
+        companyBeanTB.setCom_stamp_path((String)mParam.get("comStampPath"));
+        companyBeanTB.setCom_logo_path((String)mParam.get("comLogoPath"));
 
         ArrayList<CompanyBeanTB> companyList = MyApplication.getInstance().getDBHelper().insertCompany(companyBeanTB);
         successData(companyList);

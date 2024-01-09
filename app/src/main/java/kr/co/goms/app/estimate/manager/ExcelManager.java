@@ -4,16 +4,28 @@ import static org.apache.poi.ss.usermodel.Font.U_DOUBLE;
 import static org.apache.poi.ss.usermodel.Font.U_NONE;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.common.util.IOUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFPicture;
@@ -25,15 +37,20 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.PrintSetup;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +62,7 @@ import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
 import kr.co.goms.module.common.util.DateUtil;
+import kr.co.goms.module.common.util.DisplayUtil;
 import kr.co.goms.module.common.util.FileUtil;
 import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.GomsLog;
@@ -124,13 +142,17 @@ public class ExcelManager {
         COMPANY_BIZ_NUM_TITLE(CELL_TYPE_BG.Y,"등록번호", 1, 10, 1, 1, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_BIZ_NUM_VALUE(CELL_TYPE_BG.Y,"", 1, 14, 1, 1, 14, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_NAME_TITLE(CELL_TYPE_BG.Y,"상호명", 2, 10, 2, 2, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
-        COMPANY_NAME_VALUE(CELL_TYPE_BG.Y,"", 2, 14, 2, 2, 14, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        COMPANY_NAME_VALUE(CELL_TYPE_BG.Y,"", 2, 14, 2, 2, 14, 20, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        COMPANY_STEMP_VALUE(CELL_TYPE_BG.Y,"", 2, 21, 2, 2, 21, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         ESTIMATE_DATE_TITLE(CELL_TYPE_BG.Y,"견 적 일", 3, 0, 3, 3, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        SPECIFICATION_DATE_TITLE(CELL_TYPE_BG.Y,"거 래 일", 3, 0, 3, 3, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+
         ESTIMATE_DATE_VALUE(CELL_TYPE_BG.Y,"", 3, 2, 3, 3, 2, 8, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_CEO_NAME_TITLE(CELL_TYPE_BG.Y,"대표명", 3, 10, 3, 3, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_CEO_NAME_VALUE(CELL_TYPE_BG.Y,"", 3, 14, 3, 3, 14, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
 
         MANAGER_NAME_TITLE(CELL_TYPE_BG.Y,"담 당 자", 4, 0, 4, 4, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        SPEC_MANAGER_NAME_TITLE(CELL_TYPE_BG.Y,"인 수 자", 4, 0, 4, 4, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         MANAGER_NAME_VALUE(CELL_TYPE_BG.Y,"", 4, 2, 4, 4, 2, 8, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
 
         COMPANY_ADDRESS_TITLE(CELL_TYPE_BG.Y,"사업장주소", 4, 10, 4, 4, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
@@ -180,6 +202,7 @@ public class ExcelManager {
         REMARK_TITLE(CELL_TYPE_BG.Y,"세부사항", 32, 0, 32, 32, 0, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         REMARK_VALUE(CELL_TYPE_BG.Y,"", 33, 0, 33, 36, 0, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         BOTTOM(CELL_TYPE_BG.Y,"", 37, 0, 37, 37, 0, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        TEST(CELL_TYPE_BG.Y,"", 38, 0, 38, 38, 0, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
 
         ;
 
@@ -868,11 +891,12 @@ public class ExcelManager {
 
         CompanyBeanTB companyBeanTB = MyApplication.getInstance().getDBHelper().getCompany(estimateBeanTB.getCom_idx());
 
-
         //상세리스트별 맨홀야장조사 탭 생성 및 데이타 주입
-        setEstimateExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
+        //setEstimateExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
+        setSpecificationExcel(estimateBeanTB, companyBeanTB, hssfCellStyleBg, hssfCellStyleValue, hssfCellStyleRemark, hssfCellStyleMainTitle, hssfCellStyleNoLine, creationHelper);
 
-        saveExcel(estimateBeanTB);
+        //saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.name().toLowerCase());
+        saveExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.SPECIFICATION.name().toLowerCase());
 
     }
 
@@ -901,6 +925,8 @@ public class ExcelManager {
         Row row2 = sheet.createRow(2);
         setStyleBg(sheet, row2,  CELL_STYLE.COMPANY_NAME_TITLE, CELL_STYLE.COMPANY_NAME_TITLE.title, cellStyleBg, creationHelper);
         setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), cellStyleValue);
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", cellStyleValue);
+
 
         Row row3 = sheet.createRow(3);
 
@@ -935,7 +961,8 @@ public class ExcelManager {
         setStyle(sheet, row7,  CELL_STYLE.DIV_7, CELL_STYLE.DIV_7.title, cellStyleNoLine);
 
         Row row8 = sheet.createRow(8);
-        setStyle(sheet, row8,  CELL_STYLE.EFFECTIVE_DATE_TITLE, "하기와 같이 견적합니다. " + estimateBeanTB.getEst_effective_date() + "까지 유효합니다.", cellStyleNoLine);
+        String effectiveDate = StringUtil.isEmpty(estimateBeanTB.getEst_effective_date())?" ": " " + estimateBeanTB.getEst_effective_date() + "까지 유효합니다.";
+        setStyle(sheet, row8,  CELL_STYLE.EFFECTIVE_DATE_TITLE, "하기와 같이 견적합니다." + effectiveDate, cellStyleNoLine);
 
         Row row9 = sheet.createRow(9);
         setStyle(sheet, row9,  CELL_STYLE.DIV_9, CELL_STYLE.DIV_9.title, cellStyleNoLine);
@@ -1077,8 +1104,23 @@ public class ExcelManager {
         Row row33 = sheet.createRow(33);
         setStyle(sheet, row33,  CELL_STYLE.REMARK_VALUE, estimateBeanTB.getEst_remark(), cellStyleRemark);
 
+        //회사정보
         Row row37 = sheet.createRow(37);
-        setStyle(sheet, row37,  CELL_STYLE.BOTTOM, estimateBeanTB.getEst_remark(), cellStyleValue);
+        StringBuffer sb = new StringBuffer();
+        sb.append(companyBeanTB.getCom_name());
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_tel_num())) {
+            sb.append(" ");
+            sb.append("Tel.");
+            sb.append(FormatUtil.addHyphenToPhoneNumber(companyBeanTB.getCom_tel_num()));
+        }
+
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_fax_num())) {
+            sb.append(" ");
+            sb.append("Fax.");
+            sb.append(FormatUtil.addHyphenToPhoneNumber(companyBeanTB.getCom_fax_num()));
+        }
+        String companyInfo = sb.toString();
+        setStyle(sheet, row37,  CELL_STYLE.BOTTOM, companyInfo, cellStyleValue);
 
         setPaperAligment(sheet);
         setColumeWidth(sheet, SHEET_TYPE.DETAIL);
@@ -1113,11 +1155,276 @@ public class ExcelManager {
         setBoderLine(sheet, hssfCellStyleLeft);
         setBoderLine_bottom(sheet, hssfCellStyleLeftBottom);
 
-/*        try {
-            setServerPhoto(sheet, fieldDetailBeanS);
-        } catch (ExecutionException | InterruptedException e) {
-        }*/
+        try {
+            setPhoto(sheet, companyBeanTB);
+        } catch (ExecutionException | InterruptedException | IOException e) {
+            Log.d("EXCEL", "stampUri.toString() : " + e.toString());
+        }
     }
+
+    /**
+     * 거래명세서 엑셀 데이타 주입 처리
+     * createManholeExcel에서 호출
+     * @param estimateBeanTB
+     */
+    private void setSpecificationExcel(EstimateBeanTB estimateBeanTB, CompanyBeanTB companyBeanTB, HSSFCellStyle cellStyleBg, HSSFCellStyle cellStyleValue, HSSFCellStyle cellStyleRemark, HSSFCellStyle cellStyleMainTitle, HSSFCellStyle cellStyleNoLine, CreationHelper creationHelper) {
+
+        HSSFSheet sheet = mWorkbook.createSheet("거래명세서");
+
+        //첫번째 행 >> 맨홀 조사 야장
+        Row row0 = sheet.createRow(0);
+        setMainTitleStyle(sheet,  row0, CELL_STYLE.MAIN_TITLE, "거래명세서", cellStyleMainTitle);
+
+        Row row1 = sheet.createRow(1);
+
+        setStyle(sheet, row1,  CELL_STYLE.CLIENT_NAME_VALUE, estimateBeanTB.getEst_cli_name(), cellStyleNoLine);
+        setStyle(sheet, row1,  CELL_STYLE.CLIENT_NAME_TO, CELL_STYLE.CLIENT_NAME_TO.title, cellStyleNoLine);
+        setStyleBg(sheet, row1,  CELL_STYLE.COMPANY_TITLE_01, CELL_STYLE.COMPANY_TITLE_01.title, cellStyleBg, creationHelper);
+
+        setStyleBg(sheet, row1,  CELL_STYLE.COMPANY_BIZ_NUM_TITLE, CELL_STYLE.COMPANY_BIZ_NUM_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row1,  CELL_STYLE.COMPANY_BIZ_NUM_VALUE, FormatUtil.addHyphenToBusinessNumber(estimateBeanTB.getEst_com_biz_num()), cellStyleValue);
+
+        Row row2 = sheet.createRow(2);
+        setStyleBg(sheet, row2,  CELL_STYLE.COMPANY_NAME_TITLE, CELL_STYLE.COMPANY_NAME_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), cellStyleValue);
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", cellStyleValue);
+
+
+        Row row3 = sheet.createRow(3);
+
+        setStyle(sheet, row3,  CELL_STYLE.SPECIFICATION_DATE_TITLE, CELL_STYLE.SPECIFICATION_DATE_TITLE.title, cellStyleNoLine);
+        setStyle(sheet, row3,  CELL_STYLE.ESTIMATE_DATE_VALUE, DateUtil.displayDateFormat(estimateBeanTB.getEst_date(), "yyyyMMdd", "yyyy.MM.dd"), cellStyleNoLine);
+
+        setStyleBg(sheet, row3,  CELL_STYLE.COMPANY_TITLE_02, CELL_STYLE.COMPANY_TITLE_02.title, cellStyleBg, creationHelper);
+
+        setStyleBg(sheet, row3,  CELL_STYLE.COMPANY_CEO_NAME_TITLE, CELL_STYLE.COMPANY_CEO_NAME_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row3,  CELL_STYLE.COMPANY_CEO_NAME_VALUE, estimateBeanTB.getEst_com_ceo_name(), cellStyleValue);
+
+        //인수자, 회사 주소
+        Row row4 = sheet.createRow(4);
+        setStyle(sheet, row4,  CELL_STYLE.SPEC_MANAGER_NAME_TITLE, CELL_STYLE.SPEC_MANAGER_NAME_TITLE.title, cellStyleNoLine);
+        setStyle(sheet, row4,  CELL_STYLE.MANAGER_NAME_VALUE, estimateBeanTB.getEst_com_manager_name(), cellStyleNoLine);
+
+        setStyleBg(sheet, row4,  CELL_STYLE.COMPANY_ADDRESS_TITLE, CELL_STYLE.COMPANY_ADDRESS_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row4,  CELL_STYLE.COMPANY_ADDRESS_VALUE, estimateBeanTB.getEst_com_address_01() + " " + estimateBeanTB.getEst_com_address_02(), cellStyleValue);
+
+        Row row5 = sheet.createRow(5);
+        setStyleBg(sheet, row5,  CELL_STYLE.COMPANY_TITLE_03, CELL_STYLE.COMPANY_TITLE_03.title, cellStyleBg, creationHelper);
+
+        setStyleBg(sheet, row5,  CELL_STYLE.COMPANY_UPTAE_TITLE, CELL_STYLE.COMPANY_UPTAE_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row5,  CELL_STYLE.COMPANY_UPTAE_VALUE, companyBeanTB.getCom_uptae(), cellStyleValue);
+        setStyleBg(sheet, row5,  CELL_STYLE.COMPANY_UPJONG_TITLE, CELL_STYLE.COMPANY_UPJONG_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row5,  CELL_STYLE.COMPANY_UPJONG_VALUE, companyBeanTB.getCom_upjong(), cellStyleValue);
+
+        Row row6 = sheet.createRow(6);
+        setStyleBg(sheet, row6,  CELL_STYLE.COMPANY_TEL_TITLE, CELL_STYLE.COMPANY_TEL_TITLE.title, cellStyleBg, creationHelper);
+        setStyle(sheet, row6,  CELL_STYLE.COMPANY_TEL_VALUE, FormatUtil.addHyphenToPhoneNumber(companyBeanTB.getCom_tel_num()), cellStyleValue);
+
+        Row row7 = sheet.createRow(7);
+        setStyle(sheet, row7,  CELL_STYLE.DIV_7, CELL_STYLE.DIV_7.title, cellStyleNoLine);
+
+        Row row8 = sheet.createRow(8);
+        String effectiveDate = StringUtil.isEmpty(estimateBeanTB.getEst_effective_date())?" ": " " + estimateBeanTB.getEst_effective_date() + "까지 유효합니다.";
+        setStyle(sheet, row8,  CELL_STYLE.EFFECTIVE_DATE_TITLE, "하기와 같이 계산합니다." + effectiveDate, cellStyleNoLine);
+
+        Row row9 = sheet.createRow(9);
+        setStyle(sheet, row9,  CELL_STYLE.DIV_9, CELL_STYLE.DIV_9.title, cellStyleNoLine);
+
+        //중간 금액 부가세포함 등 Row 처리
+
+        short hAlignCenter = CellStyle.ALIGN_CENTER;
+        short vAlignCenter = CellStyle.VERTICAL_CENTER;
+
+        Row row10 = sheet.createRow(10);
+        String money = "";
+        try {
+            money = FormatUtil.money(estimateBeanTB.getEst_total_price());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        StringBuffer moneyTitle = new StringBuffer();
+        moneyTitle.append(CELL_STYLE.MONEY_TITLE.title);
+        moneyTitle.append("\n");
+        moneyTitle.append("Y".equalsIgnoreCase(estimateBeanTB.getEst_tax_type())?"부가세포함":"부가세별도");
+
+        setStyleBg(sheet, row10,  CELL_STYLE.MONEY_TITLE, moneyTitle.toString(), cellStyleBg, creationHelper);
+        setStyle(sheet, row10,  CELL_STYLE.MONEY_KOR_VALUE, FormatUtil.convertNumberToKorean(StringUtil.stringToLong(estimateBeanTB.getEst_total_price())), cellStyleValue);
+
+        Font fontReportMainTitle = mWorkbook.createFont();
+        fontReportMainTitle.setBold(true);
+        fontReportMainTitle.setFontHeight(TITLE_SIZE.PRICE_KOR.size);
+
+        HSSFCellStyle hssfCellStyleMoneyTitle = createCellStyle();
+        hssfCellStyleMoneyTitle.setAlignment(hAlignCenter);
+        hssfCellStyleMoneyTitle.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleMoneyTitle.setBorderTop((short)1);
+        hssfCellStyleMoneyTitle.setBorderBottom((short)1);
+        hssfCellStyleMoneyTitle.setBorderLeft((short)1);
+        hssfCellStyleMoneyTitle.setBorderRight((short)1);
+        hssfCellStyleMoneyTitle.setFont(fontReportMainTitle);
+
+        setMoneyStyle(sheet, row10,  CELL_STYLE.MONEY_KOR_VALUE, "금액 " + FormatUtil.convertNumberToKorean(StringUtil.stringToLong(estimateBeanTB.getEst_total_price())) + " 원", hssfCellStyleMoneyTitle);
+
+        setStyle(sheet, row10,  CELL_STYLE.MONEY_UNIT_VALUE, CELL_STYLE.MONEY_UNIT_VALUE.title, cellStyleValue);
+
+        setMoneyStyle(sheet, row10,  CELL_STYLE.MONEY_NUM_VALUE, money, hssfCellStyleMoneyTitle);
+
+        Row row11 = sheet.createRow(11);
+        setStyle(sheet, row11,  CELL_STYLE.DIV_11, CELL_STYLE.DIV_11.title, cellStyleNoLine);
+
+        Row row12 = sheet.createRow(12);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_NO_TITLE, CELL_STYLE.ITEM_NO_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_ITEM_TITLE, CELL_STYLE.ITEM_ITEM_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_QUANTITY_TITLE, CELL_STYLE.ITEM_QUANTITY_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_UNIT_TITLE, CELL_STYLE.ITEM_UNIT_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_UNIT_MONEY_TITLE, CELL_STYLE.ITEM_UNIT_MONEY_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_MONEY_TITLE, CELL_STYLE.ITEM_MONEY_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_TAX_MONEY_TITLE, CELL_STYLE.ITEM_TAX_MONEY_TITLE.title, cellStyleBg, creationHelper);
+        setStyleBg(sheet, row12,  CELL_STYLE.ITEM_TOTAL_MONEY_TITLE, CELL_STYLE.ITEM_TOTAL_MONEY_TITLE.title, cellStyleBg, creationHelper);
+
+        //for itemList
+        ArrayList<ItemBeanTB> itemList = MyApplication.getInstance().getDBHelper().getEstimateItemListData(estimateBeanTB.getEst_idx());
+
+        int no = 1;
+        int i = 13;
+        for(ItemBeanTB itemBeanTB : itemList){
+            Row row = sheet.createRow(i);
+
+            Cell cellItemNo = row.createCell(CELL_STYLE.ITEM_NO_TITLE.col);
+            Cell cellItemName = row.createCell(CELL_STYLE.ITEM_ITEM_TITLE.col);
+            Cell cellItemQuantity = row.createCell(CELL_STYLE.ITEM_QUANTITY_TITLE.col);
+            Cell cellItemUnit = row.createCell(CELL_STYLE.ITEM_UNIT_TITLE.col);
+            Cell cellItemUnitPrice = row.createCell(CELL_STYLE.ITEM_UNIT_MONEY_TITLE.col);
+            Cell cellItemPrice = row.createCell(CELL_STYLE.ITEM_MONEY_TITLE.col);
+            Cell cellItemTaxPrice = row.createCell(CELL_STYLE.ITEM_TAX_MONEY_TITLE.col);
+            Cell cellItemTotalPrice = row.createCell(CELL_STYLE.ITEM_TOTAL_MONEY_TITLE.col);
+
+            String moneyUnitPrice = "";
+            String moneyPrice = "";
+            String moneyTaxPrice = "";
+            String moneyTotalPrice = "";
+            try {
+                moneyUnitPrice = FormatUtil.money(StringUtil.stringToLong(itemBeanTB.getItem_unit_price()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                moneyPrice = FormatUtil.money(StringUtil.stringToLong(itemBeanTB.getItem_price()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                moneyTaxPrice = FormatUtil.money(StringUtil.stringToLong(itemBeanTB.getItem_tax_price()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                moneyTotalPrice = FormatUtil.money(StringUtil.stringToLong(itemBeanTB.getItem_total_price()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            setStyleCreateCell(sheet, row, cellItemNo, CELL_STYLE.ITEM_NO_VALUE, StringUtil.intToString(no), cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemName, CELL_STYLE.ITEM_ITEM_VALUE, itemBeanTB.getItem_name(), cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemQuantity, CELL_STYLE.ITEM_QUANTITY_VALUE, itemBeanTB.getItem_quantity(), cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemUnit, CELL_STYLE.ITEM_UNIT_VALUE, itemBeanTB.getItem_unit(), cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemUnitPrice, CELL_STYLE.ITEM_UNIT_MONEY_VALUE, moneyUnitPrice, cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemPrice, CELL_STYLE.ITEM_MONEY_VALUE, moneyPrice, cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemTaxPrice, CELL_STYLE.ITEM_TAX_MONEY_VALUE, moneyTaxPrice, cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemTotalPrice, CELL_STYLE.ITEM_TOTAL_MONEY_VALUE, moneyTotalPrice, cellStyleValue);
+            i++;
+            no++;
+        }
+
+        //상품 빈 라인 채우기
+        for(int k = i; k < 31; k++){
+            Row row = sheet.createRow(k);
+            Cell cellItemNo = row.createCell(CELL_STYLE.ITEM_NO_TITLE.col);
+            Cell cellItemName = row.createCell(CELL_STYLE.ITEM_ITEM_TITLE.col);
+            Cell cellItemQuantity = row.createCell(CELL_STYLE.ITEM_QUANTITY_TITLE.col);
+            Cell cellItemUnit = row.createCell(CELL_STYLE.ITEM_UNIT_TITLE.col);
+            Cell cellItemUnitPrice = row.createCell(CELL_STYLE.ITEM_UNIT_MONEY_TITLE.col);
+            Cell cellItemPrice = row.createCell(CELL_STYLE.ITEM_MONEY_TITLE.col);
+            Cell cellItemTaxPrice = row.createCell(CELL_STYLE.ITEM_TAX_MONEY_TITLE.col);
+            Cell cellItemTotalPrice = row.createCell(CELL_STYLE.ITEM_TOTAL_MONEY_TITLE.col);
+
+            setStyleCreateCell(sheet, row, cellItemNo, CELL_STYLE.ITEM_NO_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemName, CELL_STYLE.ITEM_ITEM_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemQuantity, CELL_STYLE.ITEM_QUANTITY_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemUnit, CELL_STYLE.ITEM_UNIT_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemUnitPrice, CELL_STYLE.ITEM_UNIT_MONEY_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemPrice, CELL_STYLE.ITEM_MONEY_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemTaxPrice, CELL_STYLE.ITEM_TAX_MONEY_VALUE, "", cellStyleValue);
+            setStyleCreateCell(sheet, row, cellItemTotalPrice, CELL_STYLE.ITEM_TOTAL_MONEY_VALUE, "", cellStyleValue);
+        }
+
+        Row row31 = sheet.createRow(31);
+        setStyle(sheet, row31,  CELL_STYLE.DIV_31, CELL_STYLE.DIV_31.title, cellStyleNoLine);
+
+        Row row32 = sheet.createRow(32);
+        setStyleBg(sheet, row32,  CELL_STYLE.REMARK_TITLE, CELL_STYLE.REMARK_TITLE.title, cellStyleBg, creationHelper);
+
+        Row row33 = sheet.createRow(33);
+        setStyle(sheet, row33,  CELL_STYLE.REMARK_VALUE, estimateBeanTB.getEst_remark(), cellStyleRemark);
+
+        //회사정보
+        Row row37 = sheet.createRow(37);
+        StringBuffer sb = new StringBuffer();
+        sb.append(companyBeanTB.getCom_name());
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_tel_num())) {
+            sb.append(" ");
+            sb.append("Tel.");
+            sb.append(FormatUtil.addHyphenToPhoneNumber(companyBeanTB.getCom_tel_num()));
+        }
+
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_fax_num())) {
+            sb.append(" ");
+            sb.append("Fax.");
+            sb.append(FormatUtil.addHyphenToPhoneNumber(companyBeanTB.getCom_fax_num()));
+        }
+        String companyInfo = sb.toString();
+        setStyle(sheet, row37,  CELL_STYLE.BOTTOM, companyInfo, cellStyleValue);
+
+        setPaperAligment(sheet);
+        setColumeWidth(sheet, SHEET_TYPE.DETAIL);
+
+        HSSFCellStyle hssfCellStyleLeftTop = mWorkbook.createCellStyle();
+        hssfCellStyleLeftTop.setBorderLeft((short)1);
+        hssfCellStyleLeftTop.setBorderTop((short)1);
+        hssfCellStyleLeftTop.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeftTop.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeftTop.setFillPattern((short) 1);
+        hssfCellStyleLeftTop.setAlignment(hAlignCenter);
+        hssfCellStyleLeftTop.setVerticalAlignment(vAlignCenter);
+
+        HSSFCellStyle hssfCellStyleLeft = mWorkbook.createCellStyle();
+        hssfCellStyleLeft.setBorderLeft((short)1);
+        hssfCellStyleLeft.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeft.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeft.setFillPattern((short) 1);
+        hssfCellStyleLeft.setAlignment(hAlignCenter);
+        hssfCellStyleLeft.setVerticalAlignment(vAlignCenter);
+
+        HSSFCellStyle hssfCellStyleLeftBottom = mWorkbook.createCellStyle();
+        hssfCellStyleLeftBottom.setBorderLeft((short)1);
+        hssfCellStyleLeftBottom.setBorderBottom((short)1);
+        hssfCellStyleLeftBottom.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeftBottom.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        hssfCellStyleLeftBottom.setFillPattern((short) 1);
+        hssfCellStyleLeftBottom.setAlignment(hAlignCenter);
+        hssfCellStyleLeftBottom.setVerticalAlignment(vAlignCenter);
+
+        setBoderLine_top(sheet, hssfCellStyleLeftTop);
+        setBoderLine(sheet, hssfCellStyleLeft);
+        setBoderLine_bottom(sheet, hssfCellStyleLeftBottom);
+
+        try {
+            setPhoto(sheet, companyBeanTB);
+        } catch (ExecutionException | InterruptedException | IOException e) {
+            Log.d("EXCEL", "stampUri.toString() : " + e.toString());
+        }
+    }
+
 
     private void setBoderLine_top(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
 
@@ -1180,7 +1487,126 @@ public class ExcelManager {
         }
     }
 
-    private void saveExcel(EstimateBeanTB estimateBeanTB){
+    private void setPhoto(HSSFSheet sheet,  CompanyBeanTB companyBeanTB) throws ExecutionException, InterruptedException, IOException {
+
+        CreationHelper creationHelper = mWorkbook.getCreationHelper();
+        HSSFPatriarch hssfPatriarch = sheet.createDrawingPatriarch();
+
+        ClientAnchor clientAnchorStamp = creationHelper.createClientAnchor();
+        ClientAnchor clientAnchorLogo = creationHelper.createClientAnchor();
+
+        clientAnchorStamp.setRow1(CELL_STYLE.COMPANY_STEMP_VALUE.firstRow);
+        clientAnchorStamp.setRow2(CELL_STYLE.COMPANY_STEMP_VALUE.lastRow+1);
+        clientAnchorStamp.setCol1(CELL_STYLE.COMPANY_STEMP_VALUE.firstCol);
+        clientAnchorStamp.setCol2(CELL_STYLE.COMPANY_STEMP_VALUE.lastCol+1);
+
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_stamp_path())) {
+            Uri stampUri = Uri.parse("content://media" + companyBeanTB.getCom_stamp_path());
+            Log.d("EXCEL", "stampPath : " + stampUri);
+            Log.d("EXCEL", "stampUri.toString() : " + stampUri.toString());
+            String filePath = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                filePath = ImageUtil.getRealPathFromURI(mActivity, stampUri);
+                Log.d("EXCEL", "real filePath : " + filePath);
+                try (FileInputStream imageStream = new FileInputStream(filePath)) {
+                    byte[] imageBytes = IOUtils.toByteArray(imageStream);
+                    int stempIndex = mWorkbook.addPicture(imageBytes, HSSFWorkbook.PICTURE_TYPE_PNG);
+                    HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstCol, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstRow, (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastCol+1), (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastRow + 1));
+                    hssfPatriarch.createPicture(anchor, stempIndex);
+                }
+            }
+
+            /*
+            Glide.with(mActivity).asBitmap()
+                    .load(stampUri)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap glideBitmap,
+                                                    @Nullable Transition<? super Bitmap> transition) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            glideBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                            byte[] byteData = baos.toByteArray();
+                            int iPictureStamp = mWorkbook.addPicture(byteData, HSSFWorkbook.PICTURE_TYPE_JPEG);
+                            Log.d("EXCEL", "stampPath >> iPictureStamp : " + iPictureStamp);
+                            hssfPatriarch.createPicture(clientAnchorStamp, iPictureStamp);
+                            try {
+                                baos.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
+             */
+        }
+
+
+        /*
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(!StringUtil.isEmpty(companyBeanTB.getCom_logo_path())) {
+                    String logoPath = "content://media" + companyBeanTB.getCom_logo_path();
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            byte[] bytesOuter = new byte[0];
+                            try {
+                                bytesOuter = Glide.with(mActivity)
+                                        .as(byte[].class)
+                                        .load(logoPath)
+                                        .submit()
+                                        .get();
+                            } catch (ExecutionException | InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            pictureLogo[0] = mWorkbook.addPicture(bytesOuter, HSSFWorkbook.PICTURE_TYPE_JPEG);
+                        }
+                    });
+                }
+            };
+        });
+        */
+
+        /*
+        // 하단에 회사 로고 이미지 입력.
+        if(!StringUtil.isEmpty(companyBeanTB.getCom_logo_path())) {
+            Uri logoUri = Uri.parse("content://media" + companyBeanTB.getCom_logo_path());
+            Log.d("EXCEL", "logoUri : " + logoUri);
+            Log.d("EXCEL", "logoUri.toString() : " + logoUri.toString());
+            String filePath = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                filePath = ImageUtil.getRealPathFromURI(mActivity, logoUri);
+                Log.d("EXCEL", "real filePath : " + filePath);
+                try (FileInputStream imageStream = new FileInputStream(filePath)) {
+                    byte[] imageBytes = IOUtils.toByteArray(imageStream);
+                    int logoIndex = mWorkbook.addPicture(imageBytes, HSSFWorkbook.PICTURE_TYPE_PNG);
+                    HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short) CELL_STYLE.BOTTOM.firstCol, (short) CELL_STYLE.BOTTOM.firstRow, (short) (CELL_STYLE.BOTTOM.lastCol + 1), (short) (CELL_STYLE.BOTTOM.lastRow + 1));
+                    hssfPatriarch.createPicture(anchor, logoIndex);
+                }
+            }
+        }
+         */
+
+        //clientAnchorStamp.setAnchorType(ClientAnchor.MOVE_AND_RESIZE);
+        //clientAnchorLogo.setAnchorType(ClientAnchor.MOVE_AND_RESIZE);
+
+    }
+
+
+    /**
+     *
+     * @param estimateBeanTB
+     * @param saveExcelType 견젹서(estimate), 거래명세서(specification)
+     */
+    private void saveExcel(EstimateBeanTB estimateBeanTB, String saveExcelType){
         FileOutputStream fileOut = null;
 
         //File file = FileUtil.createFile(mActivity, Environment.DIRECTORY_DOCUMENTS, "excel", ".xls");
@@ -1188,7 +1614,7 @@ public class ExcelManager {
         prefix = estimateBeanTB.getEst_cli_name();
         prefix = prefix.replace(" ", "").trim();
 
-        File file = FileUtil.createExcelFile(mActivity, AppConstant.APP_NAME, prefix, Environment.DIRECTORY_DOCUMENTS, "excel", ".xls");
+        File file = FileUtil.createExcelFile(mActivity, saveExcelType, prefix, Environment.DIRECTORY_DOCUMENTS, "excel", ".xls");
 
         try {
             fileOut = new FileOutputStream(file);

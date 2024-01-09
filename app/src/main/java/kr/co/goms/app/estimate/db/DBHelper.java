@@ -1301,18 +1301,19 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public String getEstimateNum() {
         SQLiteDatabase db = getReadableDatabase();
-        String today = DateUtil.getCurrentDate();
-        Cursor cursor = db.rawQuery("SELECT count(*) AS CNT FROM " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " WHERE strftime('%Y%m%d', " + EstimateDB.EstimateTable.EST_REGDATE + ") = '" + today + "' LIMIT 1", null);
-        cursor.moveToFirst();
+        String today = DateUtil.displayDateFormat(DateUtil.getCurrentDate(), "yyyyMMdd", "yyyy-MM-dd");
+        String query = "SELECT count(*) AS CNT FROM " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " WHERE substr(est_regdate, 1, 10) = '" + today + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(cursor.getColumnIndexOrThrow("CNT"));
+        }
+
         String estNum = "0001";
         try{
-            String tmpCnt = String.valueOf(cursor.getColumnIndexOrThrow("CNT"));
-
-            int currNum = StringUtil.stringToInt(tmpCnt);
-            int createNum = currNum + 1;
-
+            int createNum = count + 1;
             estNum = String.format("%04d", createNum);
-
             if (!cursor.isClosed()) {
                 cursor.close();
             }

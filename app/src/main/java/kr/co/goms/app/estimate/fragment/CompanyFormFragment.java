@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,7 @@ import kr.co.goms.app.estimate.AppConstant;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
+import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.app.estimate.manager.GlideHelper;
 import kr.co.goms.app.estimate.manager.SendManager;
@@ -63,6 +66,7 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
     private ImageView mIvStamp, mIvLogo;
     private LottieAnimationView mLavStemp, mLavLogo;
     private SwitchCompat mSwitchMainYn;
+    private LinearLayout mLltStamp, mLltLogo;
 
     private DIALOG_TYPE mDialogType = DIALOG_TYPE.STAMP;
     private enum DIALOG_TYPE{
@@ -158,6 +162,10 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             if(checkValue()){
                 goSave();
             }
+        }else if(id == R.id.llt_stamp) {
+            goAlbum(DIALOG_TYPE.STAMP);
+        }else if(id == R.id.llt_logo) {
+            goAlbum(DIALOG_TYPE.LOGO);
         }
     }
 
@@ -168,7 +176,7 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
                 GomsLog.d(TAG, "mDataObserver  CallBack()");
 
                 if (baseBean.getStatus() == BaseBean.STATUS.SUCCESS) {
-                    FragmentMoveManager.I().setManager(getActivity(), R.id.setting_nav_host_fragment).changeFragment(new CompanyListFragment(), "ComList", true);
+                    FragmentMoveManager.I().setManager(getActivity(), R.id.nav_host_fragment).changeFragment(new CompanyListFragment(), "ComList", true);
                 } else {
                     GomsLog.d(TAG, "CallBack() : mDataObserver 실패!!!!");
                 }
@@ -212,7 +220,7 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
 
 
     /**
-     * 사진대지 > 앨범 선택 후 setAlbumPhoto 처리
+     * 앨범 선택 후 setAlbumPhoto 처리
      * @param photoUri
      */
     public void setAlbumPhoto(Uri photoUri){
@@ -222,15 +230,14 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             mIvStamp.setVisibility(View.VISIBLE);
             mLavStemp.setVisibility(View.GONE);
             //ExcelManager.I(getActivity()).setPhotoUri(ExcelManager.PHOTO_TYPE.AROUND, mPhotoAroundUri);
-
-            resizeAndSaveImage(mDialogType, mPhotoStampUri);
+            //resizeAndSaveImage(mDialogType, mPhotoStampUri);
         }else if(DIALOG_TYPE.LOGO == mDialogType) {
             mPhotoLogoUri = photoUri;
             GlideHelper.I().setImageView(requireActivity(), photoUri,mIvLogo, 100, 100);
-            mIvStamp.setVisibility(View.VISIBLE);
+            mIvLogo.setVisibility(View.VISIBLE);
             mLavLogo.setVisibility(View.GONE);
             //ExcelManager.I(getActivity()).setPhotoUri(ExcelManager.PHOTO_TYPE.OUTER, mPhotoOuterUri);
-            resizeAndSaveImage(mDialogType, mPhotoLogoUri);
+            //resizeAndSaveImage(mDialogType, mPhotoLogoUri);
         }
     }
 
@@ -283,7 +290,13 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
 
         mSwitchMainYn = view.findViewById(R.id.sc_main_yn);
 
+        mLltStamp = view.findViewById(R.id.llt_stamp);
+        mLltLogo = view.findViewById(R.id.llt_logo);
+
         Button btnSave = view.findViewById(R.id.btn_save);
+
+        mLltStamp.setOnClickListener(this);
+        mLltLogo.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
         if(FORM_TYPE.MODIFY.name().equalsIgnoreCase(mFormType.name()) && StringUtil.isNotNull(comIdx)) {
@@ -305,6 +318,26 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             mEtAccoundNum.setText(companyBeanTB.getCom_account_num());
             mSwitchMainYn.setChecked("Y".equalsIgnoreCase(companyBeanTB.getCom_main_yn()));
 
+            Log.d(TAG, "stamp : " + companyBeanTB.getCom_stamp_path());
+            Log.d(TAG, "logo : " + companyBeanTB.getCom_logo_path());
+            Log.d(TAG, "stamp uri : " + Uri.parse(companyBeanTB.getCom_stamp_path()));
+            Log.d(TAG, "logo uri : " + Uri.parse(companyBeanTB.getCom_logo_path()));
+
+            if(!StringUtil.isEmpty(companyBeanTB.getCom_stamp_path())){
+                // 저장하면 /external/images/media/26563 >> 앞에 content://media 추가
+                mPhotoStampUri = Uri.parse("content://media" + companyBeanTB.getCom_stamp_path());
+                GlideHelper.I().setImageView(requireActivity(), mPhotoStampUri, mIvStamp);
+                mIvStamp.setVisibility(View.VISIBLE);
+                mLavStemp.setVisibility(View.GONE);
+            }
+            if(!StringUtil.isEmpty(companyBeanTB.getCom_logo_path())){
+                // 저장하면 /external/images/media/26563 >> 앞에 content://media 추가
+                mPhotoLogoUri = Uri.parse("content://media" + companyBeanTB.getCom_logo_path());
+                GlideHelper.I().setImageView(requireActivity(), mPhotoLogoUri, mIvLogo);
+                mIvLogo.setVisibility(View.VISIBLE);
+                mLavLogo.setVisibility(View.GONE);
+            }
+
             btnSave.setText("수정");
         }
     }
@@ -324,7 +357,12 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         String address01 = mEtAddress01.getText().toString();
         String address02 = mEtAddress02.getText().toString();
         String accoundNum = mEtAccoundNum.getText().toString();
+        String stamp = mPhotoStampUri.toString();
+        String logo = mPhotoLogoUri.toString();
         String mainYn = mSwitchMainYn.isChecked()?"Y":"N";
+
+        Log.d(TAG, "stamp : " + mPhotoStampUri.toString()); // content://media/external/images/media/26563
+        Log.d(TAG, "logo : " + mPhotoLogoUri.toString());   // content://media/external/images/media/26561
 
         CompanyBeanTB companyBeanTB = new CompanyBeanTB();
         companyBeanTB.setCom_idx(mComIdx);
@@ -343,6 +381,8 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         companyBeanTB.setCom_address_01(address01);
         companyBeanTB.setCom_address_02(address02);
         companyBeanTB.setCom_account_num(accoundNum);
+        companyBeanTB.setCom_stamp_path(stamp);
+        companyBeanTB.setCom_logo_path(logo);
         companyBeanTB.setCom_main_yn(mainYn);
 
         if(mPhotoStampUri != null) {
@@ -369,6 +409,8 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             params.put("comAddress01", companyBeanTB.getCom_address_01());
             params.put("comAddress02", companyBeanTB.getCom_address_02());
             params.put("comAccountNum", companyBeanTB.getCom_account_num());
+            params.put("comStampPath", companyBeanTB.getCom_stamp_path());
+            params.put("comLogoPath", companyBeanTB.getCom_logo_path());
             params.put("comMainYN", companyBeanTB.getCom_main_yn());
 
             SendManager.I().sendData(SendDataFactory.DATA_TYPE.COM_UPDATE, params, mDataObserver);

@@ -14,4 +14,19 @@ public class AppConstant {
     public final static int PHOTO_HEIGHT = 160;
     public static final String EST_PREFIX = "EST_PREFIX";
 
+    public enum FRAGMENT_TAG{
+        COMPANY_FORM,
+        COMPANY_LIST,
+        CLIENT_FORM,
+        CLIENT_LIST,
+        ESTIMATE_FORM,
+        ESTIMATE_LIST,
+
+    }
+
+    public enum SAVE_EXCEL_TYPE{
+        ESTIMATE,       //견적서
+        SPECIFICATION   //거래명세서
+    }
+
 }

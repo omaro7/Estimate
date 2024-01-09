@@ -2,5 +2,10 @@
     <string name="app_name">빠른견적</string>
     <string name="app_full_name_2line">빠른견적</string>
 
+    <string name="tab_home" translatable="false">홈</string>
+    <string name="tab_estimate" translatable="false">견적서</string>
+    <string name="tab_setting" translatable="false">세팅</string>
+
+
     <string name="admob_app_id">ca-app-pub-9725459038205351~4522322063</string>
 </resources>

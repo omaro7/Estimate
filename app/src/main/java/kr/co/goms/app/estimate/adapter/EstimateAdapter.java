@@ -18,6 +18,7 @@ import java.util.List;
 
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
+import kr.co.goms.module.common.util.DateUtil;
 import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.GomsLog;
 
@@ -43,10 +44,12 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.Sectio
 
     public class SectionHolder extends RecyclerView.ViewHolder {
         private LinearLayout lltEst;
-        private TextView tvEstCliName, tvEstTotalPrice;
+        private TextView tvEstDate, tvEstNum, tvEstCliName, tvEstTotalPrice;
         public SectionHolder(View itemView, Context context) {
             super(itemView);
             lltEst = itemView.findViewById(R.id.llt_est);
+            tvEstDate = itemView.findViewById(R.id.tv_est_date);
+            tvEstNum = itemView.findViewById(R.id.tv_est_num);
             tvEstCliName = itemView.findViewById(R.id.tv_est_cli_name);
             tvEstTotalPrice = itemView.findViewById(R.id.tv_est_total_price);
             setIsRecyclable(false);
@@ -79,7 +82,10 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.Sectio
         }catch(Exception e){
             
         }
-        
+
+        //holder.tvEstDate.setText(DateUtil.displayDateFormat(estimateBeanTB.getEst_regdate(), "yyyyMMdd", "yyyy년MM월dd일"));
+        holder.tvEstDate.setText(estimateBeanTB.getEst_regdate());
+        holder.tvEstNum.setText(estimateBeanTB.getEst_num());
         holder.tvEstCliName.setText(estimateBeanTB.getEst_cli_name());
         holder.tvEstTotalPrice.setText(totalPrice);
 
