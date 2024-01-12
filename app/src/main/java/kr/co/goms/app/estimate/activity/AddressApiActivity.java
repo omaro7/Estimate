@@ -6,6 +6,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import kr.co.goms.app.estimate.BuildConfig;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.module.common.activity.CustomActivity;
 
@@ -43,7 +44,7 @@ public class AddressApiActivity extends CustomActivity {
             }
         });
 
-        webView.loadUrl("http://app.goms.co.kr/101.api/address.php");
+        webView.loadUrl(BuildConfig.ADDRESS_SERVER_URL);
 
     }
 
