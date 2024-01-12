@@ -89,7 +89,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.SectionH
         holder.tvComCeoName.setText(CompanyBeanTB.getCom_ceo_name());
         holder.tvComBizNum.setText(bizNum);
         holder.tvComManagerName.setText(CompanyBeanTB.getCom_manager_name());
-        holder.tvComHpNum.setText(CompanyBeanTB.getCom_hp_num());
+        holder.tvComHpNum.setText(FormatUtil.addHyphenToPhoneNumber(CompanyBeanTB.getCom_hp_num()));
 
         holder.ivComMainYn.setVisibility("Y".equalsIgnoreCase(CompanyBeanTB.getCom_main_yn())?View.VISIBLE:View.GONE);
 

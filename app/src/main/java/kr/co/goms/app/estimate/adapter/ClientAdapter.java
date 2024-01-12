@@ -89,7 +89,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.SectionHol
         holder.tvCliCeoName.setText(clientBeanTB.getCli_ceo_name());
         holder.tvCliBizNum.setText(bizNum);
         holder.tvCliManagerName.setText(clientBeanTB.getCli_manager_name());
-        holder.tvCliHpNum.setText(clientBeanTB.getCli_hp_num());
+        holder.tvCliHpNum.setText(FormatUtil.addHyphenToPhoneNumber(clientBeanTB.getCli_hp_num()));
         holder.tvCliRemark.setText(clientBeanTB.getCli_remark());
 
         holder.ivCliMainYn.setVisibility("Y".equalsIgnoreCase(clientBeanTB.getCli_main_yn())?View.VISIBLE:View.GONE);

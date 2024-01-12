@@ -1,5 +1,7 @@
 package kr.co.goms.app.estimate.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +41,9 @@ import kr.co.goms.app.estimate.AppConstant;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
+import kr.co.goms.app.estimate.activity.AddressApiActivity;
 import kr.co.goms.app.estimate.activity.SettingActivity;
+import kr.co.goms.app.estimate.common.NetworkStatus;
 import kr.co.goms.app.estimate.manager.AdIdHelper;
 import kr.co.goms.app.estimate.manager.GlideHelper;
 import kr.co.goms.app.estimate.manager.SendManager;
@@ -85,6 +90,9 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
     }
 
     private ObserverInterface mDataObserver;
+
+    // 주소 요청코드 상수 requestCode
+    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
 
     public static CompanyFormFragment getFragment(String comIdx){
         CompanyFormFragment fragment = new CompanyFormFragment();
@@ -166,7 +174,29 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             goAlbum(DIALOG_TYPE.STAMP);
         }else if(id == R.id.llt_logo) {
             goAlbum(DIALOG_TYPE.LOGO);
+        }else if(id == R.id.btn_postcode){
+            goPostCode();
         }
+    }
+
+    private void goPostCode(){
+        Log.d("주소설정페이지", "주소입력창 클릭");
+
+        int status = NetworkStatus.getConnectivityStatus(getActivity());
+        if(status == NetworkStatus.TYPE_MOBILE || status == NetworkStatus.TYPE_WIFI) {
+
+            Log.d("주소설정페이지", "주소입력창 클릭");
+            Intent i = new Intent(getActivity(), AddressApiActivity.class);
+            // 화면전환 애니메이션 없애기
+            getActivity().overridePendingTransition(0, 0);
+            // 주소결과
+            //startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+            getActivity().startActivityFromFragment(this, i, SEARCH_ADDRESS_ACTIVITY);
+
+        }else {
+            Toast.makeText(getActivity(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void setObserverData(){
@@ -294,10 +324,12 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         mLltLogo = view.findViewById(R.id.llt_logo);
 
         Button btnSave = view.findViewById(R.id.btn_save);
+        Button btnPostCode = view.findViewById(R.id.btn_postcode);
 
         mLltStamp.setOnClickListener(this);
         mLltLogo.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        btnPostCode.setOnClickListener(this);
 
         if(FORM_TYPE.MODIFY.name().equalsIgnoreCase(mFormType.name()) && StringUtil.isNotNull(comIdx)) {
             CompanyBeanTB companyBeanTB = MyApplication.getInstance().getDBHelper().getCompany(comIdx);
@@ -320,11 +352,12 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
 
             Log.d(TAG, "stamp : " + companyBeanTB.getCom_stamp_path());
             Log.d(TAG, "logo : " + companyBeanTB.getCom_logo_path());
-            Log.d(TAG, "stamp uri : " + Uri.parse(companyBeanTB.getCom_stamp_path()));
-            Log.d(TAG, "logo uri : " + Uri.parse(companyBeanTB.getCom_logo_path()));
 
             if(!StringUtil.isEmpty(companyBeanTB.getCom_stamp_path())){
                 // 저장하면 /external/images/media/26563 >> 앞에 content://media 추가
+
+                Log.d(TAG, "stamp uri : " + Uri.parse(companyBeanTB.getCom_stamp_path()));
+
                 mPhotoStampUri = Uri.parse("content://media" + companyBeanTB.getCom_stamp_path());
                 GlideHelper.I().setImageView(requireActivity(), mPhotoStampUri, mIvStamp);
                 mIvStamp.setVisibility(View.VISIBLE);
@@ -332,6 +365,9 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             }
             if(!StringUtil.isEmpty(companyBeanTB.getCom_logo_path())){
                 // 저장하면 /external/images/media/26563 >> 앞에 content://media 추가
+
+                Log.d(TAG, "logo uri : " + Uri.parse(companyBeanTB.getCom_logo_path()));
+
                 mPhotoLogoUri = Uri.parse("content://media" + companyBeanTB.getCom_logo_path());
                 GlideHelper.I().setImageView(requireActivity(), mPhotoLogoUri, mIvLogo);
                 mIvLogo.setVisibility(View.VISIBLE);
@@ -418,4 +454,28 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
             MyApplication.getInstance().getDBHelper().insertCompany(companyBeanTB);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == SEARCH_ADDRESS_ACTIVITY) {
+            // Handle the result from the started activity
+            if (resultCode == Activity.RESULT_OK) {
+                String postcode = intent.getExtras().getString("postcode");
+                String address = intent.getExtras().getString("address");
+                if (address != null) {
+                    Log.d("test", "postcode:" + postcode);
+                    Log.d("test", "address:" + address);
+                    //edit_addr.setText(data);
+                    mEtZipCode.setText(postcode);
+                    mEtAddress01.setText(address);
+                    mEtAddress02.requestFocus();
+                }
+            } else {
+                // The activity was canceled or failed
+            }
+        }
+    }
+
 }

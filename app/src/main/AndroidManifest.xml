@@ -45,6 +45,8 @@
         <activity android:name=".IntroActivity" android:exported="false" android:theme="@style/AppTheme_NoActionBarApp_LAUNCHER" android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" android:exported="false" android:screenOrientation="portrait"/>
         <activity android:name=".activity.SettingActivity" android:exported="false" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AddressApiActivity" android:exported="false" android:screenOrientation="portrait"
+            android:theme="@style/DimActivityTheme"/>
 
         <!-- File Provider -->
         <provider

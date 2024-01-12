@@ -683,7 +683,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
+                            android:layout_weight="0.4">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -707,6 +707,29 @@
                                     android:textColorHint="@color/text_primary_gray"
                                     android:textSize="16dp"
                                     android:inputType="number"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="6dp"
+                            android:layout_weight="0.4">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/btn_postcode"
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="16dp"
+                                    android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                                    android:gravity="center"
+                                    android:text="검색"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16dp"
+                                    android:visibility="visible"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -965,7 +988,7 @@
                                 android:layout_centerVertical="true"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
-                                android:text="회사로고"
+                                android:text="회사\n로고"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16dp" />
                         </LinearLayout>

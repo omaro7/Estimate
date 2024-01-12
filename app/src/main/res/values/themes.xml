@@ -32,4 +32,24 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <style name="TransparentActivityTheme" parent="Theme.Estimate">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+    <!--
+    전체화면. 상태바 안보임.
+    -->
+    <style name="DimActivityTheme" parent="Theme.Estimate">
+        <item name="android:windowBackground">@color/dim_background</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>

@@ -133,8 +133,6 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
 
@@ -196,24 +194,21 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
+                                android:layout_height="match_parent"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
+                                android:gravity="left|center_vertical"
                                 android:text="대표자"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16dp" />
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.25">
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
+                                android:layout_height="match_parent"
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
 
@@ -242,7 +237,7 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
@@ -253,14 +248,12 @@
 
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.35">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
+                                android:layout_height="match_parent"
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
                                 <EditText
@@ -301,8 +294,6 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
                                 android:text="업태"
@@ -311,13 +302,11 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
 
@@ -367,13 +356,11 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
                                 android:background="@drawable/rounded_border_gray"
                                 android:orientation="horizontal">
 
@@ -424,7 +411,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -460,7 +447,7 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:gravity="right|center_vertical"
                                 android:layout_marginRight="4dp"
@@ -471,7 +458,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -516,8 +503,8 @@
                             android:gravity="left|center_vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerVertical="true"
                                 android:fontFamily="@font/spoqahansansneomedium"
@@ -528,7 +515,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -563,7 +550,7 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
@@ -573,7 +560,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -628,7 +615,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -660,7 +647,7 @@
                     <LinearLayout
                         android:id="@+id/llt_zipcode_root"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/cli_list_height"
+                        android:layout_height="@dimen/com_list_height"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
@@ -683,8 +670,8 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -707,8 +694,30 @@
                                     android:textColor="@color/text_primary_gray"
                                     android:textColorHint="@color/text_primary_gray"
                                     android:textSize="16dp"
-                                    android:inputType="number"
-                                    android:digits="0123456789"/>
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="6dp"
+                            android:layout_weight="0.5">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/btn_postcode"
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="16dp"
+                                    android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                                    android:gravity="center"
+                                    android:text="검색"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16dp"
+                                    android:visibility="visible"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -739,7 +748,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -795,7 +804,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.8">
                             <LinearLayout
                                 android:layout_width="match_parent"
