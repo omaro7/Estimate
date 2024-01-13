@@ -70,4 +70,5 @@
     <color name="red_alpha_95">#f3e73a3d</color>
     <color name="ripple">#F06292</color>
 
+    <color name="dim_background">#80000000</color>
 </resources>
