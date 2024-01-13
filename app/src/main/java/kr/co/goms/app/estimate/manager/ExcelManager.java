@@ -4,31 +4,19 @@ import static org.apache.poi.ss.usermodel.Font.U_DOUBLE;
 import static org.apache.poi.ss.usermodel.Font.U_NONE;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.FutureTarget;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.util.IOUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -37,23 +25,16 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.PrintSetup;
-import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import kr.co.goms.app.estimate.AppConstant;
@@ -62,7 +43,6 @@ import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
 import kr.co.goms.module.common.util.DateUtil;
-import kr.co.goms.module.common.util.DisplayUtil;
 import kr.co.goms.module.common.util.FileUtil;
 import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.GomsLog;
@@ -116,14 +96,17 @@ public class ExcelManager {
         }
     }
 
+    // 폰트크기 설정
+    // 원하는 폰트크기의 X2 후 0을 붙여줍니다.
+    // ex 14 -> 280
     public enum TITLE_SIZE{
-        MAIN((short)400),
-        PRICE_TITLE((short)240),
-        PRICE_KOR((short)240),
+        MAIN((short)400),           //20
+        PRICE_TITLE((short)240),    //12
+        PRICE_KOR((short)240),      //12
         PRICE_UNIT((short)240),
-        PRICE_NUMBER((short)240),
-        TITLE((short)140),
-        VALUE((short)140),
+        PRICE_NUMBER((short)240),   //12
+        TITLE((short)160),          //8
+        VALUE((short)160),          //8
         ;
 
         short size;
@@ -302,14 +285,14 @@ public class ExcelManager {
     public void setColumeWidth(Sheet sheet, SHEET_TYPE sheetType){
 
         sheet.setColumnWidth(0, 1000);  //No.
-        sheet.setColumnWidth(1, 830);  //상품
-        sheet.setColumnWidth(2, 830);
-        sheet.setColumnWidth(3, 830);
-        sheet.setColumnWidth(4, 830);
-        sheet.setColumnWidth(5, 830);
-        sheet.setColumnWidth(6, 830);
-        sheet.setColumnWidth(7, 830);
-        sheet.setColumnWidth(8, 500);   //수량
+        sheet.setColumnWidth(1, 850);  //상품
+        sheet.setColumnWidth(2, 850);
+        sheet.setColumnWidth(3, 850);
+        sheet.setColumnWidth(4, 850);
+        sheet.setColumnWidth(5, 850);
+        sheet.setColumnWidth(6, 850);
+        sheet.setColumnWidth(7, 850);
+        sheet.setColumnWidth(8, 1000);   //수량
         sheet.setColumnWidth(9, 1000);
         sheet.setColumnWidth(10, 1000); //단위
         sheet.setColumnWidth(11, 1000); //단가
@@ -607,18 +590,21 @@ public class ExcelManager {
 
         Font fontReportBg = mWorkbook.createFont();
         fontReportBg.setBold(false);
-        fontReportBg.setFontHeight(TITLE_SIZE.TITLE.size);
+        fontReportBg.setFontHeight(TITLE_SIZE.TITLE.size);  //원하는 폰트크기의 X2 후 0을 붙여줍니다.  ex 14 -> 280
         fontReportBg.setUnderline(U_NONE);
+        fontReportBg.setFontName("맑은 고딕");
 
         mFontNoramValue = mWorkbook.createFont();
         mFontNoramValue.setBold(false);
         mFontNoramValue.setFontHeight(TITLE_SIZE.TITLE.size);
         mFontNoramValue.setUnderline(U_NONE);
+        mFontNoramValue.setFontName("맑은 고딕");
 
         Font fontReportMainTitle = mWorkbook.createFont();
         fontReportMainTitle.setBold(true);
         fontReportMainTitle.setFontHeight(TITLE_SIZE.MAIN.size);
         fontReportMainTitle.setUnderline(U_DOUBLE);
+        fontReportMainTitle.setFontName("맑은 고딕");
 
         //CellStyle 객체생성 - 배경
         HSSFCellStyle hssfCellStyleBg = createCellStyle();
@@ -647,6 +633,7 @@ public class ExcelManager {
         HSSFCellStyle hssfCellStyleNoLine = createCellStyle();
         hssfCellStyleNoLine.setAlignment(hAlignCenter);
         hssfCellStyleNoLine.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleNoLine.setFont(mFontNoramValue);
 
         //CellStyle 객체생성 - 특이사항
         HSSFCellStyle hssfCellStyleRemark = createCellStyle();
@@ -784,6 +771,7 @@ public class ExcelManager {
         Font fontReportMainTitle = mWorkbook.createFont();
         fontReportMainTitle.setBold(true);
         fontReportMainTitle.setFontHeight(TITLE_SIZE.PRICE_KOR.size);
+        fontReportMainTitle.setFontName("맑은 고딕");
 
         HSSFCellStyle hssfCellStyleMoneyTitle = createCellStyle();
         hssfCellStyleMoneyTitle.setAlignment(hAlignCenter);
@@ -926,6 +914,7 @@ public class ExcelManager {
         hssfCellStyleLeftTop.setFillPattern((short) 1);
         hssfCellStyleLeftTop.setAlignment(hAlignCenter);
         hssfCellStyleLeftTop.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeftTop.setFont(mFontNoramValue);
 
         HSSFCellStyle hssfCellStyleLeft = mWorkbook.createCellStyle();
         hssfCellStyleLeft.setBorderLeft((short)1);
@@ -934,6 +923,7 @@ public class ExcelManager {
         hssfCellStyleLeft.setFillPattern((short) 1);
         hssfCellStyleLeft.setAlignment(hAlignCenter);
         hssfCellStyleLeft.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeft.setFont(mFontNoramValue);
 
         HSSFCellStyle hssfCellStyleLeftBottom = mWorkbook.createCellStyle();
         hssfCellStyleLeftBottom.setBorderLeft((short)1);
@@ -943,6 +933,7 @@ public class ExcelManager {
         hssfCellStyleLeftBottom.setFillPattern((short) 1);
         hssfCellStyleLeftBottom.setAlignment(hAlignCenter);
         hssfCellStyleLeftBottom.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeftBottom.setFont(mFontNoramValue);
 
         setBorderLine_top(sheet, hssfCellStyleLeftTop);
         setBorderLine(sheet, hssfCellStyleLeft);
@@ -1065,6 +1056,7 @@ public class ExcelManager {
         Font fontReportMainTitle = mWorkbook.createFont();
         fontReportMainTitle.setBold(true);
         fontReportMainTitle.setFontHeight(TITLE_SIZE.PRICE_KOR.size);
+        fontReportMainTitle.setFontName("맑은 고딕");
 
         HSSFCellStyle hssfCellStyleMoneyTitle = createCellStyle();
         hssfCellStyleMoneyTitle.setAlignment(hAlignCenter);
@@ -1207,6 +1199,7 @@ public class ExcelManager {
         hssfCellStyleLeftTop.setFillPattern((short) 1);
         hssfCellStyleLeftTop.setAlignment(hAlignCenter);
         hssfCellStyleLeftTop.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeftTop.setFont(mFontNoramValue);
 
         HSSFCellStyle hssfCellStyleLeft = mWorkbook.createCellStyle();
         hssfCellStyleLeft.setBorderLeft((short)1);
@@ -1215,6 +1208,7 @@ public class ExcelManager {
         hssfCellStyleLeft.setFillPattern((short) 1);
         hssfCellStyleLeft.setAlignment(hAlignCenter);
         hssfCellStyleLeft.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeft.setFont(mFontNoramValue);
 
         HSSFCellStyle hssfCellStyleLeftBottom = mWorkbook.createCellStyle();
         hssfCellStyleLeftBottom.setBorderLeft((short)1);
@@ -1224,6 +1218,7 @@ public class ExcelManager {
         hssfCellStyleLeftBottom.setFillPattern((short) 1);
         hssfCellStyleLeftBottom.setAlignment(hAlignCenter);
         hssfCellStyleLeftBottom.setVerticalAlignment(vAlignCenter);
+        hssfCellStyleLeftBottom.setFont(mFontNoramValue);
 
         setBorderLine_top(sheet, hssfCellStyleLeftTop);
         setBorderLine(sheet, hssfCellStyleLeft);
