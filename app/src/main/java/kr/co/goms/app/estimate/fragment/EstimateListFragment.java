@@ -234,17 +234,26 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
 
                 Log.d(TAG, "excelFileUri.toString() : " + excelFileUri.toString()); //content://media/external_primary/file/26950
 
-                if(FileUtil.isFileExist(ImageUtil.getRealPathFromURI(getActivity(), excelFileUri))){
-                    Log.d(TAG, "excel File 존재합니다");
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(excelFileUri, "application/vnd.ms-excel");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(intent);
-                }else{
+                try {
+                    if (FileUtil.isFileExist(ImageUtil.getRealPathFromURI(getActivity(), excelFileUri))) {
+                        Log.d(TAG, "excel File 존재합니다");
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(excelFileUri, "application/vnd.ms-excel");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+                    } else {
+                        Log.d(TAG, "excel File 존재하지 않습니다");
+                        CurvletManager.process(getActivity(), null, "water://toast?text=excel file이 존재하지 않습니다.");
+                        //엑셀파일 위치 초기화
+                        MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(estimateBeanTB.getEst_idx(), "");
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }catch(Exception e){
                     Log.d(TAG, "excel File 존재하지 않습니다");
                     CurvletManager.process(getActivity(), null, "water://toast?text=excel file이 존재하지 않습니다.");
                     //엑셀파일 위치 초기화
                     MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(estimateBeanTB.getEst_idx(), "");
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         });

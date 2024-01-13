@@ -142,8 +142,8 @@ public class ExcelManager {
         COMPANY_BIZ_NUM_TITLE(CELL_TYPE_BG.Y,"등록번호", 1, 10, 1, 1, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_BIZ_NUM_VALUE(CELL_TYPE_BG.Y,"", 1, 14, 1, 1, 14, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         COMPANY_NAME_TITLE(CELL_TYPE_BG.Y,"상호명", 2, 10, 2, 2, 10, 13, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
-        COMPANY_NAME_VALUE(CELL_TYPE_BG.Y,"", 2, 14, 2, 2, 14, 20, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
-        COMPANY_STEMP_VALUE(CELL_TYPE_BG.Y,"", 2, 21, 2, 2, 21, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        COMPANY_NAME_VALUE(CELL_TYPE_BG.Y,"", 2, 14, 2, 2, 14, 19, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        COMPANY_STEMP_VALUE(CELL_TYPE_BG.Y,"", 2, 20, 2, 2, 20, 21, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         ESTIMATE_DATE_TITLE(CELL_TYPE_BG.Y,"견 적 일", 3, 0, 3, 3, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         SPECIFICATION_DATE_TITLE(CELL_TYPE_BG.Y,"거 래 일", 3, 0, 3, 3, 0, 1, HEIGHT_SIZE.REPORT_ROW.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
 
@@ -175,7 +175,7 @@ public class ExcelManager {
 
         MONEY_TITLE(CELL_TYPE_BG.Y,"금액", 10, 0, 10, 10, 0, 2, HEIGHT_SIZE.REPORT_ROW.size, TITLE_SIZE.PRICE_TITLE.size, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         MONEY_KOR_VALUE(CELL_TYPE_BG.Y,"", 10, 3, 10, 10, 3, 13, HEIGHT_SIZE.REPORT_ROW.size, TITLE_SIZE.PRICE_KOR.size, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
-        MONEY_UNIT_VALUE(CELL_TYPE_BG.Y,"W", 10, 14, 10, 10, 14, 16, HEIGHT_SIZE.REPORT_ROW.size, TITLE_SIZE.PRICE_UNIT.size, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
+        MONEY_UNIT_VALUE(CELL_TYPE_BG.Y,"₩", 10, 14, 10, 10, 14, 16, HEIGHT_SIZE.REPORT_ROW.size, TITLE_SIZE.PRICE_UNIT.size, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         MONEY_NUM_VALUE(CELL_TYPE_BG.Y,"", 10, 17, 10, 10, 17, 21, HEIGHT_SIZE.REPORT_ROW.size, TITLE_SIZE.PRICE_NUMBER.size, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
         DIV_11(CELL_TYPE_BG.Y,"", 11, 0, 11, 11, 0, 21, HEIGHT_SIZE.DIV.size, (short) 110, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, true, U_NONE),
 
@@ -230,6 +230,8 @@ public class ExcelManager {
         }
     }
 
+    Font mFontNoramValue;
+
     public ExcelManager() {
     }
 
@@ -256,21 +258,6 @@ public class ExcelManager {
         return workbook;
     }
 
-    public HSSFSheet createSheet(String sheetName){
-        if(mSheet == null) {
-            mSheet = mWorkbook.createSheet(sheetName);
-        }
-        return mSheet;
-    }
-
-    public HSSFFont getSumFont(){
-        if(mSumFont == null) {
-            mSumFont = mWorkbook.createFont();
-        }
-        return mSumFont;
-    }
-
-
     public HSSFFont getFont(){
         if(mFont == null) {
             mFont = mWorkbook.createFont();
@@ -285,186 +272,57 @@ public class ExcelManager {
         return mFontDataList;
     }
 
-    public HSSFFont getFontReport(){
-        if(mFontReport == null) {
-            mFontReport = mWorkbook.createFont();
-        }
-        return mFontReport;
-    }
-
-    public HSSFSheet createSumSheet(String sheetName){
-        return mWorkbook.createSheet(sheetName);
-    }
-
-    public HSSFSheet createSumDetailSheet(String sheetName){
-        return mWorkbook.createSheet(sheetName);
-    }
-
-    public HSSFSheet createSumExtensionSheet(String sheetName){
-        return mWorkbook.createSheet(sheetName);
-    }
-
-    public Row createRow(Sheet sheet, int row){
-
-        if(mRow == null) {
-            mRow = sheet.createRow(row);
-        }
-        return mRow;
-    }
-
-    public Cell createOneCell(Row row, int iCell, String cellValue){
-        Cell cell = row.createCell(iCell);
-        cell.setCellValue(cellValue);
-        return cell;
-    }
-
-    /**
-     * 해당 row에 요청한 범위(sCol, eCol) colume을 병합
-     * @param row
-     * @param sCol
-     * @param eCol
-     */
-    public void createRegionCell(Row row, int sCol, int eCol){
-        CellRangeAddress region = new CellRangeAddress(row.getRowNum(),row.getRowNum(), sCol, eCol);
-        mSheet.addMergedRegion(region);
-    }
-
-    /**
-     * 요청한 범위(sCol, eCol) colume을 병합
-     * @param sRow
-     * @param eRow
-     * @param sCol
-     * @param eCol
-     */
-    public void createRegionCell(int sRow, int eRow, int sCol, int eCol){
-        CellRangeAddress region = new CellRangeAddress(sRow, eRow, sCol, eCol);
-        mSheet.addMergedRegion(region);
-    }
+    short hAlignCenter = CellStyle.ALIGN_CENTER;
+    short hAlignLeft = CellStyle.ALIGN_LEFT;
+    short vAlignCenter = CellStyle.VERTICAL_CENTER;
+    short vAlignTop = CellStyle.VERTICAL_TOP;
 
     public HSSFCellStyle createCellStyle(){
         return mWorkbook.createCellStyle();
     }
 
     /**
-     * 총괄집계표 셀스타일
-     * @return
+     * 페이지 중앙정렬 처리
+     * @param sheet
      */
-    public HSSFCellStyle createAllSumCellStyle(){
-        return mWorkbook.createCellStyle();
-    }
-
-    public HSSFCellStyle createCellStyleMainTitle(){
-        if(mHSSFCellStyleMainTitle == null) {
-            mHSSFCellStyleMainTitle = mWorkbook.createCellStyle();
-        }
-        return mHSSFCellStyleMainTitle;
-    }
-
-    public HSSFCellStyle createCellStyleBorderRight(){
-        if(mHSSFCellStyleBorderRight == null) {
-            mHSSFCellStyleBorderRight = mWorkbook.createCellStyle();
-        }
-        mHSSFCellStyleBorderRight.setBorderRight((short)1);
-        //Cell alignment 지정하기
-
-        mHSSFCellStyleBorderRight.setAlignment(CellStyle.ALIGN_CENTER);
-        mHSSFCellStyleBorderRight.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        return mHSSFCellStyleBorderRight;
-    }
-
-    public HSSFCellStyle createCellStyleBorderLeftRight(){
-        if(mHSSFCellStyleBorderLeftRight == null) {
-            mHSSFCellStyleBorderLeftRight = mWorkbook.createCellStyle();
-        }
-        mHSSFCellStyleBorderLeftRight.setBorderRight((short)1);
-        mHSSFCellStyleBorderLeftRight.setBorderLeft((short)1);
-        //Cell alignment 지정하기
-
-        mHSSFCellStyleBorderLeftRight.setAlignment(CellStyle.ALIGN_CENTER);
-        mHSSFCellStyleBorderLeftRight.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        return mHSSFCellStyleBorderLeftRight;
-    }
-
-    public HSSFCellStyle createCellStyleBorderTopRight(){
-        if(mHSSFCellStyleBorderTopRight == null) {
-            mHSSFCellStyleBorderTopRight = mWorkbook.createCellStyle();
-        }
-        mHSSFCellStyleBorderTopRight.setBorderTop((short)1);
-        mHSSFCellStyleBorderTopRight.setBorderRight((short)1);
-
-        //Cell alignment 지정하기
-
-        mHSSFCellStyleBorderTopRight.setAlignment(CellStyle.ALIGN_CENTER);
-        mHSSFCellStyleBorderTopRight.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        return mHSSFCellStyleBorderTopRight;
-    }
-
-    public HSSFCellStyle createCellStyleBorderAll(){
-        if(mHSSFCellStyleBorderAll == null) {
-            mHSSFCellStyleBorderAll = mWorkbook.createCellStyle();
-        }
-        mHSSFCellStyleBorderAll.setBorderTop((short)1);
-        mHSSFCellStyleBorderAll.setBorderBottom((short)1);
-        mHSSFCellStyleBorderAll.setBorderRight((short)1);
-        mHSSFCellStyleBorderAll.setBorderLeft((short)1);
-
-        //Cell alignment 지정하기
-        mHSSFCellStyleBorderAll.setAlignment(CellStyle.ALIGN_CENTER);
-        mHSSFCellStyleBorderAll.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        return mHSSFCellStyleBorderAll;
-    }
-
-    /**
-     * CellStyle center 정렬처리
-     * @param hssfCellStyle
-     */
-    public void setCellCenter(HSSFCellStyle hssfCellStyle){
-        hssfCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        hssfCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-    }
-
     public void setPaperAligment(Sheet sheet){
-        sheet.setDisplayGridlines(false);
-        sheet.getPrintSetup().setLandscape(false);    //가로모드 A4사이즈
-        sheet.getPrintSetup().setPaperSize(PrintSetup.A4_PAPERSIZE);    //출력시 A4사이즈
+        sheet.setDisplayGridlines(false);                               //가이드라인 안보이게
 
-        sheet.setFitToPage (true);
+        sheet.getPrintSetup().setLandscape(false);                      //세로모드 A4사이즈
+        sheet.getPrintSetup().setPaperSize(PrintSetup.A4_PAPERSIZE);    //출력시 A4사이즈
         sheet.getPrintSetup().setFitWidth((short)1);  //가로는 1페이지에
         sheet.getPrintSetup().setFitHeight((short)0);  //세로는 자동으로
 
+        sheet.setFitToPage(true);
         sheet.setHorizontallyCenter(true); //출력시 가로정렬 Center로
+        sheet.setVerticallyCenter(true);
 
     }
 
     public void setColumeWidth(Sheet sheet, SHEET_TYPE sheetType){
 
         sheet.setColumnWidth(0, 1000);  //No.
-        sheet.setColumnWidth(1, 1000); //처리구역
-        sheet.setColumnWidth(2, 1000);
-        sheet.setColumnWidth(3, 1000); //배제방식
-        sheet.setColumnWidth(4, 1000);
-        sheet.setColumnWidth(5, 1000);  //맨홀번호
-        sheet.setColumnWidth(6, 1000);
-        sheet.setColumnWidth(7, 1000);
-        sheet.setColumnWidth(8, 1000);  //규격
+        sheet.setColumnWidth(1, 830);  //상품
+        sheet.setColumnWidth(2, 830);
+        sheet.setColumnWidth(3, 830);
+        sheet.setColumnWidth(4, 830);
+        sheet.setColumnWidth(5, 830);
+        sheet.setColumnWidth(6, 830);
+        sheet.setColumnWidth(7, 830);
+        sheet.setColumnWidth(8, 500);   //수량
         sheet.setColumnWidth(9, 1000);
-        sheet.setColumnWidth(10, 1000); //맨홀깊이
-        sheet.setColumnWidth(11, 1000);
-        sheet.setColumnWidth(12, 1000); //GPS위도
-        sheet.setColumnWidth(13, 1000);
+        sheet.setColumnWidth(10, 1000); //단위
+        sheet.setColumnWidth(11, 1000); //단가
+        sheet.setColumnWidth(12, 1000);
+        sheet.setColumnWidth(13, 1000); //금액
         sheet.setColumnWidth(14, 1000);
-        sheet.setColumnWidth(15, 1000); //GPS경도
-        sheet.setColumnWidth(16, 1000);
+        sheet.setColumnWidth(15, 1000);
+        sheet.setColumnWidth(16, 1000); //세액
         sheet.setColumnWidth(17, 1000);
-        sheet.setColumnWidth(18, 1000); //조사자
-        sheet.setColumnWidth(19, 1000);
+        sheet.setColumnWidth(18, 1000);
+        sheet.setColumnWidth(19, 1000); //총금액
         sheet.setColumnWidth(20, 1000);
         sheet.setColumnWidth(21, 1000);
-    }
-
-    public enum PHOTO_TYPE{
-        LOGO,
-        STAMP,
     }
 
     /**
@@ -513,7 +371,7 @@ public class ExcelManager {
     }
 
     /**
-     *제목 스타일
+     *금액 스타일
      */
     private void setMoneyStyle(HSSFSheet sheet, Row row , CELL_STYLE cellStyle, @Nullable String text, HSSFCellStyle cellStyleMainTitle){
 
@@ -695,39 +553,6 @@ public class ExcelManager {
         }
     }
 
-    public void setStyleDiv(HSSFSheet sheet, Row row, CELL_STYLE cellStyle,@Nullable String text){
-
-        Cell cell = row.createCell(cellStyle.col);
-
-        //해당 셀의 Row 높이 지정하기
-        row.setHeight(cellStyle.rowHeight);
-
-        //row, col 병합 처리하기
-        int iRegion = sheet.addMergedRegion(new CellRangeAddress(cellStyle.firstRow, cellStyle.lastRow, cellStyle.firstCol, cellStyle.lastCol));
-
-        CellRangeAddress mergedRegion = sheet.getMergedRegion(iRegion);
-        for (int iRow = mergedRegion.getFirstRow(); iRow <= mergedRegion.getLastRow(); iRow++) {
-
-            Row currentRow = sheet.getRow(iRow);
-            if (currentRow == null) {
-                currentRow = sheet.createRow(iRow);
-            }
-
-            for (int iCol = mergedRegion.getFirstColumn(); iCol <= mergedRegion.getLastColumn(); iCol++) {
-                Cell borderCell;
-                try {
-                    borderCell = currentRow.getCell(iCol);
-                    if (borderCell == null) {
-                        borderCell = currentRow.createCell(iCol);
-                    }
-                }catch(NullPointerException e){
-                    borderCell = currentRow.getCell(iCol);
-                }
-            }
-
-        }
-    }
-
     public void setStyleRemark(HSSFSheet sheet, Row row, CELL_STYLE cellStyle,@Nullable String text, HSSFCellStyle hssfCellStyle){
 
         Cell cell = row.createCell(cellStyle.col);
@@ -772,49 +597,6 @@ public class ExcelManager {
         }
     }
 
-
-    /**
-     * 맨홀조사집계표 > 데이타 부분 스타일
-     */
-    private void setDataCellStyle(HSSFSheet sheet, int firstRow, int lastRow, int firstCol, int lastCol){
-
-        short fontHeight = (short) 110;
-
-        boolean bold = false;
-        byte underline = U_NONE;
-
-        //CellStyle 객체생성
-        //HSSFCellStyle hssfCellStyle = createCellStyleBorderAll();
-        HSSFCellStyle hssfCellStyle = mWorkbook.createCellStyle();
-        hssfCellStyle.setBorderTop((short)1);
-        hssfCellStyle.setBorderBottom((short)1);
-        hssfCellStyle.setBorderRight((short)1);
-        hssfCellStyle.setBorderLeft((short)1);
-        //Cell alignment 지정하기
-        hssfCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        hssfCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-
-        //Font 객체생성
-        Font font = getFontDataType();
-
-        font.setBold(bold);
-        font.setFontHeight(fontHeight);
-        font.setUnderline(underline);
-        //CellStyle에 지정한 폰트 Set
-        hssfCellStyle.setFont(font);
-
-        //생성필요없이 바로 스타일 적용처리. 생성하면 이상하게 제목이 날라갑니다.
-        //row 5, col 80까지 생성
-        for(int rowIndex = firstRow; rowIndex < lastRow; rowIndex++){
-            Row row = sheet.getRow(rowIndex);
-            for (int colIndex = firstCol; colIndex <= lastCol; colIndex++) {
-                Cell cell = row.getCell(colIndex);
-                cell.setCellStyle(hssfCellStyle);
-            }
-        }
-
-    }
-
     /**
      * 엑셀 생성 시작 > 맨홀 야장 조사
      * for문으로 detailList array 기반으로 "맨홀 야장 조사" 탭 생성 및 내용을 기입하자
@@ -823,20 +605,15 @@ public class ExcelManager {
     public void createExcel(EstimateBeanTB estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE saveExcelType) {
         GomsLog.d(LOG_TAG, "createExcel()");
 
-        short hAlignCenter = CellStyle.ALIGN_CENTER;
-        short hAlignLeft = CellStyle.ALIGN_LEFT;
-        short vAlignCenter = CellStyle.VERTICAL_CENTER;
-        short vAlignTop = CellStyle.VERTICAL_TOP;
-
         Font fontReportBg = mWorkbook.createFont();
         fontReportBg.setBold(false);
         fontReportBg.setFontHeight(TITLE_SIZE.TITLE.size);
         fontReportBg.setUnderline(U_NONE);
 
-        Font fontReportValue = mWorkbook.createFont();
-        fontReportValue.setBold(false);
-        fontReportValue.setFontHeight(TITLE_SIZE.TITLE.size);
-        fontReportValue.setUnderline(U_NONE);
+        mFontNoramValue = mWorkbook.createFont();
+        mFontNoramValue.setBold(false);
+        mFontNoramValue.setFontHeight(TITLE_SIZE.TITLE.size);
+        mFontNoramValue.setUnderline(U_NONE);
 
         Font fontReportMainTitle = mWorkbook.createFont();
         fontReportMainTitle.setBold(true);
@@ -864,7 +641,7 @@ public class ExcelManager {
         hssfCellStyleValue.setBorderBottom((short)1);
         hssfCellStyleValue.setBorderLeft((short)1);
         hssfCellStyleValue.setBorderRight((short)1);
-        hssfCellStyleValue.setFont(fontReportValue);
+        hssfCellStyleValue.setFont(mFontNoramValue);
 
         //CellStyle 객체생성 - 값 > 라인없음
         HSSFCellStyle hssfCellStyleNoLine = createCellStyle();
@@ -879,7 +656,7 @@ public class ExcelManager {
         hssfCellStyleRemark.setBorderBottom((short)1);
         hssfCellStyleRemark.setBorderLeft((short)1);
         hssfCellStyleRemark.setBorderRight((short)1);
-        hssfCellStyleRemark.setFont(fontReportValue);
+        hssfCellStyleRemark.setFont(mFontNoramValue);
 
         //CellStyle 객체생성 - 메인타이틀
         HSSFCellStyle hssfCellStyleMainTitle = createCellStyle();
@@ -927,17 +704,33 @@ public class ExcelManager {
 
         Row row2 = sheet.createRow(2);
         setStyleBg(sheet, row2,  CELL_STYLE.COMPANY_NAME_TITLE, CELL_STYLE.COMPANY_NAME_TITLE.title, cellStyleBg, creationHelper);
-        setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), cellStyleValue);
-        setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", cellStyleValue);
+
+        HSSFCellStyle companyNameStyle = createCellStyle();
+
+        companyNameStyle.setAlignment(hAlignCenter);
+        companyNameStyle.setVerticalAlignment(vAlignCenter);
+        companyNameStyle.setBorderBottom((short) 1);
+        companyNameStyle.setBorderTop((short) 1);
+        companyNameStyle.setBorderLeft((short) 1);
+        companyNameStyle.setBorderRight((short) 0);
+        companyNameStyle.setFont(mFontNoramValue);
+
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), companyNameStyle);
+
+        HSSFCellStyle stempStyle = createCellStyle();
+        stempStyle.setAlignment(hAlignCenter);
+        stempStyle.setVerticalAlignment(vAlignCenter);
+        stempStyle.setBorderBottom((short) 1);
+        stempStyle.setBorderTop((short) 1);
+        stempStyle.setBorderLeft((short) 0);
+        stempStyle.setBorderRight((short) 1);
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", stempStyle);
 
 
         Row row3 = sheet.createRow(3);
-
         setStyle(sheet, row3,  CELL_STYLE.ESTIMATE_DATE_TITLE, CELL_STYLE.ESTIMATE_DATE_TITLE.title, cellStyleNoLine);
         setStyle(sheet, row3,  CELL_STYLE.ESTIMATE_DATE_VALUE, DateUtil.displayDateFormat(estimateBeanTB.getEst_date(), "yyyyMMdd", "yyyy.MM.dd"), cellStyleNoLine);
-
         setStyleBg(sheet, row3,  CELL_STYLE.COMPANY_TITLE_02, CELL_STYLE.COMPANY_TITLE_02.title, cellStyleBg, creationHelper);
-
         setStyleBg(sheet, row3,  CELL_STYLE.COMPANY_CEO_NAME_TITLE, CELL_STYLE.COMPANY_CEO_NAME_TITLE.title, cellStyleBg, creationHelper);
         setStyle(sheet, row3,  CELL_STYLE.COMPANY_CEO_NAME_VALUE, estimateBeanTB.getEst_com_ceo_name(), cellStyleValue);
 
@@ -972,9 +765,6 @@ public class ExcelManager {
 
         //중간 금액 부가세포함 등 Row 처리
 
-        short hAlignCenter = CellStyle.ALIGN_CENTER;
-        short vAlignCenter = CellStyle.VERTICAL_CENTER;
-
         Row row10 = sheet.createRow(10);
         String money = "";
         try {
@@ -986,7 +776,7 @@ public class ExcelManager {
         StringBuffer moneyTitle = new StringBuffer();
         moneyTitle.append(CELL_STYLE.MONEY_TITLE.title);
         moneyTitle.append("\n");
-        moneyTitle.append("Y".equalsIgnoreCase(estimateBeanTB.getEst_tax_type())?"부가세포함":"부가세별도");
+        moneyTitle.append("Y".equalsIgnoreCase(estimateBeanTB.getEst_tax_type())?"(부가세포함)":"(부가세별도)");
 
         setStyleBg(sheet, row10,  CELL_STYLE.MONEY_TITLE, moneyTitle.toString(), cellStyleBg, creationHelper);
         setStyle(sheet, row10,  CELL_STYLE.MONEY_KOR_VALUE, FormatUtil.convertNumberToKorean(StringUtil.stringToLong(estimateBeanTB.getEst_total_price())), cellStyleValue);
@@ -1154,15 +944,16 @@ public class ExcelManager {
         hssfCellStyleLeftBottom.setAlignment(hAlignCenter);
         hssfCellStyleLeftBottom.setVerticalAlignment(vAlignCenter);
 
-        setBoderLine_top(sheet, hssfCellStyleLeftTop);
-        setBoderLine(sheet, hssfCellStyleLeft);
-        setBoderLine_bottom(sheet, hssfCellStyleLeftBottom);
+        setBorderLine_top(sheet, hssfCellStyleLeftTop);
+        setBorderLine(sheet, hssfCellStyleLeft);
+        setBorderLine_bottom(sheet, hssfCellStyleLeftBottom);
 
         try {
             setPhoto(sheet, companyBeanTB);
         } catch (ExecutionException | InterruptedException | IOException e) {
             Log.d("EXCEL", "stampUri.toString() : " + e.toString());
         }
+
     }
 
     /**
@@ -1192,6 +983,26 @@ public class ExcelManager {
         setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), cellStyleValue);
         setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", cellStyleValue);
 
+        HSSFCellStyle companyNameStyle = createCellStyle();
+
+        companyNameStyle.setAlignment(hAlignCenter);
+        companyNameStyle.setVerticalAlignment(vAlignCenter);
+        companyNameStyle.setBorderBottom((short) 1);
+        companyNameStyle.setBorderTop((short) 1);
+        companyNameStyle.setBorderLeft((short) 1);
+        companyNameStyle.setBorderRight((short) 0);
+        companyNameStyle.setFont(mFontNoramValue);
+
+        HSSFCellStyle stempStyle = createCellStyle();
+        stempStyle.setAlignment(hAlignCenter);
+        stempStyle.setVerticalAlignment(vAlignCenter);
+        stempStyle.setBorderBottom((short) 1);
+        stempStyle.setBorderTop((short) 1);
+        stempStyle.setBorderLeft((short) 0);
+        stempStyle.setBorderRight((short) 1);
+
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_NAME_VALUE, estimateBeanTB.getEst_com_name(), companyNameStyle);
+        setStyle(sheet, row2,  CELL_STYLE.COMPANY_STEMP_VALUE, "", stempStyle);
 
         Row row3 = sheet.createRow(3);
 
@@ -1235,9 +1046,6 @@ public class ExcelManager {
 
         //중간 금액 부가세포함 등 Row 처리
 
-        short hAlignCenter = CellStyle.ALIGN_CENTER;
-        short vAlignCenter = CellStyle.VERTICAL_CENTER;
-
         Row row10 = sheet.createRow(10);
         String money = "";
         try {
@@ -1417,9 +1225,9 @@ public class ExcelManager {
         hssfCellStyleLeftBottom.setAlignment(hAlignCenter);
         hssfCellStyleLeftBottom.setVerticalAlignment(vAlignCenter);
 
-        setBoderLine_top(sheet, hssfCellStyleLeftTop);
-        setBoderLine(sheet, hssfCellStyleLeft);
-        setBoderLine_bottom(sheet, hssfCellStyleLeftBottom);
+        setBorderLine_top(sheet, hssfCellStyleLeftTop);
+        setBorderLine(sheet, hssfCellStyleLeft);
+        setBorderLine_bottom(sheet, hssfCellStyleLeftBottom);
 
         try {
             setPhoto(sheet, companyBeanTB);
@@ -1429,7 +1237,7 @@ public class ExcelManager {
     }
 
 
-    private void setBoderLine_top(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
+    private void setBorderLine_top(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
 
         for(int k = 1; k <= 2; k++) {
             Row iRow = sheet.getRow(k);
@@ -1449,7 +1257,7 @@ public class ExcelManager {
             iCell01.setCellStyle(hssfCellStyleLeft);
         }
     }
-    private void setBoderLine(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
+    private void setBorderLine(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
 
         for(int k = 3; k <= 4; k++) {
             Row iRow = sheet.getRow(k);
@@ -1469,7 +1277,7 @@ public class ExcelManager {
             iCell01.setCellStyle(hssfCellStyleLeft);
         }
     }
-    private void setBoderLine_bottom(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
+    private void setBorderLine_bottom(Sheet sheet, HSSFCellStyle hssfCellStyleLeft){
 
         for(int k = 5; k <= 6; k++) {
             Row iRow = sheet.getRow(k);
@@ -1498,11 +1306,6 @@ public class ExcelManager {
         ClientAnchor clientAnchorStamp = creationHelper.createClientAnchor();
         ClientAnchor clientAnchorLogo = creationHelper.createClientAnchor();
 
-        clientAnchorStamp.setRow1(CELL_STYLE.COMPANY_STEMP_VALUE.firstRow);
-        clientAnchorStamp.setRow2(CELL_STYLE.COMPANY_STEMP_VALUE.lastRow+1);
-        clientAnchorStamp.setCol1(CELL_STYLE.COMPANY_STEMP_VALUE.firstCol);
-        clientAnchorStamp.setCol2(CELL_STYLE.COMPANY_STEMP_VALUE.lastCol+1);
-
         if(!StringUtil.isEmpty(companyBeanTB.getCom_stamp_path())) {
             Uri stampUri = Uri.parse("content://media" + companyBeanTB.getCom_stamp_path());
             Log.d("EXCEL", "stampPath : " + stampUri);
@@ -1515,7 +1318,7 @@ public class ExcelManager {
                 try (FileInputStream imageStream = new FileInputStream(filePath)) {
                     byte[] imageBytes = IOUtils.toByteArray(imageStream);
                     int stempIndex = mWorkbook.addPicture(imageBytes, HSSFWorkbook.PICTURE_TYPE_PNG);
-                    HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstCol, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstRow, (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastCol+1), (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastRow + 1));
+                    HSSFClientAnchor anchor = new HSSFClientAnchor(250, 0, 750, 0, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstCol, (short) CELL_STYLE.COMPANY_STEMP_VALUE.firstRow, (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastCol), (short) (CELL_STYLE.COMPANY_STEMP_VALUE.lastRow + 1));
                     hssfPatriarch.createPicture(anchor, stempIndex);
                 }
             }
