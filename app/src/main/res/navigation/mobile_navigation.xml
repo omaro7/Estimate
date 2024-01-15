@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_estimate">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_estimate"
         android:name="kr.co.goms.app.estimate.fragment.EstimateListFragment"
         android:label="@string/tab_home"
         tools:layout="@layout/fragment_estimate_list" />

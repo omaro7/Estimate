@@ -127,13 +127,11 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
     }
 
     private void setBottomNavigationView(){
-        mNavView.setSelectedItemId(R.id.navigation_home);
+        mNavView.setSelectedItemId(R.id.navigation_estimate);
         mNavView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.navigation_home) {
-                    changeFragment(new EstimateListFragment(), "estimateList", false);
-                }else if(item.getItemId() == R.id.navigation_estimate) {
+                if(item.getItemId() == R.id.navigation_estimate) {
                     changeFragment(new EstimateListFragment(), "estimateList", false);
                 }else if(item.getItemId() == R.id.navigation_setting) {
                     changeFragment(new SettingFragment(), "setting", false);
