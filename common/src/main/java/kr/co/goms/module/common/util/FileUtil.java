@@ -563,7 +563,7 @@ public class FileUtil {
 		String imageFileName = appName + "_" + prefix + "_" + type + "_" +timeStamp + "_";
 		File storageDir = context.getExternalFilesDir(folder);	//Android > data > kr.co.goms.manhole > file > document
 
-		File excelDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Manhole/Excel");
+		File excelDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Estimate/Excel");
 
 		GomsLog.d("File", "Dir : " + storageDir.getAbsolutePath());
 		GomsLog.d("File", "excelDir : " + excelDir.getAbsolutePath());

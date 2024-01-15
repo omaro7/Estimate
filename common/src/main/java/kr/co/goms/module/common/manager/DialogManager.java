@@ -73,6 +73,7 @@ public class DialogManager {
         positiveName("positiveName"),
         isCancelable("isCancelable"),
         isCancelTouchOutSide("isCancelTouchOutSide"),
+        isShowItem("isShowItem"),
         arrayList("arrayList"),
         ;
 
@@ -172,6 +173,11 @@ public class DialogManager {
 
     public DialogManager setCancelTouchOutSide(boolean cancelableOutSide){
         mDialogBundle.putBoolean(DIALOG_TEXT.isCancelTouchOutSide.name(), cancelableOutSide);
+        return instance;
+    }
+
+    public DialogManager setShowItem(boolean isShowItem){
+        mDialogBundle.putBoolean(DIALOG_TEXT.isShowItem.name(), isShowItem);
         return instance;
     }
 

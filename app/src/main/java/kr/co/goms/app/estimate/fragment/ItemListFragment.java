@@ -282,13 +282,14 @@ public class ItemListFragment extends Fragment  implements View.OnClickListener 
         //checkSignature();
         DialogManager.I().setTag("itemInsert")
                 .setTitle("상품생성")
-                .setMessage("상품을 입력해주세요")
+                .setMessage("상품을 입력해 주세요")
                 .setShowTitle(true)
                 .setShowMessage(true)
                 .setNegativeBtnName("")
                 .setPositiveBtnName(getActivity().getString(kr.co.goms.module.common.R.string.confirm))
                 .setCancelable(true)
                 .setCancelTouchOutSide(true)
+                .setShowItem(false)
                 .setCommand(ItemFormBottomDialogCommand.getInstance().setBaseDialogCommand(getActivity(),  new WaterCallBack() {
                     @Override
                     public void callback(BaseBean baseData) {

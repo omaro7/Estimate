@@ -62,12 +62,11 @@ public class MyApplication extends ApplicationBackground implements ApplicationI
 
         mGomsJNI = new GomsJNI(this);
         mDBHelper = new DBHelper(this);
-        /*
-        mDBHelper.deleteTable(EstimateDB.EstimateTable.ESTIMATE_TABLE);
-        mDBHelper.createTable();
-        mDBHelper.removeTableData(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
-        mDBHelper.removeTableData(EstimateDB.TempItemTable.TEMP_ITEM_TABLE);
-        */
+
+        //mDBHelper.deleteTable(EstimateDB.ItemTable.ITEM_TABLE);
+        //mDBHelper.createTable();
+        //mDBHelper.removeTableData(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE);
+        //mDBHelper.removeTableData(EstimateDB.TempItemTable.TEMP_ITEM_TABLE);
 
         curvletApiSettings();
 

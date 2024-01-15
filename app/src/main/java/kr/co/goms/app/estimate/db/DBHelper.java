@@ -1270,40 +1270,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String createTable = buildQuery(
                 "CREATE TABLE",
-                EstimateDB.EstimateTable.ESTIMATE_TABLE, "(",
-                EstimateDB.EstimateTable.EST_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",				//견적IDX
-                EstimateDB.EstimateTable.COM_IDX, " INTEGER, ",					//회사IDX
-                EstimateDB.EstimateTable.CLI_IDX, " INTEGER, ",					//거래처IDX
-                EstimateDB.EstimateTable.EST_DATE, " VARCHAR, ",				//견적일자
-                EstimateDB.EstimateTable.EST_EFFECTIVE_DATE, " VARCHAR, ",		//유효일자
-                EstimateDB.EstimateTable.EST_DELIVERY_DATE, " VARCHAR, ",		//납기일자
-                EstimateDB.EstimateTable.EST_PAYMENT_CONDITION, " VARCHAR, ",	//결제조건
-                EstimateDB.EstimateTable.EST_DELIVERY_LOCATION, " VARCHAR, ",	//인도장소
-                EstimateDB.EstimateTable.EST_NUM, " VARCHAR, ",					//견적번호
-                EstimateDB.EstimateTable.EST_CLI_NAME, " VARCHAR, ",			//거래처정보
-                EstimateDB.EstimateTable.EST_CLI_TEL, " VARCHAR, ",				//거래처 연락처
-                EstimateDB.EstimateTable.EST_CLI_FAX, " VARCHAR, ",				//거래처 팩스
-                EstimateDB.EstimateTable.EST_CLI_HP, " VARCHAR, ",				//거래처 핸드폰
-                EstimateDB.EstimateTable.EST_CLI_ZIPCODE, " VARCHAR, ",			//거래처 우편번호
-                EstimateDB.EstimateTable.EST_CLI_ADDRESS_01, " VARCHAR, ",		//거래처 주소 01
-                EstimateDB.EstimateTable.EST_CLI_ADDRESS_02, " VARCHAR, ",		//거래처 주소 02
-                EstimateDB.EstimateTable.EST_CLI_MANAGER_NAME, " VARCHAR, ",	//담당자 이름
-                EstimateDB.EstimateTable.EST_CLI_REMARK, " VARCHAR, ",			//거래처 비고
-                EstimateDB.EstimateTable.EST_COM_NAME, " VARCHAR, ",			//공급자 회사명
-                EstimateDB.EstimateTable.EST_COM_CEO_NAME, " VARCHAR, ",		//공급자 회사대표자명
-                EstimateDB.EstimateTable.EST_COM_BIZ_NUM, " VARCHAR, ",		    //공급자 사업자번호
-                EstimateDB.EstimateTable.EST_COM_UPTAE, " VARCHAR, ",		    //공급자 업태
-                EstimateDB.EstimateTable.EST_COM_UPJONG, " VARCHAR, ",		    //공급자 업종
-                EstimateDB.EstimateTable.EST_COM_MANAGER_NAME, " VARCHAR, ",    //공급자 담당자명
-                EstimateDB.EstimateTable.EST_COM_EMAIL, " VARCHAR, ",			//공급자 이메일
-                EstimateDB.EstimateTable.EST_COM_ZIPCODE, " VARCHAR, ",		    //공급자 회사우편번호
-                EstimateDB.EstimateTable.EST_COM_ADDRESS_01, " VARCHAR, ",		//공급자 주소01
-                EstimateDB.EstimateTable.EST_COM_ADDRESS_02, " VARCHAR, ",		//공급자 주소02
-                EstimateDB.EstimateTable.EST_TAX_TYPE, " VARCHAR, ",			//부가세 포함, 미포함
-                EstimateDB.EstimateTable.EST_TOTAL_PRICE	, " VARCHAR, ",		//총합계
-                EstimateDB.EstimateTable.EST_REMARK, " VARCHAR, ",				//견적서 비고
-                EstimateDB.EstimateTable.EST_EXCEL_PATH, " VARCHAR, ",			//견적서 엑셀파일 경로
-                EstimateDB.EstimateTable.EST_REGDATE , " VARCHAR "
+                EstimateDB.ItemTable.ITEM_TABLE, "(",
+                EstimateDB.ItemTable.ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",
+                EstimateDB.ItemTable.ITEM_NAME, " VARCHAR, ",
+                EstimateDB.ItemTable.ITEM_STD, " VARCHAR, ",
+                EstimateDB.ItemTable.ITEM_UNIT, " VARCHAR, ",
+                EstimateDB.ItemTable.ITEM_UNIT_PRICE, " VARCHAR, ",
+                EstimateDB.ItemTable.ITEM_REMARK, " VARCHAR, ",
+                EstimateDB.ItemTable.ITEM_REGDATE , " VARCHAR "
                         + ")"
         );
 

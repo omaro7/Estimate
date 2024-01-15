@@ -11,12 +11,17 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
 import kr.co.goms.module.common.base.BaseBean;
@@ -25,6 +30,7 @@ import kr.co.goms.module.common.command.Command;
 import kr.co.goms.module.common.curvlet.CurvletManager;
 import kr.co.goms.module.common.manager.DialogManager;
 import kr.co.goms.module.common.model.GroupBeanS;
+import kr.co.goms.module.common.util.FormatUtil;
 import kr.co.goms.module.common.util.StringUtil;
 
 public class BottomDialogItemForm {
@@ -42,6 +48,7 @@ public class BottomDialogItemForm {
     protected Command negativeCommand = null;
     protected WaterCallBack positiveCallback = null;
     protected WaterCallBack negativeCallback = null;
+    protected Spinner mSpItem = null;
     protected EditText mEtItemName = null;
     protected EditText mEtItemStd = null;
     protected EditText mEtItemUnit = null;
@@ -63,6 +70,7 @@ public class BottomDialogItemForm {
     protected boolean isCancelable = false;         //BackKey 시, 닫기 여부
     protected boolean isCancelTouchOutSide = false; //바깥 영역 클릭 시, 닫기 여부
     protected boolean isShowCloseBtn = false;       //닫기 버튼 노출 여부
+    protected boolean isShowItem = false;           //아이템 spinner 노출 여부
 
     private ArrayList mArrayList;
 
@@ -79,6 +87,7 @@ public class BottomDialogItemForm {
         this.isShowCloseBtn = ((Bundle)object).getBoolean(DialogManager.DIALOG_TEXT.isShowCloseBtn.name(), true);   //하단 팝업에 대한 Close(닫기) 버튼 노출 여부
         this.isCancelable = ((Bundle)object).getBoolean(DialogManager.DIALOG_TEXT.isCancelable.name(), true);                 //BottomDialog는 전체영역이기에 작동하지 않음
         this.isCancelTouchOutSide = ((Bundle)object).getBoolean(DialogManager.DIALOG_TEXT.isCancelTouchOutSide.name(), true); //BottomDialog는 전체영역이기에 작동하지 않음
+        this.isShowItem = ((Bundle)object).getBoolean(DialogManager.DIALOG_TEXT.isShowItem.name(), false); //Item spinner 노출 여부
 
         this.mArrayList = ((Bundle)object).getParcelableArrayList("arrayList");
     }
@@ -149,6 +158,99 @@ public class BottomDialogItemForm {
             }
         });
 
+        if(isShowItem) {
+            setItemList();
+        }
+
+    }
+
+    private void setItemList(){
+        mSpItem = dialog.findViewById(R.id.sp_item);
+
+        //상품 선택 보이도록 처리
+        LinearLayout lltItemSpinner = dialog.findViewById(R.id.llt_item_spinner);
+
+        //상품 리스트 가져오기
+        ArrayList<ItemBeanTB> itemList = MyApplication.getInstance().getDBHelper().getItemListData();
+
+        int total = 0;
+        try{
+            total = itemList.size();
+        }catch(Exception e){
+
+        }
+
+        //Bean -> String[]으로 변환
+
+        String[] itemNames = new String[total + 1]; // +1 for the "선택" item
+
+        if(total <= 0){
+            lltItemSpinner.setVisibility(View.GONE);
+        }else{
+            lltItemSpinner.setVisibility(View.VISIBLE);
+            itemNames[0] = "선택"; // Add the "선택" item at the beginning
+        }
+
+        for (int i = 0; i < total; i++) {
+            ItemBeanTB itemBeanTB = itemList.get(i);
+            String unitPrice = null;
+            try {
+                unitPrice = FormatUtil.money(itemBeanTB.getItem_unit_price());
+            } catch (Exception e) {
+
+            }
+
+            StringBuffer sb = new StringBuffer();
+            sb.append(itemBeanTB.getItem_name());
+            sb.append(", ");
+            sb.append("단가 ");
+            sb.append(unitPrice);
+            sb.append("원");
+            if (!StringUtil.isEmpty(itemBeanTB.getItem_std())){
+                sb.append(", ");
+                sb.append("규격 ");
+                sb.append(itemBeanTB.getItem_std());
+            }
+            if (!StringUtil.isEmpty(itemBeanTB.getItem_unit())){
+                sb.append(", ");
+                sb.append("단위 ");
+                sb.append(itemBeanTB.getItem_unit());
+            }
+
+            itemNames[i+1] = sb.toString();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, R.layout.item_spinner, itemNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpItem.setAdapter(adapter);
+
+        mSpItem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+                String selectedData = adapterView.getItemAtPosition(position).toString();
+
+                if(StringUtil.isEmpty(selectedData) || " ".equalsIgnoreCase(selectedData)){
+                    selectedData = "선택";
+                }else if("선택".equalsIgnoreCase(selectedData)){
+
+                }else{
+                    //선택을 추가했기 때문에, - 1를 추가해서 해당 itemBean을 가져옴
+                    ItemBeanTB itemBeanTB = itemList.get(position - 1);
+                    mEtItemName.setText(itemBeanTB.getItem_name());
+                    mEtItemStd.setText(itemBeanTB.getItem_std());
+                    mEtItemUnit.setText(itemBeanTB.getItem_unit());
+                    mEtItemUnitPrice.setText(itemBeanTB.getItem_unit_price());
+                    mEtItemRemark.setText(itemBeanTB.getItem_remark());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     public void setOnRightButtonListener(String name, final Command command) {

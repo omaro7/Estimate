@@ -423,7 +423,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
 
     private void addEstItem(String token){
         DialogManager.I().setTag("itemInsert")
-                .setTitle("상품생성")
+                .setTitle("상품")
                 .setMessage("견적 상품을 입력해 주세요")
                 .setShowTitle(true)
                 .setShowMessage(true)
@@ -431,6 +431,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                 .setPositiveBtnName(getActivity().getString(kr.co.goms.module.common.R.string.confirm))
                 .setCancelable(true)
                 .setCancelTouchOutSide(true)
+                .setShowItem(true)
                 .setCommand(ItemFormBottomDialogCommand.getInstance().setBaseDialogCommand(getActivity(),  new WaterCallBack() {
                             @Override
                             public void callback(BaseBean baseData) {
