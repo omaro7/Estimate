@@ -36,7 +36,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private SwitchCompat mSwitchBlcok;
-    private EditText mEtEstimatePrefix;
+    private EditText mEtEstimatePrefix, mEtEstimateFolder;
 
     private String isShowBlockYN = "N";
 
@@ -87,6 +87,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         mSwitchBlcok.setChecked("Y".equalsIgnoreCase(isShowBlockYN));
 
         mEtEstimatePrefix = view.findViewById(R.id.et_estimate_prefix);
+        mEtEstimateFolder = view.findViewById(R.id.et_estimate_folder);
 
         String estimatePrefix = MyApplication.getInstance().prefs().get(AppConstant.EST_PREFIX);
         if(StringUtil.isEmpty(estimatePrefix)){
@@ -94,12 +95,20 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }
         mEtEstimatePrefix.setText(estimatePrefix);
 
+
+        String estimateFolder= MyApplication.getInstance().prefs().get(AppConstant.EST_FOLDER);
+        if(StringUtil.isEmpty(estimateFolder)){
+            estimateFolder = AppConstant.EST_FOLDER_DEFAULT;
+        }
+        mEtEstimateFolder.setText(estimateFolder);
+
         RelativeLayout rltCom = view.findViewById(R.id.rl_com);
         RelativeLayout rltItem = view.findViewById(R.id.rl_item);
         RelativeLayout rltCli = view.findViewById(R.id.rl_cli);
         RelativeLayout rltEst = view.findViewById(R.id.rl_est);
 
         view.findViewById(R.id.btn_est_prefix).setOnClickListener(this);
+        view.findViewById(R.id.btn_est_folder).setOnClickListener(this);
 
         rltCom.setOnClickListener(this);
         rltItem.setOnClickListener(this);
@@ -149,6 +158,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }else if(id == R.id.btn_est_prefix){
             String prefix = mEtEstimatePrefix.getText().toString();
             MyApplication.getInstance().prefs().put(AppConstant.EST_PREFIX, prefix);
+        }else if(id == R.id.btn_est_folder){
+            String folder = mEtEstimateFolder.getText().toString();
+            MyApplication.getInstance().prefs().put(AppConstant.EST_FOLDER, folder);
         }
 
     }

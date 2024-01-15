@@ -248,7 +248,66 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_est_prefix"
-                        android:layout_width="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="42dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:text="저장"
+                        android:textColor="#ffffff"
+                        android:textSize="16dp"
+                        android:visibility="visible"/>
+
+                </RelativeLayout>
+
+                <!-- 견적서 저장 위치-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="저장폴더\n(문서폴더)"
+                        android:textSize="16dp"
+                        android:textColor="@color/text_primary"
+                        android:letterSpacing="-0.03"
+                        android:fontFamily="@font/spoqahansansneomedium"/>
+
+                    <LinearLayout
+                        android:id="@+id/llt_est_folder"
+                        android:layout_width="160dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/btn_est_folder"
+                        android:background="@drawable/rounded_border_gray"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_estimate_folder"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            android:fontFamily="@font/spoqahansansneoregular"
+                            android:gravity="left|center_vertical"
+                            android:text="/Estimate/Excel"
+                            android:textColor="@color/text_primary_gray"
+                            android:textColorHint="@color/text_primary_gray"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_est_folder"
+                        android:layout_width="60dp"
                         android:layout_height="42dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"

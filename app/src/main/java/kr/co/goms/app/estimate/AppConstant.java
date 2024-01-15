@@ -13,6 +13,8 @@ public class AppConstant {
     public final static int PHOTO_WIDTH = 160;
     public final static int PHOTO_HEIGHT = 160;
     public static final String EST_PREFIX = "EST_PREFIX";
+    public static final String EST_FOLDER = "EST_FOLDER";
+    public static final String EST_FOLDER_DEFAULT = "/Estimate/Excel";
 
     public enum FRAGMENT_TAG{
         COMPANY_FORM,
