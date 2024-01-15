@@ -558,14 +558,25 @@ public class FileUtil {
 		}
 	}
 
-	public static File createExcelFile(Context context, String appName, String prefix, String folder, String type, String extname) {
+	/**
+	 *
+	 * @param context
+	 * @param appName	//estimate, spectification
+	 * @param prefix
+	 * @param folder	Environment.DIRECTORY_DOCUMENTS	문서폴더
+	 * @param path      /Estimate/Excel
+	 * @param type		excel
+	 * @param extname	.xls
+	 * @return
+	 */
+	public static File createExcelFile(Context context, String appName, String prefix, String folder, String path, String type, String extname) {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
 		String imageFileName = appName + "_" + prefix + "_" + type + "_" +timeStamp + "_";
-		File storageDir = context.getExternalFilesDir(folder);	//Android > data > kr.co.goms.manhole > file > document
 
-		File excelDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Estimate/Excel");
+		//File storageDir = context.getExternalFilesDir(folder);	//Android > data > kr.co.goms.manhole > file > document
+		//GomsLog.d("File", "Dir : " + storageDir.getAbsolutePath());
 
-		GomsLog.d("File", "Dir : " + storageDir.getAbsolutePath());
+		File excelDir = new File(Environment.getExternalStoragePublicDirectory(folder) + path);
 		GomsLog.d("File", "excelDir : " + excelDir.getAbsolutePath());
 
 		try {
