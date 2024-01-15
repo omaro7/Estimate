@@ -15,6 +15,9 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/ic_splash</item>
 
+        <!-- color high light > 레이아웃 클릭 시, ripple effect -->
+        <item name="colorControlHighlight">@color/gray_e3</item>
+
     </style>
 
     <style name="AppTheme_NoActionBarApp_LAUNCHER"  parent="Theme.MaterialComponents.NoActionBar">
