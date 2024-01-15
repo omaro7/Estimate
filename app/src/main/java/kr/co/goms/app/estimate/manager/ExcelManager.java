@@ -1415,7 +1415,8 @@ public class ExcelManager {
         prefix = estimateBeanTB.getEst_cli_name();
         prefix = prefix.replace(" ", "").trim();
 
-        File file = FileUtil.createExcelFile(mActivity, saveExcelType, prefix, Environment.DIRECTORY_DOCUMENTS, "excel", ".xls");
+        //"/Estimate/Excel"
+        File file = FileUtil.createExcelFile(mActivity, saveExcelType, prefix, Environment.DIRECTORY_DOCUMENTS, AppConstant.EST_FOLDER_DEFAULT, "excel", ".xls");
 
         try {
             fileOut = new FileOutputStream(file);
