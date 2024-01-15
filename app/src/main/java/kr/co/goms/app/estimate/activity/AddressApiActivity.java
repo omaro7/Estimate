@@ -75,7 +75,7 @@ public class AddressApiActivity extends CustomActivity {
 
         // The data you want to send in the request body
         byte[] value = Base64.encode(BuildConfig.APPLICATION_ID.getBytes(), Base64.DEFAULT);   //kr.co.goms.app.estimate
-        String postData = "key=" + new String(value);
+        String postData = "key=" + new String(value);   //"key=a3IuY28uZ29tcy5hcHAuZXN0aW1hdGU="
 
         Log.d("POST", "postData : " + postData);
 
