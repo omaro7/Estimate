@@ -135,11 +135,20 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="회사정보"
+                        android:text="회사 정보"
                         android:textSize="16dp"
                         android:textColor="@color/text_primary"
                         android:letterSpacing="-0.03"
                         android:fontFamily="@font/spoqahansansneomedium"/>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        android:gravity="center" />
 
                 </RelativeLayout>
                 <!-- 거래처 호출-->
@@ -156,12 +165,19 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="거래처"
+                        android:text="거래처 정보"
                         android:textSize="16dp"
                         android:textColor="@color/text_primary"
                         android:letterSpacing="-0.03"
                         android:fontFamily="@font/spoqahansansneomedium"/>
-
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        android:gravity="center" />
                 </RelativeLayout>
                 <!-- 견적서 호출-->
                 <RelativeLayout
@@ -196,11 +212,20 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="상품"
+                        android:text="상품 정보"
                         android:textSize="16dp"
                         android:textColor="@color/text_primary"
                         android:letterSpacing="-0.03"
                         android:fontFamily="@font/spoqahansansneomedium"/>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        android:gravity="center" />
 
                 </RelativeLayout>
 
@@ -321,6 +346,48 @@
                         android:visibility="visible"/>
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_app_setting_widget"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="충전소"
+                        android:textSize="16dp"
+                        android:textColor="@color/text_primary"
+                        android:letterSpacing="-0.03"
+                        android:fontFamily="@font/spoqahansansneomedium"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_charge"
+                        android:layout_width="60dp"
+                        android:layout_height="42dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:text="0"
+                        android:textColor="#ffffff"
+                        android:textSize="16dp"
+                        android:visibility="visible"/>
+
+                </RelativeLayout>
+
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adview_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:adSize="MEDIUM_RECTANGLE"
+                    app:adUnitId="@string/admob_widget_banner_bottom"/>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

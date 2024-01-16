@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import kr.co.goms.app.estimate.AppConstant;
+import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.adapter.EstimateAdapter;
@@ -48,6 +49,8 @@ import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
 import kr.co.goms.app.estimate.send_data.SendDataFactory;
+import kr.co.goms.module.admob.AdmobPrefs;
+import kr.co.goms.module.admob.fragment.ChargingStationFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
@@ -250,28 +253,7 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                 goSave(mComIdx, mCliIdx);
             }
         }else if(id == R.id.btn_excel) {
-
-            if(!StringUtil.isEmpty(mEstIdx)) {
-                ExcelManager.I(getActivity()).setExcelInterface(new ExcelManager.ExcelInterface() {
-                    @Override
-                    public void onComplete(String path, Uri uri) {
-                        //엑셀 경로 업데이트
-                        GomsLog.d(TAG, "onComplete() >> mEstIdx : " + mEstIdx);
-                        GomsLog.d(TAG, "onComplete() >> path : " + path);
-                        GomsLog.d(TAG, "onComplete() >> uri.toString : " + uri.toString()); //content://media/external_primary/file/26950
-                        GomsLog.d(TAG, "onComplete() >> uri.getPath : " + uri.getPath());   ///external_primary/file/26950 안불러짐..
-                        MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(mEstIdx, uri.toString());
-                        //완료 하단팝업 띄우기
-                        showDialogComplete(AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.getName());
-                    }
-                });
-
-                EstimateBeanTB estimateBeanTB = MyApplication.getInstance().getDBHelper().getEstimateData(mEstIdx);
-                //엑셀 첫 시작 시점입니다.
-                ExcelManager.I(getActivity()).createWorkbook();
-                //견적서 엑셀 작성하기
-                ExcelManager.I(getActivity()).createExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE);
-            }
+            setDiaBottomDialog(mEstIdx);
         }else if(id == R.id.iv_com_search){
             goComSearch(mCompanyList);
         }else if(id == R.id.iv_cli_search){
@@ -1103,6 +1085,30 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
         mTvItemTotalPrice.setText(itemTotalPrice);
     }
 
+    private void goExcel(String mEstIdx){
+        if(!StringUtil.isEmpty(mEstIdx)) {
+            ExcelManager.I(getActivity()).setExcelInterface(new ExcelManager.ExcelInterface() {
+                @Override
+                public void onComplete(String path, Uri uri) {
+                    //엑셀 경로 업데이트
+                    GomsLog.d(TAG, "onComplete() >> mEstIdx : " + mEstIdx);
+                    GomsLog.d(TAG, "onComplete() >> path : " + path);
+                    GomsLog.d(TAG, "onComplete() >> uri.toString : " + uri.toString()); //content://media/external_primary/file/26950
+                    GomsLog.d(TAG, "onComplete() >> uri.getPath : " + uri.getPath());   ///external_primary/file/26950 안불러짐..
+                    MyApplication.getInstance().getDBHelper().updateEstimateExcelPath(mEstIdx, uri.toString());
+                    //완료 하단팝업 띄우기
+                    showDialogComplete(AppConstant.SAVE_EXCEL_TYPE.ESTIMATE.getName());
+                }
+            });
+
+            EstimateBeanTB estimateBeanTB = MyApplication.getInstance().getDBHelper().getEstimateData(mEstIdx);
+            //엑셀 첫 시작 시점입니다.
+            ExcelManager.I(getActivity()).createWorkbook();
+            //견적서 엑셀 작성하기
+            ExcelManager.I(getActivity()).createExcel(estimateBeanTB, AppConstant.SAVE_EXCEL_TYPE.ESTIMATE);
+        }
+    }
+
     /**
      * 견적서 생성완료
      * @param excelType
@@ -1129,6 +1135,61 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
                     }
                 }))
                 .showDialog(getActivity());
+    }
+
+    @MainThread
+    private void setDiaBottomDialog(String mEstIdx){
+
+        int diaCnt = AdmobPrefs.getInstance(getContext()).get(AdmobPrefs.DIA_CNT, 0);
+        String bottomDialogTitle = "엑셀 생성 시작하기(보유 DIA " + diaCnt + "개)";
+
+        if(diaCnt <= 0){
+            DialogManager.I().setTitle(bottomDialogTitle)
+                    .setMessage("견적서 엑셀 생성은 다이아 1개가 필요합니다.\n충전소로 이동하시겠습니까?")
+                    .setShowTitle(true)
+                    .setShowMessage(true)
+                    .setNegativeBtnName("아니오")
+                    .setPositiveBtnName("네")
+                    .setCancelable(true)
+                    .setCancelTouchOutSide(true)
+                    .setCommand(DialogCommandFactory.I().createDialogCommand(getActivity(), DialogCommandFactory.DIALOG_TYPE.bottom_basic.name(), new WaterCallBack() {
+                        @Override
+                        public void callback(BaseBean baseData) {
+                            String btnType = ((Bundle)baseData.getObject()).getString(BaseBottomDialogCommand.EXT_BTN_TYPE);
+                            if(BaseBottomDialogCommand.BTN_TYPE.LEFT.name().equalsIgnoreCase(btnType)){
+
+                            }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
+                                ((MainActivity)getActivity()).changeFragment(new ChargingStationFragment(), "Charge", false);
+                            }else if(BaseBottomDialogCommand.BTN_TYPE.SELECT.name().equalsIgnoreCase(btnType)){
+                            }
+                        }
+                    }))
+                    .showDialog(getActivity());
+        }else{
+            DialogManager.I().setTitle(bottomDialogTitle)
+                    .setMessage("견적서 엑셀 생성은 다이아 1개가 차감됩니다.\n견적서 엑셀 생성을 시작하시겠습니까?")
+                    .setShowTitle(true)
+                    .setShowMessage(true)
+                    .setNegativeBtnName("아니오")
+                    .setPositiveBtnName("네")
+                    .setCancelable(true)
+                    .setCancelTouchOutSide(true)
+                    .setCommand(DialogCommandFactory.I().createDialogCommand(getActivity(), DialogCommandFactory.DIALOG_TYPE.bottom_basic.name(), new WaterCallBack() {
+                        @Override
+                        public void callback(BaseBean baseData) {
+                            String btnType = ((Bundle)baseData.getObject()).getString(BaseBottomDialogCommand.EXT_BTN_TYPE);
+                            if(BaseBottomDialogCommand.BTN_TYPE.LEFT.name().equalsIgnoreCase(btnType)){
+
+                            }else if(BaseBottomDialogCommand.BTN_TYPE.RIGHT.name().equalsIgnoreCase(btnType)){
+                                int minusCnt = diaCnt - 1;
+                                AdmobPrefs.getInstance(getContext()).put(AdmobPrefs.DIA_CNT, minusCnt);
+                                goExcel(mEstIdx);
+                            }else if(BaseBottomDialogCommand.BTN_TYPE.SELECT.name().equalsIgnoreCase(btnType)){
+                            }
+                        }
+                    }))
+                    .showDialog(getActivity());
+        }
     }
 
 

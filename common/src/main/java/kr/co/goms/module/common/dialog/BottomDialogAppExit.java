@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import kr.co.goms.module.common.CommonModule;
 import kr.co.goms.module.common.R;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
@@ -102,11 +103,15 @@ public class BottomDialogAppExit extends BottomDialogCommon{
             }
         });
 
-		 //광고
         AdView adViewMiddle = dialog.findViewById(R.id.adview_middle);
-        AdRequest adRequestMiddle = new AdRequest.Builder().build();
-        adViewMiddle.loadAd(adRequestMiddle);
-
+        if(CommonModule.isFree) {
+            //띠배너 호출
+            //광고
+            AdRequest adRequestMiddle = new AdRequest.Builder().build();
+            adViewMiddle.loadAd(adRequestMiddle);
+        }else{
+            adViewMiddle.setVisibility(View.GONE);
+        }
     }
 
 

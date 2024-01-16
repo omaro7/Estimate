@@ -1,7 +1,5 @@
 package kr.co.goms.app.estimate.fragment;
 
-import static kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand.EXT_OBJECT;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,18 +28,20 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 import kr.co.goms.app.estimate.AppConstant;
+import kr.co.goms.app.estimate.BuildConfig;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
-import kr.co.goms.app.estimate.adapter.ClientAdapter;
 import kr.co.goms.app.estimate.adapter.EstimateAdapter;
-import kr.co.goms.app.estimate.command.ItemFormBottomDialogCommand;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
 import kr.co.goms.app.estimate.manager.SendManager;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
@@ -151,7 +151,19 @@ public class EstimateListFragment extends Fragment  implements View.OnClickListe
 
         getEstimateData();
 
+        if(BuildConfig.IS_FREE) {
+            //띠배너 호출
+            initBanner(view);
+        }
+
         this.setHasOptionsMenu(true);
+    }
+
+    private void initBanner(View view){
+        //광고
+        AdView adViewMiddle = view.findViewById(R.id.adview_bottom);
+        AdRequest adRequestMiddle = new AdRequest.Builder().build();
+        adViewMiddle.loadAd(adRequestMiddle);
     }
 
     private void getEstimateData(){

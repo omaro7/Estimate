@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -17,14 +18,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.Objects;
 
 import kr.co.goms.app.estimate.AppConstant;
+import kr.co.goms.app.estimate.BuildConfig;
 import kr.co.goms.app.estimate.MainActivity;
 import kr.co.goms.app.estimate.MyApplication;
 import kr.co.goms.app.estimate.R;
 import kr.co.goms.app.estimate.activity.SettingActivity;
 import kr.co.goms.app.estimate.common.EstimatePrefs;
+import kr.co.goms.module.admob.AdmobPrefs;
+import kr.co.goms.module.admob.fragment.ChargingStationFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.util.StringUtil;
 
@@ -37,7 +44,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private Toolbar mToolbar;
     private SwitchCompat mSwitchBlcok;
     private EditText mEtEstimatePrefix, mEtEstimateFolder;
-
+    private Button mBtnCharge;
     private String isShowBlockYN = "N";
 
 
@@ -109,15 +116,31 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         view.findViewById(R.id.btn_est_prefix).setOnClickListener(this);
         view.findViewById(R.id.btn_est_folder).setOnClickListener(this);
+        mBtnCharge = view.findViewById(R.id.btn_charge);
+        mBtnCharge.setOnClickListener(this);
+
+        int dia = AdmobPrefs.getInstance(getContext()).get(AdmobPrefs.DIA_CNT, 0);
+        mBtnCharge.setText(String.valueOf(dia));
 
         rltCom.setOnClickListener(this);
         rltItem.setOnClickListener(this);
         rltCli.setOnClickListener(this);
         rltEst.setOnClickListener(this);
 
+        if(BuildConfig.IS_FREE) {
+            //띠배너 호출
+            initBanner(view);
+        }
 
         this.setHasOptionsMenu(true);
 
+    }
+
+    private void initBanner(View view){
+        //광고
+        AdView adViewMiddle = view.findViewById(R.id.adview_bottom);
+        AdRequest adRequestMiddle = new AdRequest.Builder().build();
+        adViewMiddle.loadAd(adRequestMiddle);
     }
 
     @Override
@@ -161,6 +184,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }else if(id == R.id.btn_est_folder){
             String folder = mEtEstimateFolder.getText().toString();
             MyApplication.getInstance().prefs().put(AppConstant.EST_FOLDER, folder);
+        }else if(id == R.id.btn_charge){
+            ((MainActivity)requireActivity()).changeFragment(new ChargingStationFragment(), "충전소", false);
         }
 
     }

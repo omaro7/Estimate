@@ -228,20 +228,24 @@ public class BottomDialogItemForm {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-                String selectedData = adapterView.getItemAtPosition(position).toString();
+                try {
+                    String selectedData = adapterView.getItemAtPosition(position).toString();
 
-                if(StringUtil.isEmpty(selectedData) || " ".equalsIgnoreCase(selectedData)){
-                    selectedData = "선택";
-                }else if("선택".equalsIgnoreCase(selectedData)){
+                    if (StringUtil.isEmpty(selectedData) || " ".equalsIgnoreCase(selectedData)) {
+                        selectedData = "선택";
+                    } else if ("선택".equalsIgnoreCase(selectedData)) {
 
-                }else{
-                    //선택을 추가했기 때문에, - 1를 추가해서 해당 itemBean을 가져옴
-                    ItemBeanTB itemBeanTB = itemList.get(position - 1);
-                    mEtItemName.setText(itemBeanTB.getItem_name());
-                    mEtItemStd.setText(itemBeanTB.getItem_std());
-                    mEtItemUnit.setText(itemBeanTB.getItem_unit());
-                    mEtItemUnitPrice.setText(itemBeanTB.getItem_unit_price());
-                    mEtItemRemark.setText(itemBeanTB.getItem_remark());
+                    } else {
+                        //선택을 추가했기 때문에, - 1를 추가해서 해당 itemBean을 가져옴
+                        ItemBeanTB itemBeanTB = itemList.get(position - 1);
+                        mEtItemName.setText(itemBeanTB.getItem_name());
+                        mEtItemStd.setText(itemBeanTB.getItem_std());
+                        mEtItemUnit.setText(itemBeanTB.getItem_unit());
+                        mEtItemUnitPrice.setText(itemBeanTB.getItem_unit_price());
+                        mEtItemRemark.setText(itemBeanTB.getItem_remark());
+                    }
+                }catch(Exception e){
+
                 }
 
             }

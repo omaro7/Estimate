@@ -11,7 +11,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
 
         externalNativeBuild {
             cmake {
@@ -32,13 +32,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "ADDRESS_SERVER_URL", "\"http://app.goms.co.kr/101.api/address.php\""
             buildConfigField "boolean","IS_DEBUG","true"
+            buildConfigField "boolean","IS_FREE","true"
         }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "ADDRESS_SERVER_URL", "\"http://app.goms.co.kr/101.api/address.php\""
             buildConfigField "boolean","IS_DEBUG","false"
+            buildConfigField "boolean","IS_FREE","true"
+        }
+
+        releaseProduct {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ADDRESS_SERVER_URL", "\"http://app.goms.co.kr/101.api/address.php\""
+            buildConfigField "boolean","IS_DEBUG","false"
+            buildConfigField "boolean","IS_FREE","false"    //admob
         }
     }
     compileOptions {
@@ -79,6 +90,13 @@ dependencies {
     implementation 'com.vanniktech:android-image-cropper:4.3.3'
 
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
+    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.5.1"
+
+    implementation 'com.google.android.gms:play-services-ads:22.1.0'
 
     implementation project(path: ':common')
 
