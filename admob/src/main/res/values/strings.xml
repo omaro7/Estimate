@@ -2,14 +2,14 @@
     <string name="app_name">Admob</string>
     <string name="app_name_title">충전소</string>
 
-    <string name="admob_app_id">ca-app-pub-9725459038205351~6682492642</string>
+    <string name="admob_app_id">ca-app-pub-9725459038205351~4522322063</string>
 
-    <string name="admob_widget_banner_reward">ca-app-pub-9725459038205351/7340968193</string>
+    <string name="admob_widget_banner_reward">ca-app-pub-9725459038205351/2378803636</string>
     <string name="admob_widget_banner_bottom">ca-app-pub-9725459038205351/2432202543</string>
 
-    <string name="admob_widget_app">ca-app-pub-9725459038205351/4634913807</string>
-    <string name="admob_widget_app_exit">ca-app-pub-9725459038205351/3202358738</string>
-    <string name="admob_widget_opening">ca-app-pub-9725459038205351/5947995474</string>
+    <string name="admob_widget_app">ca-app-pub-9725459038205351/3980176833</string>
+    <string name="admob_widget_app_exit">ca-app-pub-9725459038205351/9626738267</string>
+    <string name="admob_widget_opening">ca-app-pub-9725459038205351/5188536476</string>
 
     <string name="action_charging_station">충전소</string>
     <string name="dia_use_alert">다이아 1개를 사용합니다.</string>
