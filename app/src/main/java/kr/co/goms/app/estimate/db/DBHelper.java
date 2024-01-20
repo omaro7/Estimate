@@ -1270,14 +1270,20 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String createTable = buildQuery(
                 "CREATE TABLE",
-                EstimateDB.ItemTable.ITEM_TABLE, "(",
-                EstimateDB.ItemTable.ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",
-                EstimateDB.ItemTable.ITEM_NAME, " VARCHAR, ",
-                EstimateDB.ItemTable.ITEM_STD, " VARCHAR, ",
-                EstimateDB.ItemTable.ITEM_UNIT, " VARCHAR, ",
-                EstimateDB.ItemTable.ITEM_UNIT_PRICE, " VARCHAR, ",
-                EstimateDB.ItemTable.ITEM_REMARK, " VARCHAR, ",
-                EstimateDB.ItemTable.ITEM_REGDATE , " VARCHAR "
+                EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE, "(",
+                EstimateDB.EstimateItemTable.EST_ITEM_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ",				//견적ITEM 키값
+                EstimateDB.EstimateItemTable.EST_IDX, " INTEGER, ",					    //견적IDX
+                EstimateDB.EstimateItemTable.ITEM_IDX, " INTEGER, ",					//견적ITEM IDX
+                EstimateDB.EstimateItemTable.EST_ITEM_NO, " VARCHAR, ",					//견적ITEM NO
+                EstimateDB.EstimateItemTable.EST_ITEM_NAME, " VARCHAR, ",				//견적ITEM 이름
+                EstimateDB.EstimateItemTable.EST_ITEM_QUANTITY, " VARCHAR, ",			//견적ITEM수량
+                EstimateDB.EstimateItemTable.EST_ITEM_STD, " VARCHAR, ",			    //견적ITEM규격
+                EstimateDB.EstimateItemTable.EST_ITEM_UNIT, " VARCHAR, ",			    //견적ITEM단위
+                EstimateDB.EstimateItemTable.EST_ITEM_UNIT_PRICE, " VARCHAR, ",			//견적ITEM단가
+                EstimateDB.EstimateItemTable.EST_ITEM_PRICE, " VARCHAR, ",				//견적ITEM금액
+                EstimateDB.EstimateItemTable.EST_ITEM_TAX_PRICE, " VARCHAR, ",			//견적ITEM세액
+                EstimateDB.EstimateItemTable.EST_ITEM_TOTAL_PRICE, " VARCHAR, ",		//견적ITEM총금액
+                EstimateDB.EstimateItemTable.EST_ITEM_REMARK, " VARCHAR "				//견적ITEM비고
                         + ")"
         );
 
