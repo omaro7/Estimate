@@ -178,8 +178,14 @@ public class EstimateFormFragment extends Fragment implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isVatYN = isChecked?"Y":"N";
-                ((EstimateItemAdapter)mAdapter).changeVatData(isVatYN);
-                setEstTotalPrice(isChecked);
+                try {
+                    if (mAdapter != null) {
+                        ((EstimateItemAdapter) mAdapter).changeVatData(isVatYN);
+                        setEstTotalPrice(isChecked);
+                    }
+                }catch(NullPointerException ignore){
+
+                }
             }
         });
 
