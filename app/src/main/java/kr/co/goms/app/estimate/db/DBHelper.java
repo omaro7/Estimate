@@ -15,12 +15,13 @@ import kr.co.goms.app.estimate.model.ClientBeanTB;
 import kr.co.goms.app.estimate.model.CompanyBeanTB;
 import kr.co.goms.app.estimate.model.EstimateBeanTB;
 import kr.co.goms.app.estimate.model.ItemBeanTB;
+import kr.co.goms.app.estimate.model.SpecificationBeanTB;
 import kr.co.goms.module.common.util.DateUtil;
 import kr.co.goms.module.common.util.GomsLog;
 import kr.co.goms.module.common.util.StringUtil;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 9;
 
     Context mContext;
 
@@ -222,11 +223,159 @@ public class DBHelper extends SQLiteOpenHelper {
         }catch(RuntimeException e){
 
         }
+
+        /**명세서 */
+        String createSpecificatioinTable = buildQuery(
+                "CREATE TABLE",
+                EstimateDB.SpecificationTable.SPECIFICATION_TABLE, "(",
+                EstimateDB.SpecificationTable.SPEC_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ", //명세서 IDX
+                EstimateDB.SpecificationTable.EST_IDX, " INTEGER, ",					//견적서 IDX
+                EstimateDB.SpecificationTable.SPEC_DATE, " VARCHAR, ",					//명세서 거래일
+                EstimateDB.SpecificationTable.SPEC_EXCEL_PATH, " VARCHAR, ",			//명세서 엑셀
+                EstimateDB.SpecificationTable.SPEC_REGDATE , " VARCHAR "                //명세서 생성일자
+                        + ")"
+        );
+        try {
+            pDb.execSQL(createSpecificatioinTable);
+        }catch(RuntimeException e){
+
+        }
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(AppConstant.LOG_TAG, "onUpgrade");
+
+        if(oldVersion == 1 && newVersion == 2){
+
+            /**명세서 */
+            String createSpecificatioinTable = buildQuery(
+                    "CREATE TABLE",
+                    EstimateDB.SpecificationTable.SPECIFICATION_TABLE, "(",
+                    EstimateDB.SpecificationTable.SPEC_IDX, " INTEGER PRIMARY KEY AUTOINCREMENT, ", //명세서 IDX
+                    EstimateDB.SpecificationTable.EST_IDX, " INTEGER, ",					//견적서 IDX
+                    EstimateDB.SpecificationTable.SPEC_DATE, " VARCHAR, ",					//명세서 거래일
+                    EstimateDB.SpecificationTable.SPEC_EXCEL_PATH, " VARCHAR, ",			//명세서 엑셀
+                    EstimateDB.SpecificationTable.SPEC_REGDATE , " VARCHAR "                //명세서 생성일자
+                            + ")"
+            );
+            try {
+                db.execSQL(createSpecificatioinTable);
+            }catch(RuntimeException e){
+
+            }
+
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 3){
+
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 4){
+
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 5){
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+        }else if(newVersion == 6){
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 7){
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 8){
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }else if(newVersion == 9){
+            try {
+                db.beginTransaction();
+                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
+                db.setTransactionSuccessful();
+            } catch (IllegalStateException e) {
+            } finally {
+                db.endTransaction();
+            }
+
+        }
+
         onCreate(db);
     }
 
@@ -852,7 +1001,7 @@ public class DBHelper extends SQLiteOpenHelper {
             bean.setEst_com_ceo_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_CEO_NAME)));
             bean.setEst_com_biz_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_BIZ_NUM)));
             bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPTAE)));
-            bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
+            bean.setEst_com_upjong(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
             bean.setEst_com_manager_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_MANAGER_NAME)));
             bean.setEst_com_email(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_EMAIL)));
             bean.setEst_com_zipcode(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ZIPCODE)));
@@ -916,7 +1065,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     bean.setEst_com_biz_num(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_BIZ_NUM)));
                     bean.setEst_com_manager_name(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_MANAGER_NAME)));
                     bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPTAE)));
-                    bean.setEst_com_uptae(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
+                    bean.setEst_com_upjong(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_UPJONG)));
                     bean.setEst_com_email(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_EMAIL)));
                     bean.setEst_com_zipcode(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ZIPCODE)));
                     bean.setEst_com_address_01(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.EstimateTable.EST_COM_ADDRESS_01)));
@@ -1042,9 +1191,15 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[]{estimateIdx}; // 실제 삭제할 id 값을 입력
         db.delete(EstimateDB.EstimateTable.ESTIMATE_TABLE, whereClause, whereArgs);
 
+        //해당 item 삭제하기
         String whereClauseItem = EstimateDB.EstimateItemTable.EST_IDX + "=?";
         String[] whereArgsItem = new String[]{estimateIdx}; // 실제 삭제할 id 값을 입력
         db.delete(EstimateDB.EstimateItemTable.ESTIMATE_ITEM_TABLE, whereClauseItem, whereArgsItem);
+
+        //명세서 삭제하기
+        String whereClauseSpec = EstimateDB.SpecificationTable.EST_IDX + "=?";
+        String[] whereArgsSpec = new String[]{estimateIdx}; // 실제 삭제할 id 값을 입력
+        db.delete(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, whereClauseSpec, whereArgsSpec);
 
         db.close();
 
@@ -1328,4 +1483,183 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
     }
+
+    /**
+     * -------------------------------------------------------------------------
+     * 명세서
+     * -------------------------------------------------------------------------
+     */
+
+    /**
+     * 명세서 입력하기
+     * EST_CLI_MANAGER_NAME	="est_cli_manager_name";	//거래처 담당자 이름으로 인수자로 합니다.
+     * @param specificationBeanTB
+     * @return
+     */
+    public ArrayList<SpecificationBeanTB> insertSpecification(SpecificationBeanTB specificationBeanTB ) {
+        Log.d(AppConstant.LOG_TAG, "insertCompany() START ====================== ");
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        final String currDate = DateUtil.getDateTime03();
+        final ContentValues cv = new ContentValues();
+
+        cv.put(EstimateDB.SpecificationTable.EST_IDX, specificationBeanTB.getEst_idx());
+        cv.put(EstimateDB.SpecificationTable.SPEC_DATE, specificationBeanTB.getSpec_date());
+        cv.put(EstimateDB.SpecificationTable.SPEC_REGDATE, currDate);
+        db.insert(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, null, cv);
+        cv.clear();
+
+        db.close();
+        return getSpecificationListData();
+    }
+
+    /**
+     * 명세서 엑셀 경로 업데이트 하기
+     * @param excelPath
+     */
+    public void updateSpecificationExcelPath(String specIdx, String excelPath){
+        GomsLog.d("EXCEL", "updateSpecificationExcelPath() >> specIdx : " + specIdx);
+        GomsLog.d("EXCEL", "updateSpecificationExcelPath() >> excelPath : " + excelPath);
+        SQLiteDatabase db = getReadableDatabase();
+
+        String whereClause = EstimateDB.SpecificationTable.SPEC_IDX + "=?";
+        String[] whereArgs = new String[]{specIdx}; // 해당 명세서 idx
+
+        final ContentValues cv = new ContentValues();
+        cv.put(EstimateDB.SpecificationTable.SPEC_EXCEL_PATH, excelPath);
+        db.update(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, cv, whereClause, whereArgs);
+
+        cv.clear();
+        db.close();
+    }
+
+
+    public ArrayList<SpecificationBeanTB> getSpecificationListData() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + EstimateDB.SpecificationTable.SPECIFICATION_TABLE + " ORDER BY " + EstimateDB.SpecificationTable.SPEC_REGDATE + " DESC ", null);
+        ArrayList<SpecificationBeanTB> specList = new ArrayList<SpecificationBeanTB>();
+        try{
+            if (cursor.moveToFirst()) {
+                do {
+                    SpecificationBeanTB bean = new SpecificationBeanTB();
+
+                    bean.setSpec_idx(StringUtil.intToString(cursor.getInt(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_IDX))));
+                    bean.setEst_idx(StringUtil.intToString(cursor.getInt(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.EST_IDX))));
+                    bean.setSpec_date(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_DATE)));
+                    bean.setSpec_excel_path(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_EXCEL_PATH)));
+                    bean.setSpec_regdate(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_REGDATE)));
+
+                    EstimateBeanTB estimateBeanTB = getEstimateData(bean.getEst_idx());
+                    bean.setEstimateBeanTB(estimateBeanTB);
+                    specList.add(bean);
+
+                } while (cursor.moveToNext());
+            }
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+        }catch (NullPointerException | SQLiteException e){
+            return null;
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return specList;
+    }
+    /**
+     * 선택한 명세서 가져오기
+     * @return
+     */
+    public SpecificationBeanTB getSpecificationData(String specIdx) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + EstimateDB.SpecificationTable.SPECIFICATION_TABLE + " WHERE " + EstimateDB.SpecificationTable.SPEC_IDX + "=" + specIdx , null);
+        cursor.moveToFirst();
+        try{
+
+            SpecificationBeanTB bean = new SpecificationBeanTB();
+
+            bean.setSpec_idx(StringUtil.intToString(cursor.getInt(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_IDX))));
+            bean.setEst_idx(StringUtil.intToString(cursor.getInt(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.EST_IDX))));
+            bean.setSpec_date(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_DATE)));
+            bean.setSpec_excel_path(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_EXCEL_PATH)));
+            bean.setSpec_regdate(cursor.getString(cursor.getColumnIndexOrThrow(EstimateDB.SpecificationTable.SPEC_REGDATE)));
+
+            EstimateBeanTB estimateBeanTB = getEstimateData(bean.getEst_idx());
+            bean.setEstimateBeanTB(estimateBeanTB);
+
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+
+            return bean;
+        }catch (NullPointerException | SQLiteException e){
+            return null;
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+            db.close();
+        }
+    }
+
+    /**
+     * 명세서 업데이트하기
+     * @param specificationBeanTB
+     * @return
+     */
+    public ArrayList<SpecificationBeanTB> updateSpecification(SpecificationBeanTB specificationBeanTB) {
+
+        String specIdx = specificationBeanTB.getSpec_idx();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String whereClause = EstimateDB.SpecificationTable.SPEC_IDX + "=?";
+        String[] whereArgs = new String[]{specIdx}; // 실제 id 값을 입력
+
+        final ContentValues cv = new ContentValues();
+
+        cv.put(EstimateDB.SpecificationTable.SPEC_DATE, specificationBeanTB.getSpec_date());    //거래일자
+
+        db.update(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, cv, whereClause, whereArgs);
+        cv.clear();
+        db.close();
+
+        return getSpecificationListData();
+    }
+
+
+    /**
+     * 해당 명세서의 삭제하기
+     * @param specIdx
+     * @return
+     */
+    public ArrayList<SpecificationBeanTB> deleteSpecificationData(String specIdx) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String whereClause = EstimateDB.SpecificationTable.SPEC_IDX + "=?";
+        String[] whereArgs = new String[]{specIdx}; // 실제 삭제할 id 값을 입력
+        db.delete(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, whereClause, whereArgs);
+
+        db.close();
+
+        return getSpecificationListData();
+    }
+
+    public boolean isDuplicationSpecification(String estIdx) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(EstimateDB.SpecificationTable.SPECIFICATION_TABLE, null, EstimateDB.SpecificationTable.EST_IDX + "=?",
+                new String[]{estIdx}, null, null, null, null);
+
+        boolean isDuplicate = cursor.getCount() > 0;
+
+        cursor.close();
+        db.close();
+
+        return isDuplicate;
+    }
+
 }

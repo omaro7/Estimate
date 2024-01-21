@@ -23,6 +23,9 @@ public class AppConstant {
         CLIENT_LIST,
         ESTIMATE_FORM,
         ESTIMATE_LIST,
+        SPECIFICATION_LIST,
+        SPECIFICATION_FORM,
+        SPECIFICATION_VIEW,
 
     }
 

@@ -4,6 +4,7 @@
 
     <string name="tab_home" translatable="false">홈</string>
     <string name="tab_estimate" translatable="false">견적서</string>
+    <string name="tab_specification" translatable="false">명세서</string>
     <string name="tab_setting" translatable="false">세팅</string>
 
 </resources>

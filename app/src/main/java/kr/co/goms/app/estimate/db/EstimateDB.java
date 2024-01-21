@@ -172,4 +172,17 @@ public class EstimateDB {
         public static final String EST_ITEM_TOTAL_PRICE ="est_item_total_price";        //견적item총금액
         public static final String EST_ITEM_REMARK ="est_item_remark";				    //견적item비고
     }
+
+    /**
+     * 명세서 정보
+     */
+    public static final class SpecificationTable{
+        public static final String SPECIFICATION_TABLE  = "SpecificationTable";     //명세서 테이블
+        public static final String SPEC_IDX				="spec_idx";				//명세서 idx
+        public static final String EST_IDX				="est_idx";					//견적idx
+        public static final String SPEC_DATE			="spec_date";				//거래일자
+        public static final String SPEC_EXCEL_PATH		="spec_excel_path";			//명세서 엑셀 위치
+        public static final String SPEC_REGDATE			="spec_regdate";			//명세서 생성일
+    }
+
 }

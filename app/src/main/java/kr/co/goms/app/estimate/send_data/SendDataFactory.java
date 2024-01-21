@@ -25,6 +25,11 @@ public class SendDataFactory {
         EST_TEMP_ITEM_DELETE("125"),
         EST_ITEM_LIST("126"),  //견적서 수정 시, 상품리스트 가져오기
         EST_ITEM_DELETE("127"),  //견적서 수정 시, 상품리스트 삭제하기
+        SPEC_LIST("130"),
+        SPEC_INSERT("131"),
+        SPEC_UPDATE("132"),
+        SPEC_DELETE("133"),
+        SPEC_DUPLICATION("134"),    //중복
         ;
 
         String mRequestUrlCode;
@@ -79,6 +84,16 @@ public class SendDataFactory {
             sendData = new EstItemListData();
         }else if(dataType.ordinal() == DATA_TYPE.EST_ITEM_DELETE.ordinal()){
             sendData = new EstItemDeleteData();
+        }else if(dataType.ordinal() == DATA_TYPE.SPEC_INSERT.ordinal()){
+            sendData = new SpecificationInsertData();
+        }else if(dataType.ordinal() == DATA_TYPE.SPEC_LIST.ordinal()){
+            sendData = new SpecificationListData();
+        }else if(dataType.ordinal() == DATA_TYPE.SPEC_UPDATE.ordinal()){
+            sendData = new SpecificationUpdateData();
+        }else if(dataType.ordinal() == DATA_TYPE.SPEC_DELETE.ordinal()){
+            sendData = new SpecificationDeleteData();
+        }else if(dataType.ordinal() == DATA_TYPE.SPEC_DUPLICATION.ordinal()){
+            sendData = new SpecificationDuplicationData();
         }
 
         return sendData;

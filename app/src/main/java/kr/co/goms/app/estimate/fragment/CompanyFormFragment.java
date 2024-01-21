@@ -393,12 +393,8 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         String address01 = mEtAddress01.getText().toString();
         String address02 = mEtAddress02.getText().toString();
         String accoundNum = mEtAccoundNum.getText().toString();
-        String stamp = mPhotoStampUri.toString();
-        String logo = mPhotoLogoUri.toString();
-        String mainYn = mSwitchMainYn.isChecked()?"Y":"N";
 
-        Log.d(TAG, "stamp : " + mPhotoStampUri.toString()); // content://media/external/images/media/26563
-        Log.d(TAG, "logo : " + mPhotoLogoUri.toString());   // content://media/external/images/media/26561
+        String mainYn = mSwitchMainYn.isChecked()?"Y":"N";
 
         CompanyBeanTB companyBeanTB = new CompanyBeanTB();
         companyBeanTB.setCom_idx(mComIdx);
@@ -417,9 +413,10 @@ public class CompanyFormFragment extends Fragment implements View.OnClickListene
         companyBeanTB.setCom_address_01(address01);
         companyBeanTB.setCom_address_02(address02);
         companyBeanTB.setCom_account_num(accoundNum);
-        companyBeanTB.setCom_stamp_path(stamp);
-        companyBeanTB.setCom_logo_path(logo);
         companyBeanTB.setCom_main_yn(mainYn);
+
+        //companyBeanTB.setCom_stamp_path(stamp);
+        //companyBeanTB.setCom_logo_path(logo);
 
         if(mPhotoStampUri != null) {
             companyBeanTB.setCom_stamp_path(mPhotoStampUri.getPath());

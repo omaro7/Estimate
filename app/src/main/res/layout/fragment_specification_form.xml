@@ -55,7 +55,7 @@
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/spoqahansansneobold"
                             android:gravity="center"
-                            android:text="견적서"
+                            android:text="명세서"
                             android:textColor="@color/text_primary"
                             android:textSize="20dp" />
 
@@ -66,42 +66,29 @@
                             android:orientation="horizontal">
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_save"
-                            android:layout_width="60dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="16dp"
                             android:background="@drawable/bg_round_bottomdialog_rightbtn"
                             android:gravity="center"
-                            android:text="저장\n하기"
+                            android:text="저장"
                             android:textColor="#ffffff"
                             android:textSize="16dp"
                             android:visibility="visible"/>
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/btn_excel"
-                                android:layout_width="60dp"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginTop="4dp"
-                                android:background="@drawable/bg_round_bottomdialog_rightbtn"
-                                android:gravity="center"
-                                android:text="엑셀\n생성"
-                                android:textColor="#ffffff"
-                                android:textSize="16dp"
-                                android:visibility="visible"/>
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/btn_spec"
-                                android:layout_width="60dp"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginRight="10dp"
-                                android:background="@drawable/bg_round_bottomdialog_rightbtn"
-                                android:gravity="center"
-                                android:text="명세서\n생성"
-                                android:textColor="#ffffff"
-                                android:textSize="16dp"
-                                android:visibility="visible"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_excel"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="16dp"
+                            android:background="@drawable/bg_round_bottomdialog_rightbtn"
+                            android:gravity="center"
+                            android:text="엑셀"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            android:visibility="visible"/>
                         </LinearLayout>
                     </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
@@ -151,7 +138,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
-                                android:text="*회사명"
+                                android:text="회사명"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -240,7 +227,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
-                                android:text="*거래처명"
+                                android:text="거래처명"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -272,7 +259,9 @@
                                     android:textColor="@color/text_primary_gray"
                                     android:textColorHint="@color/text_primary_gray"
                                     android:textSize="16dp"
-                                    android:inputType="text"/>
+                                    android:inputType="text"
+                                    android:clickable="false"
+                                    android:focusable="false"/>
                             </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
@@ -310,7 +299,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/spoqahansansneomedium"
                                 android:letterSpacing="-0.03"
-                                android:text="*견적일자"
+                                android:text="*거래일자"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -327,7 +316,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/tv_est_date"
+                                    android:id="@+id/tv_spec_date"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -337,7 +326,7 @@
                                     android:layout_marginBottom="1dp"
                                     android:fontFamily="@font/spoqahansansneoregular"
                                     android:gravity="left|center_vertical"
-                                    android:hint="견적일자를 넣어주세요"
+                                    android:hint="거래일자를 넣어주세요"
                                     android:text=""
                                     android:textColor="@color/text_primary_gray"
                                     android:textColorHint="@color/text_primary_gray"
@@ -347,419 +336,7 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                    <!--유효일, 납기일-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/est_list_height"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:letterSpacing="-0.03"
-                                android:text="유효일자"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/tv_est_effective_date"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="유효일자 입력"
-                                    android:inputType="phone"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:gravity="right|center_vertical"
-                                android:layout_marginRight="4dp"
-                                android:letterSpacing="-0.03"
-                                android:text="납기일자"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/tv_est_delivery_date"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="납기일자 입력"
-                                    android:inputType="phone"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                    <!--전화, 팩스-->
-                    <LinearLayout
-                        android:id="@+id/llt_tel_root"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/est_list_height"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:letterSpacing="-0.03"
-                                android:text="전화번호"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_tel"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="전화번호 입력"
-                                    android:inputType="phone"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:gravity="right|center_vertical"
-                                android:layout_marginRight="4dp"
-                                android:letterSpacing="-0.03"
-                                android:text="팩스번호"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_fax"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="팩스번호 입력"
-                                    android:inputType="phone"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!--휴대폰-->
-                    <LinearLayout
-                        android:id="@+id/llt_hp_root"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/est_list_height"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:letterSpacing="-0.03"
-                                android:text="담당자명"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_manager_name"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="담당자명 입력"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25"
-                            android:gravity="right|center_vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="4dp"
-                                android:letterSpacing="-0.03"
-                                android:text="휴대폰"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_hp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="휴대폰번호 입력"
-                                    android:inputType="phone"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!--이메일-->
-                    <LinearLayout
-                        android:id="@+id/llt_email_root"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/est_list_height"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.2"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:letterSpacing="-0.03"
-                                android:text="이메일"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_email"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="이메일 입력"
-                                    android:inputType="textEmailAddress"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!--우편번호-->
-                    <LinearLayout
-                        android:id="@+id/llt_zipcode_root"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/est_list_height"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.2"
-                            android:gravity="left|center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/spoqahansansneomedium"
-                                android:letterSpacing="-0.03"
-                                android:text="비고"
-                                android:textColor="@color/text_primary"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/rounded_border_gray"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/et_remart"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="6dp"
-                                    android:layout_marginTop="1dp"
-                                    android:layout_marginRight="6dp"
-                                    android:layout_marginBottom="1dp"
-                                    android:fontFamily="@font/spoqahansansneoregular"
-                                    android:gravity="left|center_vertical"
-                                    android:hint="비고 입력"
-                                    android:text=""
-                                    android:textColor="@color/text_primary_gray"
-                                    android:textColorHint="@color/text_primary_gray"
-                                    android:textSize="16dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
                     <!--견적내용-->
                     <LinearLayout
                         android:id="@+id/llt_address_root"
@@ -806,7 +383,7 @@
                                     android:text="추가"
                                     android:textColor="#ffffff"
                                     android:textSize="16dp"
-                                    android:visibility="visible"/>
+                                    android:visibility="gone"/>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -844,6 +421,8 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:layout_marginLeft="10dp"
+                                    android:clickable="false"
+                                    android:focusable="false"
                                     />
 
                             </LinearLayout>

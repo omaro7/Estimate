@@ -16,6 +16,13 @@
         android:title="@string/tab_estimate" />
 
     <item
+        android:id="@+id/navigation_specification"
+        android:icon="@drawable/baseline_article_24"
+        android:visible="true"
+        android:enabled="true"
+        android:title="@string/tab_specification" />
+
+    <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/baseline_settings_24"
         android:visible="true"

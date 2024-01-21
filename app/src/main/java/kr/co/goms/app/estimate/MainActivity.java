@@ -31,6 +31,7 @@ import kr.co.goms.app.estimate.fragment.CompanyFormFragment;
 import kr.co.goms.app.estimate.fragment.EstimateListFragment;
 import kr.co.goms.app.estimate.fragment.ItemListFragment;
 import kr.co.goms.app.estimate.fragment.SettingFragment;
+import kr.co.goms.app.estimate.fragment.SpecificationListFragment;
 import kr.co.goms.module.common.activity.CustomActivity;
 import kr.co.goms.module.common.base.BaseBean;
 import kr.co.goms.module.common.base.WaterCallBack;
@@ -133,6 +134,8 @@ public class MainActivity extends CustomActivity implements View.OnClickListener
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.navigation_estimate) {
                     changeFragment(new EstimateListFragment(), "estimateList", false);
+                }else if(item.getItemId() == R.id.navigation_specification) {
+                    changeFragment(new SpecificationListFragment(), "specificationList", false);
                 }else if(item.getItemId() == R.id.navigation_setting) {
                     changeFragment(new SettingFragment(), "setting", false);
                 }else{
