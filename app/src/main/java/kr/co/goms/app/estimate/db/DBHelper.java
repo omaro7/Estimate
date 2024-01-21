@@ -21,7 +21,7 @@ import kr.co.goms.module.common.util.GomsLog;
 import kr.co.goms.module.common.util.StringUtil;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
 
     Context mContext;
 
@@ -247,7 +247,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(AppConstant.LOG_TAG, "onUpgrade");
 
-        if(oldVersion == 1 && newVersion == 2){
+        if(oldVersion == 1 && newVersion == 10){
 
             /**명세서 */
             String createSpecificatioinTable = buildQuery(
@@ -274,99 +274,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
                 db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
                 db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 3){
-
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 4){
-
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_TAX_PRICE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.TempItemTable.TEMP_ITEM_TABLE + " ADD COLUMN " + EstimateDB.TempItemTable.TEMP_ITEM_UNIT_PRICE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 5){
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_MANAGER_NAME + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-        }else if(newVersion == 6){
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPTAE + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 7){
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_COM_UPJONG + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 8){
-            try {
-                db.beginTransaction();
-                db.execSQL("ALTER TABLE " + EstimateDB.EstimateTable.ESTIMATE_TABLE + " ADD COLUMN " + EstimateDB.EstimateTable.EST_EXCEL_PATH + " VARCHAR");
-                db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
-                db.setTransactionSuccessful();
-            } catch (IllegalStateException e) {
-            } finally {
-                db.endTransaction();
-            }
-
-        }else if(newVersion == 9){
-            try {
-                db.beginTransaction();
                 db.execSQL("ALTER TABLE " + EstimateDB.ItemTable.ITEM_TABLE + " ADD COLUMN " + EstimateDB.ItemTable.ITEM_UNIT_PRICE + " VARCHAR");
                 db.setTransactionSuccessful();
             } catch (IllegalStateException e) {
