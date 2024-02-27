@@ -71,4 +71,7 @@
     <color name="ripple">#F06292</color>
 
     <color name="dim_background">#80000000</color>
+
+    <color name="radio_on">#FFFFFF</color>
+    <color name="radio_off">#EEEEEE</color>
 </resources>
